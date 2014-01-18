@@ -5,8 +5,6 @@ from pygame.locals import *
 
 FONT = None
 
-import math
-
 class wheelVector:
     def __init__(self):
         x       =0.0
