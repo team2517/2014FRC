@@ -21,7 +21,7 @@ class robot_(object):
         self.joystick=joystick
         
         self.robot_box = pygame.Rect((0,0),(200,200))
-        self.robot_box.center = 400,300
+        self.robot_box.center = 150,450
 
 
         #debug displays
@@ -124,13 +124,15 @@ class robot_(object):
             if wh.x < 0:
                 wh.tarTheta += math.pi
         for i in range(len(wheel)):
-            print "move wheel %i at angle %f at speed %f"%(i,wheel[i].tarTheta,wheel[i].mag)
+            #print "move wheel %i at angle %f at speed %f"%(i,wheel[i].tarTheta,wheel[i].mag)
+            print "move wheel %i over %f x and %f y"%(i, wheel[i].x, wheel[i].y)
         self.wheel_FL_mag.set(wheel[FL].mag)
         self.wheel_FR_mag.set(wheel[FR].mag)
         self.wheel_BL_mag.set(wheel[BL].mag)
         self.wheel_BR_mag.set(wheel[BR].mag)
 
         self.wheel_FL_ang.set(wheel[FL].tarTheta)
+
         self.wheel_FR_ang.set(wheel[FR].tarTheta)
         self.wheel_BL_ang.set(wheel[BL].tarTheta)
         self.wheel_BR_ang.set(wheel[BR].tarTheta)
