@@ -17,16 +17,23 @@ class wheelVector:
         turnVel =0.0
 
 class robot_(object):
+
+    FL=0
+    FR=1
+    BR=2
+    BL=3
+
     def __init__(self,joystick):
         self.joystick=joystick
         
         self.robot_box = pygame.Rect((0,0),(200,200))
         self.robot_box.center = 150,450
 
+        self.wheel=(wheelVector(),wheelVector(),wheelVector(),wheelVector())
 
         #debug displays
 
-        #wheel motor values, not in self.displays due to use in other parts than self.draw()
+        #self.wheel motor values, not in self.displays due to use in other parts than self.draw()
         self.wheel_FL_mag = var_display('FL',(175,50))
         self.wheel_FR_mag = var_display('FR',(175,75))
         self.wheel_BL_mag = var_display('BL',(175,100))
@@ -78,10 +85,6 @@ class robot_(object):
     def calculate_wheel_values(self):
         self.displays['z'].set(self.z)
             
-        FL=0
-        FR=1
-        BR=2
-        BL=3
 
         leftx = self.x
         lefty = self.y
@@ -89,29 +92,30 @@ class robot_(object):
         if self.x==0 and self.y == 0:
             print "joys low!! x: %s y: %s z: %s "%(self.x,self.y,self.z)
             return
-        wheel=(wheelVector(),wheelVector(),wheelVector(),wheelVector())
+        
         ##TODO: get leftx/y ect ect
-        wheel[FL].x = 0.707 * rightx
-        wheel[FL].y = 0.707 * rightx
-        wheel[FR].x = 0.707 * rightx
-        wheel[FR].y = -0.707 * rightx
-        wheel[BL].x = -0.707 * rightx
-        wheel[BL].y = -0.707 * rightx
-        wheel[BR].x = -0.707 * rightx
-        wheel[BR].y = 0.707 * rightx
+        self.wheel[self.FL].x = 0.707 * rightx
+        self.wheel[self.FL].y = 0.707 * rightx
+        self.wheel[self.FR].x = 0.707 * rightx
+        self.wheel[self.FR].y = -0.707 * rightx
+        self.wheel[self.BL].x = -0.707 * rightx
+        self.wheel[self.BL].y = -0.707 * rightx
+        self.wheel[self.BR].x = -0.707 * rightx
+        self.wheel[self.BR].y = 0.707 * rightx
 
 
-        for wh in wheel:
+        for wh in self.wheel:
             wh.x += leftx
             wh.y += lefty
             wh.mag = math.sqrt(math.pow(wh.x, 2.0)+math.pow(wh.y,2.0))
-        for wh in wheel:
+
+        for wh in self.wheel:
             if wh.mag > 1.0:
                 mag_devide = wh.mag
-                for j in range(len(wheel)):
-                    wheel[j].mag = wheel[j].mag / mag_devide
+                for j in range(len(self.wheel)):
+                    self.wheel[j].mag = self.wheel[j].mag / mag_devide
 
-        for wh in wheel:
+        for wh in self.wheel:
             if wh.y == 0 or wh.x == 0:
                 print "joys low!! x: %s y: %s z: %s "%(self.x,self.y,self.z)
                 print "wh.x %s, wh.y %s"%(wh.x,wh.y)
@@ -123,19 +127,18 @@ class robot_(object):
             wh.tarTheta = math.atan(wh.y/wh.x)
             if wh.x < 0:
                 wh.tarTheta += math.pi
-        for i in range(len(wheel)):
-            #print "move wheel %i at angle %f at speed %f"%(i,wheel[i].tarTheta,wheel[i].mag)
-            print "move wheel %i over %f x and %f y"%(i, wheel[i].x, wheel[i].y)
-        self.wheel_FL_mag.set(wheel[FL].mag)
-        self.wheel_FR_mag.set(wheel[FR].mag)
-        self.wheel_BL_mag.set(wheel[BL].mag)
-        self.wheel_BR_mag.set(wheel[BR].mag)
+        for i in range(len(self.wheel)):
+            #print "move self.wheel %i at angle %f at speed %f"%(i,self.wheel[i].tarTheta,self.wheel[i].mag)
+            print "move self.wheel %i over %f x and %f y"%(i, self.wheel[i].x, self.wheel[i].y)
+        self.wheel_FL_mag.set(self.wheel[self.FL].mag)
+        self.wheel_FR_mag.set(self.wheel[self.FR].mag)
+        self.wheel_BL_mag.set(self.wheel[self.BL].mag)
+        self.wheel_BR_mag.set(self.wheel[self.BR].mag)
 
-        self.wheel_FL_ang.set(wheel[FL].tarTheta)
-
-        self.wheel_FR_ang.set(wheel[FR].tarTheta)
-        self.wheel_BL_ang.set(wheel[BL].tarTheta)
-        self.wheel_BR_ang.set(wheel[BR].tarTheta)
+        self.wheel_FL_ang.set(self.wheel[self.FL].tarTheta)
+        self.wheel_FR_ang.set(self.wheel[self.FR].tarTheta)
+        self.wheel_BL_ang.set(self.wheel[self.BL].tarTheta)
+        self.wheel_BR_ang.set(self.wheel[self.BR].tarTheta)
 
     def draw(self,screen):
         #draw robot "base" first, layer other things over it
@@ -152,6 +155,8 @@ class robot_(object):
         rot_line_start = self.robot_box.midtop[0], self.robot_box.midtop[1]-10 #10 pixels above
         rot_line_end   = rot_line_start[0]+(self.z*100),rot_line_start[1]
         pygame.draw.line(screen,(255,0,255),rot_line_start,rot_line_end,4)
+
+        pygame.draw.line(screen, (125, 0, 125), (200, 100), (200 + self.wheel[self.FL].x, 100 + self.wheel[self.FL].y))
 
         self.wheel_FL_mag.draw(screen)
         self.wheel_FR_mag.draw(screen)
