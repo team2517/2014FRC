@@ -44,7 +44,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(6), turnWheelFR(7), turnWheelBR(8),
+		stick(1), turnWheelFL(11), turnWheelFR(7), turnWheelBR(8),
 				turnWheelBL(9), moveWheelFL(10), moveWheelFR(11),
 				moveWheelBR(12), moveWheelBL(13), posEncFL(1), posEncFR(2),
 				posEncBR(3), posEncBL(4) {
