@@ -25,11 +25,16 @@ struct wheelVector
  */
 class RobotDemo : public SimpleRobot {
 	AnalogChannel testEncoder;
+	Joystick stick;
+	CANJaguar jaguar;
+	float motorspeed;
+	
+	
 
 
 public:
 	RobotDemo() :
-		testEncoder(testEncoderNum){
+		testEncoder(testEncoderNum), stick(1),jaguar(11){
 		Watchdog().SetExpiration(1);
 	}
 
@@ -50,6 +55,22 @@ public:
 		
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
+			
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Stick1 = (%.2f,%.2f)   ", stick.GetRawAxis(1), stick.GetRawAxis(2));
+			
+			if (stick.GetRawButton(2) == true) {
+				jaguar.Set(.15);
+			}
+			else if (stick.GetRawButton(3) == true) {
+				jaguar.Set(-.15);
+			}
+			else{
+				jaguar.Set(0);
+			}
+			
+			
+			
+			
 
 			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Encoder = %f", testEncoder.GetVoltage());
 			dsLCD->UpdateLCD();
