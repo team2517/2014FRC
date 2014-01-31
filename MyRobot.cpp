@@ -8,6 +8,10 @@
 #define FR                        1
 #define BR                        2
 #define BL                        3
+#define FLOFFSET				1		
+#define FROFFSET				1
+#define BROFFSET				1
+#define BLOFFSET				1
 #define X                        0
 #define Y                        1
 #define PI                        3.1415926535
@@ -166,10 +170,10 @@ public:
 				}
 			}
 
-			wheel[FL].curTheta = posEncFL.GetVoltage() / 5 * 2 * PI;
-			wheel[FR].curTheta = posEncFR.GetVoltage() / 5 * 2 * PI;
-			wheel[BR].curTheta = posEncBR.GetVoltage()/ 5 * 2 * PI;
-			wheel[BL].curTheta = posEncBL.GetVoltage() / 5 * 2 * PI;
+			wheel[FL].curTheta = (posEncFL.GetVoltage() - FLOFFSET) / 5 * 2 * PI;
+			wheel[FR].curTheta = (posEncFR.GetVoltage() - FROFFSET) / 5 * 2 * PI;
+			wheel[BR].curTheta = (posEncBR.GetVoltage() - BROFFSET)/ 5 * 2 * PI;
+			wheel[BL].curTheta = (posEncBL.GetVoltage() - BLOFFSET) / 5 * 2 * PI;
 
 			for (i=0; i <= 3; i++) {
 				wheel[i].tarTheta -= wheel[i].curTheta;
