@@ -2,6 +2,7 @@
 #include "math.h"
 #include "Vision/BinaryImage.h"
 #include "Math.h"
+#include "controls.h"
 
 #define FL                        0
 #define FR                        1
