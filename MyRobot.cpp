@@ -1,5 +1,8 @@
 #include "WPILib.h"
 #include "math.h"
+#include "Vision/BinaryImage.h"
+#include "Math.h"
+
 #define FL                        0
 #define FR                        1
 #define BR                        2
@@ -47,7 +50,58 @@ public:
 	 * Drive left & right motors for 2 seconds then stop
 	 */
 	void Autonomous() {
+		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
+		ParticleFilterCriteria2 criteria[] = { { IMAQ_MT_AREA, 500,
+						65535, false, false } }; //Particle filter criteria, used to filter out small particles
+		AxisCamera &camera = AxisCamera::GetInstance("10.25.17.11"); //To use the Axis camera uncomment this line
 		
+		Watchdog().SetEnabled(true);
+
+				while (IsAutonomous() && IsEnabled()) {
+
+					Watchdog().Feed();
+					/**
+					 * Do the image capture with the camera and apply the algorithm described above. This
+					 * sample will either get images from the camera or from an image file stored in the top
+					 * level directory in the flash memory on the cRIO. The file name in this case is "testImage.jpg"
+					 */
+					ColorImage *image;
+
+					image = camera.GetImage(); //To get the images from the camera comment the line above and uncomment this one
+					BinaryImage *thresholdImage = image->ThresholdRGB(0, 78, 144, 255,
+							86, 255); // get just the green target pixels
+					BinaryImage *convexHullImage = thresholdImage->ConvexHull(false); // fill in partial and full rectangles
+					BinaryImage *filteredImage = convexHullImage->ParticleFilter(
+					 criteria, 1); //Remove small particles
+
+					vector<ParticleAnalysisReport> *reports =
+							filteredImage->GetOrderedParticleAnalysisReports(); //get a particle analysis report for each particle
+					
+					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Penguins = %i",
+						reports->size());
+					
+					
+					if(reports->size())
+					{
+						ParticleAnalysisReport *report = &(reports->at(0));
+						dsLCD->Printf(DriverStationLCD::kUser_Line2, 2, "x = %i, y = %i", report->center_mass_x, report->center_mass_y);
+					}
+					else
+					{
+						dsLCD->Printf(DriverStationLCD::kUser_Line2, 2, "Nuttin");
+					}
+					//dsLCD->Printf(DriverStationLCD::kUser_Line2, 2, "Test");
+					dsLCD->UpdateLCD();
+
+					// be sure to delete images after using them
+					delete filteredImage;
+					delete convexHullImage;
+					delete thresholdImage;
+					delete image;
+
+					//delete allocated reports and Scores objects also
+					delete reports;			
+				}
 	}
 
 	/**
