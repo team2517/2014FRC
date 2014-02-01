@@ -15,7 +15,7 @@
 float deadBand(float);
 
 struct wheelVector {
-	float x, y, mag, tarTheta, curTheta, turnVel;
+	float x, y, mag, tarTheta, curTheta, diffTheta, turnVel;
 };
 
 /**
@@ -101,7 +101,7 @@ public:
 			wheel[BR].y += leftStickVec[Y];
 
 			for (i = 0; i <= 3; i++) {
-				wheel[i].x
+				//wheel[i].x;
 				wheel[i].mag = sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
 				/*if (wheel[i].mag> 1.0) {
 				 wheel[i].mag=1;
@@ -146,12 +146,12 @@ public:
 			 }*/
 
 			for (i=0; i <= 3; i++) {
-				wheel[i].tarTheta -= wheel[i].curTheta;
+				wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
 
-				if (wheel[i].tarTheta > PI) {
-					wheel[i].tarTheta -= 2*PI;
-				} else if (wheel[i].tarTheta < -PI) {
-					wheel[i].tarTheta += 2*PI;
+				if (wheel[i].diffTheta > PI) {
+					wheel[i].diffTheta -= 2*PI;
+				} else if (wheel[i].diffTheta < -PI) {
+					wheel[i].diffTheta += 2*PI;
 				}
 				/*
 				 if (wheel[i].tarTheta > PI/4) {
@@ -162,11 +162,11 @@ public:
 				 wheel[i].mag = wheel[i].mag * -1;
 				 }*/
 
-				wheel[i].turnVel = wheel[i].tarTheta / PI;
+				wheel[i].turnVel = wheel[i].diffTheta / PI;
 			}
 
 			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
-					"FL.T = %f         ", wheel[FL].tarTheta);
+					"diffT = %f         ", wheel[FL].diffTheta);
 			dsLCD->UpdateLCD();
 
 			if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
