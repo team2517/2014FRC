@@ -14,6 +14,8 @@
 #define Y                        1
 #define PI                        3.1415926535
 
+float deadBand(float);
+
 struct wheelVector
 {
         float x, y, mag, tarTheta, curTheta, turnVel;
