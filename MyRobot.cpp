@@ -167,16 +167,22 @@ public:
 					wheel[i].diffTheta += 2*PI;
 				}
 
-				//				 if (wheel[i].tarTheta > PI/4) {
-				//				 wheel[i].tarTheta -= PI/2;
-				//				 wheel[i].mag = wheel[i].mag * -1;
-				//				 } else if (wheel[i].tarTheta < PI/4) {
-				//				 wheel[i].tarTheta += PI/2;
-				//				 wheel[i].mag = wheel[i].mag * -1;
-				//				 }
+				if (wheel[i].diffTheta > PI/2) {
+					wheel[i].diffTheta -= PI;
+					wheel[i].mag = wheel[i].mag * -1;
+				} else if (wheel[i].diffTheta < -PI/2) {
+					wheel[i].diffTheta += PI;
+					wheel[i].mag = wheel[i].mag * -1;
+				}
 
 				wheel[i].turnVel = wheel[i].diffTheta / PI;
 			}
+			
+			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "mag: %f        ",
+				wheel[FL].mag);
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "diff: %f        ",
+				wheel[FL].diffTheta);
+			dsLCD->UpdateLCD();
 
 			for (i = 0; i < 4; i++) {
 				if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
@@ -195,9 +201,7 @@ public:
 				
 
 		}
-		dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "timer: %f        ",
-				baneTimer.Get());
-		dsLCD->UpdateLCD();
+		
 
 		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
 			turnWheelFL.Set(-wheel[FL].turnVel);
