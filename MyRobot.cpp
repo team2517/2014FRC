@@ -18,6 +18,10 @@ float deadBand(float);
 
 struct wheelVector {
 	float rawx, x, rawy, y, mag, tarTheta, curTheta, diffTheta, turnVel;
+
+	float prevTurnVel;
+	bool changeSign;
+	float moveTime;
 };
 
 /**
@@ -40,7 +44,8 @@ class RobotDemo : public SimpleRobot {
 	AnalogChannel posEncFR;
 	AnalogChannel posEncBR;
 	AnalogChannel posEncBL;
-	float magmodifier;
+	Timer baneTimer;
+	//float magmodifier;
 
 public:
 	RobotDemo() :
@@ -68,12 +73,19 @@ public:
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
+		baneTimer.Start();
+
 		float leftStickVec[4];
 		float phi;
 		float largestMag;
 		wheelVector wheel[4];
 		int i;
 		int j;
+
+		for (i = 0; i < 4; i++) {
+			wheel[i].changeSign = false;
+			wheel[i].prevTurnVel = 0;
+		}
 
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
@@ -86,13 +98,6 @@ public:
 					leftStickVec[rawX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "x: %f         ",
-					leftStickVec[X]);
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "y: %f         ",
-					leftStickVec[Y]);
-			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "phi: %f         ",
-					phi);
-			dsLCD->UpdateLCD();
 
 			//Need to change these values based on center/wheel placement.
 			wheel[FL].x = .707 * phi;
@@ -140,7 +145,8 @@ public:
 					* PI;
 			wheel[FR].curTheta = -(posEncFR.GetVoltage() - FROFFSET) / 5 * 2
 					* PI;
-			wheel[BR].curTheta = -(posEncBR.GetVoltage() - BROFFSET)/ 5 * 2 * PI;
+			wheel[BR].curTheta = -(posEncBR.GetVoltage() - BROFFSET)/ 5 * 2
+					* PI;
 			wheel[BL].curTheta = -(posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
 					* PI;
 
@@ -172,34 +178,60 @@ public:
 				wheel[i].turnVel = wheel[i].diffTheta / PI;
 			}
 
-			if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
-				turnWheelFL.Set(-wheel[FL].turnVel);
-				//				turnWheelFR.Set(wheel[FR].turnVel);
-				//				 turnWheelBR.Set(wheel[BR].turnVel);
-				//				 turnWheelBL.Set(wheel[BL].turnVel);
-				//				 
-				//				 moveWheelFL.Set(wheel[FL].mag);
-				//				 moveWheelFR.Set(wheel[FR].mag);
-				//				 moveWheelBR.Set(wheel[BR].mag);
-				//				 moveWheelBL.Set(wheel[BL].mag);
-
-			} else {
-				turnWheelFL.Set(0);
-
-				//				turnWheelFR.Set(0);
-				//				turnWheelBR.Set(0);
-				//				turnWheelBL.Set(0);
-			}
+			for (i = 0; i < 4; i++) {
+				if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
+						|| (wheel[i].turnVel < 0&& wheel[i].prevTurnVel> 0)) 
+						&& !wheel[i].changeSign)
+				{
+					wheel[i].changeSign = true;
+					wheel[i].moveTime = baneTimer.Get() + .1;
+				}
+				if (wheel[i].changeSign) {
+					wheel[i].turnVel = 0;
+					if (wheel[i].moveTime < baneTimer.Get()) {
+						wheel[i].changeSign = false;
+					}
+				}
+				
 
 		}
-	}
+		dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "timer: %f        ",
+				baneTimer.Get());
+		dsLCD->UpdateLCD();
 
-	/**
-	 * Runs during test mode
-	 */
-	void Test() {
+		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
+			turnWheelFL.Set(-wheel[FL].turnVel);
+			//				turnWheelFR.Set(wheel[FR].turnVel);
+			//				 turnWheelBR.Set(wheel[BR].turnVel);
+			//				 turnWheelBL.Set(wheel[BL].turnVel);
+			//				 
+			//				 moveWheelFL.Set(wheel[FL].mag);
+			//				 moveWheelFR.Set(wheel[FR].mag);
+			//				 moveWheelBR.Set(wheel[BR].mag);
+			//				 moveWheelBL.Set(wheel[BL].mag);
+
+		} else {
+			turnWheelFL.Set(0);
+
+			//				turnWheelFR.Set(0);
+			//				turnWheelBR.Set(0);
+			//				turnWheelBL.Set(0);
+		}
+
+		for(i=0; i<4; i++)
+		{
+			wheel[i].prevTurnVel = wheel[i].turnVel;
+		}
 
 	}
+}
+
+/**
+ * Runs during test mode
+ */
+void Test() {
+
+}
 };
 
 START_ROBOT_CLASS(RobotDemo)
