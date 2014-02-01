@@ -4,18 +4,20 @@
 #include "offsets.h"
 //#include "util.h"
 
-#define FL                        0
-#define FR                        1
-#define BR                        2
-#define BL                        3
-#define X                        0
-#define Y                        1
+#define FL                      0
+#define FR                      1
+#define BR                      2
+#define BL                      3
+#define X                       0
+#define Y                       1
+#define rawX					2
+#define rawY					3
 #define PI                        3.1415926535
 
 float deadBand(float);
 
 struct wheelVector {
-	float x, y, mag, tarTheta, curTheta, diffTheta, turnVel;
+	float rawx, x, rawy, y, mag, tarTheta, curTheta, diffTheta, turnVel;
 };
 
 /**
@@ -66,7 +68,7 @@ public:
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
-		float leftStickVec[2];
+		float leftStickVec[4];
 		float phi;
 		float largestMag;
 		wheelVector wheel[4];
@@ -75,9 +77,12 @@ public:
 
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
-
-			leftStickVec[X] = deadBand(stick.GetRawAxis(1));
-			leftStickVec[Y] = -deadBand(stick.GetRawAxis(2));
+			
+			
+			leftStickVec[rawX] = deadBand(stick.GetRawAxis(1));
+			leftStickVec[rawY] = deadBand(stick.GetRawAxis(2));
+			leftStickVec[X] = leftStickVec[rawX]*sqrt(1-.5*pow(leftStickVec[rawY], 2));
+			leftStickVec[Y] = leftStickVec[rawY]*sqrt(1-.5*pow(leftStickVec[rawX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 
 
@@ -165,6 +170,11 @@ public:
 				wheel[i].turnVel = wheel[i].diffTheta / PI;
 			}
 
+			
+			/*dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
+					"(%f,%f)  ",leftStickVec[X],leftStickVec[Y]); 
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
+					"Magnitude: %f",wheel[FL].mag); */
 			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
 					"diffT = %f         ", wheel[FL].diffTheta);
 			dsLCD->UpdateLCD();
