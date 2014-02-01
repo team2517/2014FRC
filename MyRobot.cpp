@@ -3,15 +3,13 @@
 #include "Vision/BinaryImage.h"
 #include "Math.h"
 #include "controls.h"
+#include "offsets.h"
+//#include "util.h"
 
 #define FL                        0
 #define FR                        1
 #define BR                        2
 #define BL                        3
-#define FLOFFSET				1		
-#define FROFFSET				1
-#define BROFFSET				1
-#define BLOFFSET				1
 #define X                        0
 #define Y                        1
 #define PI                        3.1415926535
@@ -125,9 +123,9 @@ public:
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
 
-			leftStickVec[X] = stick.GetRawAxis(1);
-			leftStickVec[Y] = stick.GetRawAxis(2);
-			phi = stick.GetRawAxis(3); //Should be right stick x.
+			leftStickVec[X] = deadBand(stick.GetRawAxis(1));
+			leftStickVec[Y] = deadBand(stick.GetRawAxis(2));
+			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 
 			//Need to change these values based on center/wheel placement.
 			wheel[FL].x = .707 * phi;
@@ -170,7 +168,7 @@ public:
 				}
 			}
 
-			wheel[FL].curTheta = (posEncFL.GetVoltage() - FLOFFSET) / 5 * 2 * PI;
+			wheel[FL].curTheta = (posEncFL.GetVoltage() - FLOFFSET   ) / 5 * 2 * PI;
 			wheel[FR].curTheta = (posEncFR.GetVoltage() - FROFFSET) / 5 * 2 * PI;
 			wheel[BR].curTheta = (posEncBR.GetVoltage() - BROFFSET)/ 5 * 2 * PI;
 			wheel[BL].curTheta = (posEncBL.GetVoltage() - BLOFFSET) / 5 * 2 * PI;
@@ -217,4 +215,17 @@ public:
 
 START_ROBOT_CLASS(RobotDemo)
 ;
+
+float deadBand(float axisValue)
+{
+	if(axisValue < -.05 || axisValue > .05)
+	{
+		return axisValue;
+	}
+	else
+	{
+		return 0.0;
+	}
+}
+
 
