@@ -14,9 +14,8 @@
 
 float deadBand(float);
 
-struct wheelVector
-{
-        float x, y, mag, tarTheta, curTheta, turnVel;
+struct wheelVector {
+	float x, y, mag, tarTheta, curTheta, turnVel;
 };
 
 /**
@@ -39,6 +38,7 @@ class RobotDemo : public SimpleRobot {
 	AnalogChannel posEncFR;
 	AnalogChannel posEncBR;
 	AnalogChannel posEncBL;
+	float magmodifier;
 
 public:
 	RobotDemo() :
@@ -54,9 +54,9 @@ public:
 	 */
 	void Autonomous() {
 
-				while (IsAutonomous() && IsEnabled()) {
+		while (IsAutonomous() && IsEnabled()) {
 
-				}
+		}
 	}
 
 	/**
@@ -64,6 +64,7 @@ public:
 	 */
 	void OperatorControl() {
 		Watchdog().SetEnabled(true);
+		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
 		float leftStickVec[2];
 		float phi;
@@ -76,8 +77,9 @@ public:
 			Watchdog().Feed();
 
 			leftStickVec[X] = deadBand(stick.GetRawAxis(1));
-			leftStickVec[Y] = deadBand(stick.GetRawAxis(2));
+			leftStickVec[Y] = -deadBand(stick.GetRawAxis(2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
+
 
 			//Need to change these values based on center/wheel placement.
 			wheel[FL].x = .707 * phi;
@@ -99,8 +101,14 @@ public:
 			wheel[BR].y += leftStickVec[Y];
 
 			for (i = 0; i <= 3; i++) {
+				wheel[i].x
 				wheel[i].mag = sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
+				/*if (wheel[i].mag> 1.0) {
+				 wheel[i].mag=1;
+				 }*/
 			}
+
+
 
 			for (i = 0; i <= 3; i++) {
 				if (wheel[i].mag > 1) {
@@ -118,12 +126,24 @@ public:
 				if (wheel[i].x < 0) {
 					wheel[i].tarTheta += PI;
 				}
+				
 			}
 
-			wheel[FL].curTheta = (posEncFL.GetVoltage() - FLOFFSET   ) / 5 * 2 * PI;
-			wheel[FR].curTheta = (posEncFR.GetVoltage() - FROFFSET) / 5 * 2 * PI;
+			wheel[FL].curTheta = (posEncFL.GetVoltage() - FLOFFSET ) / 5 * 2
+					* PI;
+			wheel[FR].curTheta = (posEncFR.GetVoltage() - FROFFSET) / 5 * 2
+					* PI;
 			wheel[BR].curTheta = (posEncBR.GetVoltage() - BROFFSET)/ 5 * 2 * PI;
-			wheel[BL].curTheta = (posEncBL.GetVoltage() - BLOFFSET) / 5 * 2 * PI;
+			wheel[BL].curTheta = (posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
+					* PI;
+
+			/*if (stick.GetRawButton(2) == true) {
+			 turnWheelFL.Set(.15);
+			 } else if (stick.GetRawButton(3) == true) {
+			 turnWheelFL.Set(-.15);
+			 } else {
+			 turnWheelFL.Set(0);
+			 }*/
 
 			for (i=0; i <= 3; i++) {
 				wheel[i].tarTheta -= wheel[i].curTheta;
@@ -133,26 +153,42 @@ public:
 				} else if (wheel[i].tarTheta < -PI) {
 					wheel[i].tarTheta += 2*PI;
 				}
-
-				if (wheel[i].tarTheta > PI/4) {
-					wheel[i].tarTheta -= PI/2;
-					wheel[i].mag = wheel[i].mag * -1;
-				} else if (wheel[i].tarTheta < PI/4) {
-					wheel[i].tarTheta += PI/2;
-					wheel[i].mag = wheel[i].mag * -1;
-				}
+				/*
+				 if (wheel[i].tarTheta > PI/4) {
+				 wheel[i].tarTheta -= PI/2;
+				 wheel[i].mag = wheel[i].mag * -1;
+				 } else if (wheel[i].tarTheta < PI/4) {
+				 wheel[i].tarTheta += PI/2;
+				 wheel[i].mag = wheel[i].mag * -1;
+				 }*/
 
 				wheel[i].turnVel = wheel[i].tarTheta / PI;
 			}
 
-			turnWheelFL.Set(wheel[FL].turnVel);
-			turnWheelFR.Set(wheel[FR].turnVel);
-			turnWheelBR.Set(wheel[BR].turnVel);
-			turnWheelBL.Set(wheel[BL].turnVel);
-			moveWheelFL.Set(wheel[FL].mag);
-			moveWheelFR.Set(wheel[FR].mag);
-			moveWheelBR.Set(wheel[BR].mag);
-			moveWheelBL.Set(wheel[BL].mag);
+			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
+					"FL.T = %f         ", wheel[FL].tarTheta);
+			dsLCD->UpdateLCD();
+
+			if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
+				turnWheelFL.Set(wheel[FL].turnVel);
+				/*turnWheelFR.Set(wheel[FR].turnVel);
+				 turnWheelBR.Set(wheel[BR].turnVel);
+				 turnWheelBL.Set(wheel[BL].turnVel);
+				 
+				 moveWheelFL.Set(wheel[FL].mag);
+				 moveWheelFR.Set(wheel[FR].mag);
+				 moveWheelBR.Set(wheel[BR].mag);
+				 moveWheelBL.Set(wheel[BL].mag);
+				 */
+			}
+			else
+			{
+				turnWheelFL.Set(0);
+				/*
+				turnWheelFR.Set(0);
+				turnWheelBR.Set(0);
+				turnWheelBL.Set(0);*/
+			}
 
 		}
 	}
@@ -168,16 +204,13 @@ public:
 START_ROBOT_CLASS(RobotDemo)
 ;
 
-float deadBand(float axisValue)
-{
-	if(axisValue < -.05 || axisValue > .05)
-	{
-		return axisValue;
-	}
-	else
-	{
-		return 0.0;
-	}
+float deadBand(float axisValue) {
+	if (axisValue < -.05 || axisValue> .05){
+	return axisValue;
 }
-
+else
+{
+	return 0.0;
+}
+}
 
