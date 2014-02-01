@@ -77,14 +77,22 @@ public:
 
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
-			
-			
+
 			leftStickVec[rawX] = deadBand(stick.GetRawAxis(1));
 			leftStickVec[rawY] = deadBand(stick.GetRawAxis(2));
-			leftStickVec[X] = leftStickVec[rawX]*sqrt(1-.5*pow(leftStickVec[rawY], 2));
-			leftStickVec[Y] = leftStickVec[rawY]*sqrt(1-.5*pow(leftStickVec[rawX], 2));
+			leftStickVec[X] = leftStickVec[rawX]*sqrt(1-.5*pow(
+					leftStickVec[rawY], 2));
+			leftStickVec[Y] = -leftStickVec[rawY]*sqrt(1-.5*pow(
+					leftStickVec[rawX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 
+			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "x: %f         ",
+					leftStickVec[X]);
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "y: %f         ",
+					leftStickVec[Y]);
+			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "phi: %f         ",
+					phi);
+			dsLCD->UpdateLCD();
 
 			//Need to change these values based on center/wheel placement.
 			wheel[FL].x = .707 * phi;
@@ -106,14 +114,8 @@ public:
 			wheel[BR].y += leftStickVec[Y];
 
 			for (i = 0; i <= 3; i++) {
-				//wheel[i].x;
 				wheel[i].mag = sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
-				/*if (wheel[i].mag> 1.0) {
-				 wheel[i].mag=1;
-				 }*/
 			}
-
-
 
 			for (i = 0; i <= 3; i++) {
 				if (wheel[i].mag > 1) {
@@ -131,24 +133,24 @@ public:
 				if (wheel[i].x < 0) {
 					wheel[i].tarTheta += PI;
 				}
-				
+
 			}
 
-			wheel[FL].curTheta = (posEncFL.GetVoltage() - FLOFFSET ) / 5 * 2
+			wheel[FL].curTheta = -(posEncFL.GetVoltage() - FLOFFSET ) / 5 * 2
 					* PI;
-			wheel[FR].curTheta = (posEncFR.GetVoltage() - FROFFSET) / 5 * 2
+			wheel[FR].curTheta = -(posEncFR.GetVoltage() - FROFFSET) / 5 * 2
 					* PI;
-			wheel[BR].curTheta = (posEncBR.GetVoltage() - BROFFSET)/ 5 * 2 * PI;
-			wheel[BL].curTheta = (posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
+			wheel[BR].curTheta = -(posEncBR.GetVoltage() - BROFFSET)/ 5 * 2 * PI;
+			wheel[BL].curTheta = -(posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
 					* PI;
 
-			/*if (stick.GetRawButton(2) == true) {
-			 turnWheelFL.Set(.15);
-			 } else if (stick.GetRawButton(3) == true) {
-			 turnWheelFL.Set(-.15);
-			 } else {
-			 turnWheelFL.Set(0);
-			 }*/
+			//			if (stick.GetRawButton(2) == true) {
+			//			 turnWheelFL.Set(.15);
+			//			 } else if (stick.GetRawButton(3) == true) {
+			//			 turnWheelFL.Set(-.15);
+			//			 } else {
+			//			 turnWheelFL.Set(0);
+			//			 }
 
 			for (i=0; i <= 3; i++) {
 				wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
@@ -158,46 +160,35 @@ public:
 				} else if (wheel[i].diffTheta < -PI) {
 					wheel[i].diffTheta += 2*PI;
 				}
-				/*
-				 if (wheel[i].tarTheta > PI/4) {
-				 wheel[i].tarTheta -= PI/2;
-				 wheel[i].mag = wheel[i].mag * -1;
-				 } else if (wheel[i].tarTheta < PI/4) {
-				 wheel[i].tarTheta += PI/2;
-				 wheel[i].mag = wheel[i].mag * -1;
-				 }*/
+
+				//				 if (wheel[i].tarTheta > PI/4) {
+				//				 wheel[i].tarTheta -= PI/2;
+				//				 wheel[i].mag = wheel[i].mag * -1;
+				//				 } else if (wheel[i].tarTheta < PI/4) {
+				//				 wheel[i].tarTheta += PI/2;
+				//				 wheel[i].mag = wheel[i].mag * -1;
+				//				 }
 
 				wheel[i].turnVel = wheel[i].diffTheta / PI;
 			}
 
-			
-			/*dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
-					"(%f,%f)  ",leftStickVec[X],leftStickVec[Y]); 
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-					"Magnitude: %f",wheel[FL].mag); */
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
-					"diffT = %f         ", wheel[FL].diffTheta);
-			dsLCD->UpdateLCD();
-
 			if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
-				turnWheelFL.Set(wheel[FL].turnVel);
-				/*turnWheelFR.Set(wheel[FR].turnVel);
-				 turnWheelBR.Set(wheel[BR].turnVel);
-				 turnWheelBL.Set(wheel[BL].turnVel);
-				 
-				 moveWheelFL.Set(wheel[FL].mag);
-				 moveWheelFR.Set(wheel[FR].mag);
-				 moveWheelBR.Set(wheel[BR].mag);
-				 moveWheelBL.Set(wheel[BL].mag);
-				 */
-			}
-			else
-			{
+				turnWheelFL.Set(-wheel[FL].turnVel);
+				//				turnWheelFR.Set(wheel[FR].turnVel);
+				//				 turnWheelBR.Set(wheel[BR].turnVel);
+				//				 turnWheelBL.Set(wheel[BL].turnVel);
+				//				 
+				//				 moveWheelFL.Set(wheel[FL].mag);
+				//				 moveWheelFR.Set(wheel[FR].mag);
+				//				 moveWheelBR.Set(wheel[BR].mag);
+				//				 moveWheelBL.Set(wheel[BL].mag);
+
+			} else {
 				turnWheelFL.Set(0);
-				/*
-				turnWheelFR.Set(0);
-				turnWheelBR.Set(0);
-				turnWheelBL.Set(0);*/
+
+				//				turnWheelFR.Set(0);
+				//				turnWheelBR.Set(0);
+				//				turnWheelBL.Set(0);
 			}
 
 		}
