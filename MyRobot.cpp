@@ -13,6 +13,7 @@
 #define rawX					2
 #define rawY					3
 #define PI                        3.1415926535
+#define voltageRate				10000
 
 float deadBand(float);
 
@@ -86,6 +87,11 @@ public:
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
 		}
+		
+		turnWheelFL.SetVoltageRampRate(voltageRate);
+		turnWheelFR.SetVoltageRampRate(voltageRate);
+		turnWheelBR.SetVoltageRampRate(voltageRate);
+		turnWheelBL.SetVoltageRampRate(voltageRate);
 
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
@@ -150,13 +156,13 @@ public:
 			wheel[BL].curTheta = -(posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
 					* PI;
 
-			//			if (stick.GetRawButton(2) == true) {
-			//			 turnWheelFL.Set(.15);
-			//			 } else if (stick.GetRawButton(3) == true) {
-			//			 turnWheelFL.Set(-.15);
-			//			 } else {
-			//			 turnWheelFL.Set(0);
-			//			 }
+//						if (stick.GetRawButton(2) == true) {
+//						 turnWheelFL.Set(.15);
+//						 } else if (stick.GetRawButton(3) == true) {
+//						 turnWheelFL.Set(-.15);
+//						 } else {
+//						 turnWheelFL.Set(0);
+//						 }
 
 			for (i=0; i <= 3; i++) {
 				wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
@@ -175,16 +181,19 @@ public:
 					wheel[i].mag = wheel[i].mag * -1;
 				}
 
-				wheel[i].turnVel = wheel[i].diffTheta / PI;
+				wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
 			}
 			
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "mag: %f        ",
+			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
 				wheel[FL].mag);
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "diff: %f        ",
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
 				wheel[FL].diffTheta);
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Coords: (%f,%f)        ",
+				wheel[FL].x, wheel[FL].y);
 			dsLCD->UpdateLCD();
-
-			for (i = 0; i < 4; i++) {
+			
+			for (i = 0; i < 4; i++) 
+			{
 				if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
 						|| (wheel[i].turnVel < 0&& wheel[i].prevTurnVel> 0)) 
 						&& !wheel[i].changeSign)
@@ -200,7 +209,7 @@ public:
 				}
 				
 
-		}
+			}
 		
 
 		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
