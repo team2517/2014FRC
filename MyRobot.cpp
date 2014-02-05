@@ -13,7 +13,7 @@
 #define rawX					2
 #define rawY					3
 #define PI                        3.1415926535
-#define voltageRate				10000
+//#define voltageRate				10000
 
 float deadBand(float);
 
@@ -88,10 +88,10 @@ public:
 			wheel[i].prevTurnVel = 0;
 		}
 		
-		turnWheelFL.SetVoltageRampRate(voltageRate);
+		/*turnWheelFL.SetVoltageRampRate(voltageRate);
 		turnWheelFR.SetVoltageRampRate(voltageRate);
 		turnWheelBR.SetVoltageRampRate(voltageRate);
-		turnWheelBL.SetVoltageRampRate(voltageRate);
+		turnWheelBL.SetVoltageRampRate(voltageRate);*/
 
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
