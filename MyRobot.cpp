@@ -59,10 +59,10 @@ public:
 			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Stick1 = (%.2f,%.2f)   ", stick.GetRawAxis(1), stick.GetRawAxis(2));
 			
 			if (stick.GetRawButton(2) == true) {
-				jaguar.Set(.15);
+				jaguar.Set(.5);
 			}
 			else if (stick.GetRawButton(3) == true) {
-				jaguar.Set(-.15);
+				jaguar.Set(-.5);
 			}
 			else{
 				jaguar.Set(0);
