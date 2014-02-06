@@ -188,8 +188,9 @@ public:
 				wheel[FL].mag);
 			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
 				wheel[FL].diffTheta);
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Coords: (%f,%f)        ",
+			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
 				wheel[FL].x, wheel[FL].y);
+			
 			dsLCD->UpdateLCD();
 			
 			for (i = 0; i < 4; i++) 
