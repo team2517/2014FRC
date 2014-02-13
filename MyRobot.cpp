@@ -34,7 +34,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		testEncoder(testEncoderNum), stick(1),jaguar(11){
+		testEncoder(testEncoderNum), stick(1),jaguar(45){
 		Watchdog().SetExpiration(1);
 	}
 
@@ -53,6 +53,7 @@ public:
 
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 		
+
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
 			
@@ -72,7 +73,7 @@ public:
 			
 			
 
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Encoder = %f", testEncoder.GetVoltage());
+			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Encoder = %f          ", testEncoder.GetVoltage());
 			dsLCD->UpdateLCD();
 			Watchdog().Feed();
 		}
