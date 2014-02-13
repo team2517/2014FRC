@@ -50,8 +50,8 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(11), turnWheelFR(7), turnWheelBR(8),
-				turnWheelBL(9), moveWheelFL(45), moveWheelFR(11),
+		stick(1), turnWheelFL(45), turnWheelFR(7), turnWheelBR(8),
+				turnWheelBL(9), moveWheelFL(4), moveWheelFR(11),
 				moveWheelBR(12), moveWheelBL(13), posEncFL(1), posEncFR(2),
 				posEncBR(3), posEncBL(4) {
 		Watchdog().SetExpiration(1);
@@ -123,6 +123,9 @@ public:
 			wheel[BL].y += leftStickVec[Y];
 			wheel[BR].x += leftStickVec[X];
 			wheel[BR].y += leftStickVec[Y];
+			
+			
+			
 
 			for (i = 0; i <= 3; i++) {
 				wheel[i].mag = sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
