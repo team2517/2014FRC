@@ -12,7 +12,11 @@
 #define Y                       1
 #define rawX					2
 #define rawY					3
-#define PI                        3.1415926535
+#define PI                      3.1415926535
+#define pValue					1.37
+#define iValue					0.0
+#define dValue					0
+#define MAXPOWER				18
 //#define voltageRate				10000
 
 float deadBand(float);
@@ -50,8 +54,8 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(45), turnWheelFR(7), turnWheelBR(8),
-				turnWheelBL(9), moveWheelFL(4), moveWheelFR(11),
+		stick(1), turnWheelFL(11), turnWheelFR(7), turnWheelBR(8),
+				turnWheelBL(9), moveWheelFL(30), moveWheelFR(32),
 				moveWheelBR(12), moveWheelBL(13), posEncFL(1), posEncFR(2),
 				posEncBR(3), posEncBL(4) {
 		Watchdog().SetExpiration(1);
@@ -82,7 +86,40 @@ public:
 		wheelVector wheel[4];
 		int i;
 		int j;
-
+		
+		moveWheelFL.ChangeControlMode(CANJaguar::kSpeed);
+		moveWheelFL.ConfigEncoderCodesPerRev(1000);
+		moveWheelFL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
+		moveWheelFL.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
+		moveWheelFL.SetPID(pValue,iValue,dValue);
+		moveWheelFL.EnableControl();
+		Watchdog().Feed();
+		moveWheelFR.ChangeControlMode(CANJaguar::kSpeed);
+		moveWheelFR.ConfigEncoderCodesPerRev(1000);
+		moveWheelFR.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
+		moveWheelFR.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
+		moveWheelFR.SetPID(pValue,iValue,dValue);
+		moveWheelFR.EnableControl();
+		Watchdog().Feed();
+		moveWheelBL.ChangeControlMode(CANJaguar::kSpeed);
+		moveWheelBL.ConfigEncoderCodesPerRev(1000);
+		moveWheelBL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
+		moveWheelBL.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
+		moveWheelBL.SetPID(pValue,iValue,dValue);
+		moveWheelBL.EnableControl();
+		Watchdog().Feed();
+		moveWheelBR.ChangeControlMode(CANJaguar::kSpeed);
+		moveWheelBR.ConfigEncoderCodesPerRev(1000);
+		moveWheelBR.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
+		moveWheelBR.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder	);
+		moveWheelBR.SetPID(pValue,iValue,dValue);
+		moveWheelBR.EnableControl();
+//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
+//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
+//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
+//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
+		
+		
 		for (i = 0; i < 4; i++) {
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
@@ -128,14 +165,14 @@ public:
 			
 
 			for (i = 0; i <= 3; i++) {
-				wheel[i].mag = sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
+				wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
 			}
 
 			for (i = 0; i <= 3; i++) {
-				if (wheel[i].mag > 1) {
+				if (wheel[i].mag > 1 * MAXPOWER) {
 					largestMag = wheel[i].mag;
 					for (j = 0; j <= 3; j++) {
-						wheel[j].mag = wheel[j].mag / largestMag;
+						wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
 					}
 				}
 
@@ -185,6 +222,13 @@ public:
 				}
 
 				wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
+				/*
+				If (0 < wheel[i].turnVel && wheel[i].turnVel < .17){
+					wheel[1].turnVel = .17;
+				} 
+				If (0 > wheel[i].turnVel && wheel[i].turnVel > -.17){
+					wheel[1].turnVel = -.17;
+				}*/
 			}
 			
 			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
@@ -193,7 +237,9 @@ public:
 				wheel[FL].diffTheta);
 			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
 				wheel[FL].x, wheel[FL].y);
-			
+			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
+			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
+							moveWheelFL.GetPosition());
 			dsLCD->UpdateLCD();
 			
 			for (i = 0; i < 4; i++) 
@@ -229,6 +275,7 @@ public:
 
 		} else {
 			turnWheelFL.Set(0);
+			moveWheelFL.Set(0);
 
 			//				turnWheelFR.Set(0);
 			//				turnWheelBR.Set(0);
