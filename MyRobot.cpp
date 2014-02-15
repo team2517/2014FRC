@@ -3,7 +3,7 @@
 #include "Vision/BinaryImage.h"
 #include "Math.h"
 
-#define testEncoderNum			1
+#define testEncoderNum			3
 #define FL                        0
 #define FR                        1
 #define BR                        2
@@ -34,7 +34,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		testEncoder(testEncoderNum), stick(1),jaguar(11){
+		testEncoder(testEncoderNum), stick(1),jaguar(4){
 		Watchdog().SetExpiration(1);
 	}
 
@@ -60,10 +60,10 @@ public:
 			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Stick1 = (%.2f,%.2f)   ", stick.GetRawAxis(1), stick.GetRawAxis(2));
 			
 			if (stick.GetRawButton(2) == true) {
-				jaguar.Set(.5);
+				jaguar.Set(.3);
 			}
 			else if (stick.GetRawButton(3) == true) {
-				jaguar.Set(-.5);
+				jaguar.Set(-.3);
 			}
 			else{
 				jaguar.Set(0);
