@@ -34,7 +34,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		testEncoder(testEncoderNum), stick(1),jaguar(45){
+		testEncoder(testEncoderNum), stick(1),jaguar(11){
 		Watchdog().SetExpiration(1);
 	}
 
