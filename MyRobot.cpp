@@ -284,6 +284,25 @@ public:
 			//				turnWheelBR.Set(0);
 			//				turnWheelBL.Set(0);
 		}
+		if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
+			turnWheelFR.Set(-wheel[FR].turnVel);
+			//				turnWheelFR.Set(wheel[FR].turnVel);
+			//				 turnWheelBR.Set(wheel[BR].turnVel);
+			//				 turnWheelBL.Set(wheel[BL].turnVel);
+			//				 
+			moveWheelFR.Set(wheel[FR].mag);
+			//				 moveWheelFR.Set(wheel[FR].mag);
+			//				 moveWheelBR.Set(wheel[BR].mag);
+			//				 moveWheelBL.Set(wheel[BL].mag);
+
+		} else {
+			turnWheelFR.Set(0);
+			moveWheelFR.Set(0);
+
+			//				turnWheelFR.Set(0);
+			//				turnWheelBR.Set(0);
+			//				turnWheelBL.Set(0);
+		}
 
 		for(i=0; i<4; i++)
 		{
