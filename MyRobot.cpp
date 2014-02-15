@@ -3,22 +3,22 @@
 #include "controls.h"
 #include "offsets.h"
 //#include "util.h"
-#define testVal                 .4
+#define RAWX                 .4
 #define FL                      0
 #define FR                      1
 #define BR                      2
 #define BL                      3
 #define X                       0
 #define Y                       1
-#define rawX					2
-#define rawY					3
+#define RAWX					2
+#define RAWY					3
 #define PI                      3.1415926535
-#define pValue					1.37
-#define iValue					0.0
-#define dValue					0
+#define PVALUE					1.37
+#define IVALUE					0.0
+#define DVALUE					0
 #define MAXPOWER				1
-#define tester                  1
-//#define voltageRate				10000
+#define TESTER                  1
+//#define VOLTAGERATE				10000
 
 float deadBand(float);
 
@@ -92,28 +92,28 @@ public:
 //		moveWheelFL.ConfigEncoderCodesPerRev(1000);
 //		moveWheelFL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
 //		moveWheelFL.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-//		moveWheelFL.SetPID(pValue,iValue,dValue);
+//		moveWheelFL.SetPID(PVALUE,IVALUE,DVALUE);
 //		moveWheelFL.EnableControl();
 //		Watchdog().Feed();
 //		moveWheelFR.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelFR.ConfigEncoderCodesPerRev(1000);
 //		moveWheelFR.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
 //		moveWheelFR.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-//		moveWheelFR.SetPID(pValue,iValue,dValue);
+//		moveWheelFR.SetPID(PVALUE,IVALUE,DVALUE);
 //		moveWheelFR.EnableControl();
 //		Watchdog().Feed();
 //		moveWheelBL.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelBL.ConfigEncoderCodesPerRev(1000);
 //		moveWheelBL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
 //		moveWheelBL.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-//		moveWheelBL.SetPID(pValue,iValue,dValue);
+//		moveWheelBL.SetPID(PVALUE,IVALUE,DVALUE);
 //		moveWheelBL.EnableControl();
 //		Watchdog().Feed();
 //		moveWheelBR.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelBR.ConfigEncoderCodesPerRev(1000);
 //		moveWheelBR.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
 //		moveWheelBR.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder	);
-//		moveWheelBR.SetPID(pValue,iValue,dValue);
+//		moveWheelBR.SetPID(PVALUE,IVALUE,DVALUE);
 //		moveWheelBR.EnableControl();
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
@@ -136,31 +136,31 @@ public:
 
 
 			
-//#define tester			1
+//#define TESTER			1
 
-			leftStickVec[rawX] = deadBand(stick.GetRawAxis(1));
-			leftStickVec[rawY] = deadBand(stick.GetRawAxis(2));
-			leftStickVec[X] = leftStickVec[rawX]*sqrt(1-.5*pow(
-					leftStickVec[rawY], 2));
-			leftStickVec[Y] = -leftStickVec[rawY]*sqrt(1-.5*pow(
-					leftStickVec[rawX], 2));
+			leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
+			leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
+			leftStickVec[X] = leftStickVec[RAWX]*sqrt(1-.5*pow(
+					leftStickVec[RAWY], 2));
+			leftStickVec[Y] = -leftStickVec[RAWY]*sqrt(1-.5*pow(
+					leftStickVec[RAWX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 			
-			#ifdef tester
+			#ifdef TESTER
 				if (stick.GetRawButton(4)){
 					leftStickVec[X] = 0;
-					leftStickVec[Y] = testVal;
+					leftStickVec[Y] = TESTVAL;
 				} 
 				else if (stick.GetRawButton(3)){
-					leftStickVec[X] = testVal;
+					leftStickVec[X] = TESTVAL;
 					leftStickVec[Y] = 0;
 				}
 				else if (stick.GetRawButton(2)){
 					leftStickVec[X] = 0;
-					leftStickVec[Y] = -testVal;
+					leftStickVec[Y] = -TESTVAL;
 				}
 				else if (stick.GetRawButton(1)){
-					leftStickVec[X] = -testVal;
+					leftStickVec[X] = -TESTVAL;
 					leftStickVec[Y] = 0;
 				}				
 			#endif
