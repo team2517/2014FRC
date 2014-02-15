@@ -3,7 +3,7 @@
 #include "controls.h"
 #include "offsets.h"
 //#include "util.h"
-#define RAWX                 .4
+#define TESTVAL                 .4
 #define FL                      0
 #define FR                      1
 #define BR                      2
