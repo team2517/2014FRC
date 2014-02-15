@@ -3,7 +3,7 @@
 #include "controls.h"
 #include "offsets.h"
 //#include "util.h"
-
+#define testVal                 .4
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -17,6 +17,7 @@
 #define iValue					0.0
 #define dValue					0
 #define MAXPOWER				1
+#define tester                  1
 //#define voltageRate				10000
 
 float deadBand(float);
@@ -144,13 +145,26 @@ public:
 			leftStickVec[Y] = -leftStickVec[rawY]*sqrt(1-.5*pow(
 					leftStickVec[rawX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
-			/*
+			
 			#ifdef tester
 				if (stick.GetRawButton(4)){
-					
+					leftStickVec[X] = 0;
+					leftStickVec[Y] = testVal;
 				} 
+				else if (stick.GetRawButton(3)){
+					leftStickVec[X] = testVal;
+					leftStickVec[Y] = 0;
+				}
+				else if (stick.GetRawButton(2)){
+					leftStickVec[X] = 0;
+					leftStickVec[Y] = -testVal;
+				}
+				else if (stick.GetRawButton(1)){
+					leftStickVec[X] = -testVal;
+					leftStickVec[Y] = 0;
+				}				
 			#endif
-			*/
+			
 			//Need to change these values based on center/wheel placement.
 			wheel[FL].x = .707 * phi;
 			wheel[FL].y = .707 * phi;
