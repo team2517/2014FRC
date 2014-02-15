@@ -54,10 +54,10 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(11), turnWheelFR(4), turnWheelBR(8),
-				turnWheelBL(9), moveWheelFL(30), moveWheelFR(2),
-				moveWheelBR(12), moveWheelBL(13), posEncFL(1), posEncFR(3),
-				posEncBR(63), posEncBL(5) {
+		stick(1), turnWheelFL(27), turnWheelFR(4), turnWheelBR(8),
+				turnWheelBL(11), moveWheelFL(30), moveWheelFR(2),
+				moveWheelBR(12), moveWheelBL(45), posEncFL(1), posEncFR(3),
+				posEncBR(6), posEncBL(5) {
 		Watchdog().SetExpiration(1);
 	}
 
@@ -133,6 +133,10 @@ public:
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
 
+
+			
+//#define tester			1
+
 			leftStickVec[rawX] = deadBand(stick.GetRawAxis(1));
 			leftStickVec[rawY] = deadBand(stick.GetRawAxis(2));
 			leftStickVec[X] = leftStickVec[rawX]*sqrt(1-.5*pow(
@@ -140,8 +144,13 @@ public:
 			leftStickVec[Y] = -leftStickVec[rawY]*sqrt(1-.5*pow(
 					leftStickVec[rawX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
-
-
+			/*
+			#ifdef tester
+				if (stick.GetRawButton(4)){
+					
+				} 
+			#endif
+			*/
 			//Need to change these values based on center/wheel placement.
 			wheel[FL].x = .707 * phi;
 			wheel[FL].y = .707 * phi;
