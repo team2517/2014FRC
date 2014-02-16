@@ -468,6 +468,7 @@ public:
 //			{
 //				pickUpArm1.Set(-1);
 //				pickUpArm2.Set(1);
+//			}
 //			if (stick.GetRawButton(6))
 //			{
 //				shooterMotor1.Set(1);
@@ -480,7 +481,6 @@ public:
 //			}
 		}
 	}
-}
 
 /**
  * Runs during test mode
