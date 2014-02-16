@@ -178,12 +178,12 @@ public:
 			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i",
 							calMode+1);
 			if (stick.GetRawButton(2) == true && calMode == 0) {
-			 turnWheelFL.Set(.15);
-			 } else if (stick.GetRawButton(3) == true) {
-			 turnWheelFL.Set(-.15);
-			 } else {
-			 turnWheelFL.Set(0);
-			 }
+				turnWheelFL.Set(.15);
+			} else if (stick.GetRawButton(3) == true) {
+				turnWheelFL.Set(-.15);
+			} else {
+				turnWheelFL.Set(0);
+			}
 			
 			if (stick.GetRawButton(2) == true && calMode == 1) {
 				turnWheelFR.Set(.15);
