@@ -464,8 +464,14 @@ public:
 		{
 			wheel[i].prevTurnVel = wheel[i].turnVel;
 		}
-		
-		
+		if (stick.GetRawButton(7)){
+			pickUpArm1.Set(1);
+			pickUpArm2.Set(-1);
+		}
+		else if (stick.GetRawButton(8)){
+			pickUpArm1.Set(-1);
+			pickUpArm2.Set(1);
+		}
 		
 	}
 }
