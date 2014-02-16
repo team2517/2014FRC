@@ -18,6 +18,7 @@
 #define IVALUE					0.0
 #define DVALUE					0
 #define MAXPOWER				1
+#define STALLTHERESHOLD			0
 //#define TESTER                  1
 //#define VOLTAGERATE				10000
 
@@ -25,7 +26,7 @@ float deadBand(float);
 
 struct wheelVector 
 {
-	float rawx, x, rawy, y, mag, tarTheta, curTheta, diffTheta, turnVel;
+	float rawx, x, rawy, y, mag, tarTheta, curTheta, diffTheta, turnVel, prevTheta;
 
 	float prevTurnVel;
 	bool changeSign;
@@ -101,6 +102,8 @@ public:
 		bool calibrating = false;
 		int calMode;
 		bool isButtonPressed;
+		bool isThetaCalculated;
+		isThetaCalculated = false;
 		isButtonPressed = false;
 		
 //		moveWheelFL.ChangeControlMode(CANJaguar::kSpeed);
@@ -156,6 +159,16 @@ public:
 				leftStickVec[RAWX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 			
+			//
+			
+			for (i = 0; i <= 3; i++)
+			{
+				if (wheel[i].curTheta - wheel[i].prevTheta < STALLTHERESHOLD){
+					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "M%i STALLED",
+										i);
+				}
+			}
+			
 			
 			if (stick.GetRawButton(5) && stick.GetRawButton(6))
 			{
@@ -163,105 +176,106 @@ public:
 			}
 			
 			if (calibrating == true && IsOperatorControl())
-			{ 
-				Watchdog().Feed();
-				
-				if (stick.GetRawButton(8) && !isButtonPressed) 
-				{
-					if (calMode == 0) 
-					{
-						flOffset = posEncFL.GetVoltage();
-						dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
-					} 
-					else if (calMode == 1) 
-					{
-						frOffset = posEncFR.GetVoltage();
-						dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
-					} 
-					else if (calMode == 2) 
-					{
-						blOffset = posEncBL.GetVoltage();
-						dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
-					} 
-					else if (calMode == 3) 
-					{
-						brOffset = posEncBR.GetVoltage();
-						dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
-					}
-	
-					calMode++;
-					if (calMode >= 4)
-					{
-						calibrating = false;
-					}
-					isButtonPressed = true;
-				}
-				else if (!stick.GetRawButton(8)) 
-				{
-					isButtonPressed = false;
-				}
-				
-				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
-						"**CALIBRATING WHEEL %i", calMode+1);
-				if (stick.GetRawButton(2) == true && calMode == 0) 
-				{
-					turnWheelFL.Set(OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 0) 
-				{
-					turnWheelFL.Set(-OFFSETMOVE);
-				} 
-				else 
-				{
-					turnWheelFL.Set(0);
-				}
-
-				if (stick.GetRawButton(2) == true && calMode == 1) 
-				{
-					turnWheelFR.Set(OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 1) 
-				{
-					turnWheelFR.Set(-OFFSETMOVE);
-				} 
-				else 
-				{
-					turnWheelFR.Set(0);
-				}
-
-				if (stick.GetRawButton(2) == true && calMode == 2) 
-				{
-					turnWheelBL.Set(OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 2) 
-				{
-					turnWheelBL.Set(-OFFSETMOVE);
-				} 
-				else 
-				{
-					turnWheelBL.Set(0);
-				}
-
-				if (stick.GetRawButton(2) == true && calMode == 3) 
-				{
-					turnWheelBR.Set(OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 3) 
-				{
-					turnWheelBR.Set(-OFFSETMOVE);
-				} 
-				else 
-				{
-					turnWheelBR.Set(0);
-				
-				}
-				
+						{ 
+							Watchdog().Feed();
 							
-			}
+							if (stick.GetRawButton(8) && !isButtonPressed) 
+							{
+								if (calMode == 0) 
+								{
+									flOffset = posEncFL.GetVoltage();
+									dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
+										"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+								} 
+								else if (calMode == 1) 
+								{
+									frOffset = posEncFR.GetVoltage();
+									dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
+										"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+								} 
+								else if (calMode == 2) 
+								{
+									blOffset = posEncBL.GetVoltage();
+									dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
+										"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
+								} 
+								else if (calMode == 3) 
+								{
+									brOffset = posEncBR.GetVoltage();
+									dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
+										"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+								}
+				
+								calMode++;
+								if (calMode >= 4)
+								{
+									calibrating = false;
+								}
+								isButtonPressed = true;
+							}
+							else if (!stick.GetRawButton(8)) 
+							{
+								isButtonPressed = false;
+							}
+							
+							dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
+									"**CALIBRATING WHEEL %i", calMode+1);
+							if (stick.GetRawButton(2) == true && calMode == 0) 
+							{
+								turnWheelFL.Set(OFFSETMOVE);
+							} 
+							else if (stick.GetRawButton(3) == true && calMode == 0) 
+							{
+								turnWheelFL.Set(-OFFSETMOVE);
+							} 
+							else 
+							{
+								turnWheelFL.Set(0);
+							}
+
+							if (stick.GetRawButton(2) == true && calMode == 1) 
+							{
+								turnWheelFR.Set(OFFSETMOVE);
+							} 
+							else if (stick.GetRawButton(3) == true && calMode == 1) 
+							{
+								turnWheelFR.Set(-OFFSETMOVE);
+							} 
+							else 
+							{
+								turnWheelFR.Set(0);
+							}
+
+							if (stick.GetRawButton(2) == true && calMode == 2) 
+							{
+								turnWheelBL.Set(OFFSETMOVE);
+							} 
+							else if (stick.GetRawButton(3) == true && calMode == 2) 
+							{
+								turnWheelBL.Set(-OFFSETMOVE);
+							} 
+							else 
+							{
+								turnWheelBL.Set(0);
+							}
+
+							if (stick.GetRawButton(2) == true && calMode == 3) 
+							{
+								turnWheelBR.Set(OFFSETMOVE);
+							} 
+							else if (stick.GetRawButton(3) == true && calMode == 3) 
+							{
+								turnWheelBR.Set(-OFFSETMOVE);
+							} 
+							else 
+							{
+								turnWheelBR.Set(0);
+							
+							}
+							
+										
+						}
+			
 			else
 			{
 				
@@ -337,14 +351,26 @@ public:
 	
 				}
 	
+				if (isThetaCalculated == true){
+					wheel[FL].prevTheta = wheel[FL].curTheta;
+					wheel[FR].prevTheta = wheel[FR].curTheta;
+					wheel[BL].prevTheta = wheel[BL].curTheta;
+					wheel[BR].prevTheta = wheel[BR].curTheta;
+				}
+				
+				
+				
 				wheel[FL].curTheta = -(posEncFL.GetVoltage() - flOffset ) / 5 * 2
 						* PI;
 				wheel[FR].curTheta = -(posEncFR.GetVoltage() - frOffset) / 5 * 2
 						* PI;
-				wheel[BR].curTheta = -(posEncBR.GetVoltage() - blOffset)/ 5 * 2
-						* PI;
 				wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
 						* PI;
+				wheel[BR].curTheta = -(posEncBR.GetVoltage() - blOffset)/ 5 * 2
+						* PI;
+				
+				isThetaCalculated = true;
+
 	
 				for (i=0; i <= 3; i++) 
 				{
@@ -386,14 +412,14 @@ public:
 					}
 				}
 				
-				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
+				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Mag: %f        ",
 					wheel[FL].mag);
-				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
+				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Diff: %f        ",
 					wheel[FL].diffTheta);
-				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, 
+				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, 
 					"Coords: (%3.2f,%3.2f)        ",wheel[FL].x, wheel[FL].y);
-				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
-				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
+				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "Turn Val: %f         ", wheel[FL].turnVel);
+				dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "EncoderPos: %f        ",
 					moveWheelFL.GetPosition());
 				dsLCD->UpdateLCD();
 				
@@ -450,7 +476,7 @@ public:
 				{
 					turnWheelBR.Set(-wheel[BR].turnVel);
 				 
-					moveWheelBR.Set(wheel[BR].mag);\
+					moveWheelBR.Set(wheel[BR].mag);
 				} 
 				else 
 				{
