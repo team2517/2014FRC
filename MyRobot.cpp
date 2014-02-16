@@ -130,6 +130,8 @@ public:
 			} else {
 				turnWheelBR.Set(0);
 			}
+			
+			dsLCD->UpdateLCD();
 
 		}
 	}
