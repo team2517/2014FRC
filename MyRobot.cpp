@@ -55,10 +55,10 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(27), turnWheelFR(4), turnWheelBR(8),
-				turnWheelBL(11), moveWheelFL(30), moveWheelFR(2),
-				moveWheelBR(12), moveWheelBL(45), posEncFL(1), posEncFR(3),
-				posEncBR(6), posEncBL(5) {
+		stick(1), turnWheelFL(4), turnWheelFR(11), turnWheelBR(27),
+				turnWheelBL(9), moveWheelFL(2), moveWheelFR(45),
+				moveWheelBR(30), moveWheelBL(13), posEncFL(5), posEncFR(1),
+				posEncBR(7), posEncBL(3) {
 		Watchdog().SetExpiration(1);
 	}
 
