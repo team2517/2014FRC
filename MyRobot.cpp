@@ -136,16 +136,24 @@ public:
 			
 			if (stick.GetRawButton(8) && !isButtonPressed){
 				if (calMode == 0){
-					posEncFL.GetVoltage();
+					flOffset = posEncFL.GetVoltage();
+					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "OFFSET(%i) SET TO %f",
+												calMode+1, flOffset);
 				}
 				else if (calMode == 1){
-					posEncFR.GetVoltage();
+					frOffset = posEncFR.GetVoltage();
+					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "OFFSET(%i) SET TO %f",
+												calMode+1, frOffset);
 				}
 				else if (calMode == 3){
-					posEncBL.GetVoltage();
+					blOffset = posEncBL.GetVoltage();
+					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "OFFSET(%i) SET TO %f",
+												calMode+1, blOffset);
 				}
 				else if (calMode == 4){
-					posEncBR.GetVoltage();
+					brOffset = posEncBR.GetVoltage();
+					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "OFFSET(%i) SET TO %f",
+												calMode+1, brOffset);
 				}
 				
 				calMode++;
@@ -290,13 +298,13 @@ public:
 
 			}
 
-			wheel[FL].curTheta = -(posEncFL.GetVoltage() - FLOFFSET ) / 5 * 2
+			wheel[FL].curTheta = -(posEncFL.GetVoltage() - flOffset ) / 5 * 2
 					* PI;
-			wheel[FR].curTheta = -(posEncFR.GetVoltage() - FROFFSET) / 5 * 2
+			wheel[FR].curTheta = -(posEncFR.GetVoltage() - frOffset) / 5 * 2
 					* PI;
-			wheel[BR].curTheta = -(posEncBR.GetVoltage() - BROFFSET)/ 5 * 2
+			wheel[BR].curTheta = -(posEncBR.GetVoltage() - blOffset)/ 5 * 2
 					* PI;
-			wheel[BL].curTheta = -(posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
+			wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
 					* PI;
 
 //						if (stick.GetRawButton(2) == true) {
