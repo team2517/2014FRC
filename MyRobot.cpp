@@ -77,11 +77,11 @@ public:
 					frOffset = posEncFR.GetVoltage();
 					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
 							"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
-				} else if (calMode == 3) {
+				} else if (calMode == 2) {
 					blOffset = posEncBL.GetVoltage();
 					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
 							"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
-				} else if (calMode == 4) {
+				} else if (calMode == 3) {
 					brOffset = posEncBR.GetVoltage();
 					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
 							"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
