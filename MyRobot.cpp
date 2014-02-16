@@ -3,7 +3,7 @@
 #include "Vision/BinaryImage.h"
 #include "Math.h"
 
-#define TESTENCODERNUM				5
+#define TESTENCODERNUM				3
 #define FL                        0
 #define FR                        1
 #define BR                        2
@@ -34,7 +34,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		testEncoder(TESTENCODERNUM), stick(1),jaguar(11){
+		testEncoder(TESTENCODERNUM), stick(1),jaguar(9){
 		Watchdog().SetExpiration(1);
 	}
 
