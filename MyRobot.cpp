@@ -199,6 +199,10 @@ public:
 					}
 					isButtonPressed = true;
 				}
+				else if (!stick.GetRawButton(8)) 
+				{
+					isButtonPressed = false;
+				}
 				
 				
 				
