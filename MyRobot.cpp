@@ -13,7 +13,8 @@
 #define Y                        1
 #define PI                        3.1415926535
 
-struct wheelVector {
+struct wheelVector 
+{
 	float x, y, mag, tarTheta, curTheta, turnVel;
 };
 
@@ -23,7 +24,8 @@ struct wheelVector {
  * Autonomous and OperatorControl methods at the right time as controlled by the switches on
  * the driver station or the field controls.
  */
-class RobotDemo : public SimpleRobot {
+class RobotDemo : public SimpleRobot 
+{
 	AnalogChannel posEncFL;
 	AnalogChannel posEncFR;
 	AnalogChannel posEncBR;
@@ -39,21 +41,24 @@ public:
 	RobotDemo() :
 		posEncFL(5), posEncFR(1), posEncBR(7), posEncBL(3), 
 		turnWheelFL(4), turnWheelFR(11), turnWheelBR(27),
-		turnWheelBL(9), stick(1) {
+		turnWheelBL(9), stick(1) 
+	{
 		Watchdog().SetExpiration(1);
 	}
 
 	/**
 	 * Drive left & right motors for 2 seconds then stop
 	 */
-	void Autonomous() {
+	void Autonomous() 
+	{
 
 	}
 
 	/**
 	 * Runs the motors with arcade steering. 
 	 */
-	void OperatorControl() {
+	void OperatorControl() 
+	{
 		Watchdog().SetEnabled(true);
 		
 		bool isButtonPressed = false;
@@ -65,69 +70,97 @@ public:
 
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
-		while (IsOperatorControl()) {
+		while (IsOperatorControl()) 
+		{
 			Watchdog().Feed();
 
-			if (stick.GetRawButton(8) && !isButtonPressed) {
-				if (calMode == 0) {
+			if (stick.GetRawButton(8) && !isButtonPressed) 
+			{
+				if (calMode == 0) 
+				{
 					flOffset = posEncFL.GetVoltage();
 					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
-				} else if (calMode == 1) {
+						"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+				} 
+				else if (calMode == 1) 
+				{
 					frOffset = posEncFR.GetVoltage();
 					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
-				} else if (calMode == 2) {
+						"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+				} 
+				else if (calMode == 2) 
+				{
 					blOffset = posEncBL.GetVoltage();
 					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
-				} else if (calMode == 3) {
+						"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
+				} 
+				else if (calMode == 3) 
+				{
 					brOffset = posEncBR.GetVoltage();
 					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+						"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
 				}
 
 				calMode++;
 				isButtonPressed = true;
-
-
 			}
 
-			else if (!stick.GetRawButton(8)) {
+			else if (!stick.GetRawButton(8)) 
+			{
 				isButtonPressed = false;
 			}
 
 			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
 					"**CALIBRATING WHEEL %i", calMode+1);
-			if (stick.GetRawButton(2) == true && calMode == 0) {
+			if (stick.GetRawButton(2) == true && calMode == 0) 
+			{
 				turnWheelFL.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true && calMode == 0) {
+			} 
+			else if (stick.GetRawButton(3) == true && calMode == 0) 
+			{
 				turnWheelFL.Set(-OFFSETMOVE);
-			} else {
+			} 
+			else 
+			{
 				turnWheelFL.Set(0);
 			}
 
-			if (stick.GetRawButton(2) == true && calMode == 1) {
+			if (stick.GetRawButton(2) == true && calMode == 1) 
+			{
 				turnWheelFR.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true && calMode == 1) {
+			} 
+			else if (stick.GetRawButton(3) == true && calMode == 1) 
+			{
 				turnWheelFR.Set(-OFFSETMOVE);
-			} else {
+			} 
+			else 
+			{
 				turnWheelFR.Set(0);
 			}
 
-			if (stick.GetRawButton(2) == true && calMode == 2) {
+			if (stick.GetRawButton(2) == true && calMode == 2) 
+			{
 				turnWheelBL.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true && calMode == 2) {
+			} 
+			else if (stick.GetRawButton(3) == true && calMode == 2) 
+			{
 				turnWheelBL.Set(-OFFSETMOVE);
-			} else {
+			} 
+			else 
+			{
 				turnWheelBL.Set(0);
 			}
 
-			if (stick.GetRawButton(2) == true && calMode == 3) {
+			if (stick.GetRawButton(2) == true && calMode == 3) 
+			{
 				turnWheelBR.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true && calMode == 3) {
+			} 
+			else if (stick.GetRawButton(3) == true && calMode == 3) 
+			{
 				turnWheelBR.Set(-OFFSETMOVE);
-			} else {
+			} 
+			else 
+			{
 				turnWheelBR.Set(0);
 			}
 			
@@ -139,11 +172,11 @@ public:
 	/**
 	 * Runs during test mode
 	 */
-	void Test() {
+	void Test() 
+	{
 
 	}
 };
 
-START_ROBOT_CLASS(RobotDemo)
-;
+START_ROBOT_CLASS(RobotDemo);
 
