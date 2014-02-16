@@ -186,28 +186,28 @@ public:
 			 }
 			
 			if (stick.GetRawButton(2) == true && calMode == 1) {
-						 turnWheelFR.Set(.15);
-						 } else if (stick.GetRawButton(3) == true && calMode == 1) {
-						 turnWheelFR.Set(-.15);
-						 } else {
-						 turnWheelFR.Set(0);
-						 }
+				turnWheelFR.Set(.15);
+			} else if (stick.GetRawButton(3) == true && calMode == 1) {
+				turnWheelFR.Set(-.15);
+			} else {
+				turnWheelFR.Set(0);
+			}
 			
 			if (stick.GetRawButton(2) == true && calMode == 2) {
-						 turnWheelBL.Set(.15);
-						 } else if (stick.GetRawButton(3) == true && calMode == 2) {
-						 turnWheelBL.Set(-.15);
-						 } else {
-						 turnWheelBL.Set(0);
-						 }
+				turnWheelBL.Set(.15);
+			} else if (stick.GetRawButton(3) == true && calMode == 2) {
+				turnWheelBL.Set(-.15);
+			} else {
+				turnWheelBL.Set(0);
+			}
 			
 			if (stick.GetRawButton(2) == true && calMode == 3) {
-						 turnWheelBR.Set(.15);
-						 } else if (stick.GetRawButton(3) == true && calMode == 3) {
-						 turnWheelBR.Set(-.15);
-						 } else {
-						 turnWheelBR.Set(0);
-						 }
+				turnWheelBR.Set(.15);
+			} else if (stick.GetRawButton(3) == true && calMode == 3) {
+				turnWheelBR.Set(-.15);
+			} else {
+				turnWheelBR.Set(0);
+			}
 			
 
 		}
