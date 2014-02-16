@@ -4,6 +4,7 @@
 #include "offsets.h"
 //#include "util.h"
 #define TESTVAL                 .4
+#define OFFSETMOVE				.2
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -178,33 +179,33 @@ public:
 			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i",
 							calMode+1);
 			if (stick.GetRawButton(2) == true && calMode == 0) {
-				turnWheelFL.Set(.15);
+				turnWheelFL.Set(OFFSETMOVE);
 			} else if (stick.GetRawButton(3) == true) {
-				turnWheelFL.Set(-.15);
+				turnWheelFL.Set(-OFFSETMOVE);
 			} else {
 				turnWheelFL.Set(0);
 			}
 			
 			if (stick.GetRawButton(2) == true && calMode == 1) {
-				turnWheelFR.Set(.15);
+				turnWheelFR.Set(OFFSETMOVE);
 			} else if (stick.GetRawButton(3) == true && calMode == 1) {
-				turnWheelFR.Set(-.15);
+				turnWheelFR.Set(-OFFSETMOVE);
 			} else {
 				turnWheelFR.Set(0);
 			}
 			
 			if (stick.GetRawButton(2) == true && calMode == 2) {
-				turnWheelBL.Set(.15);
+				turnWheelBL.Set(OFFSETMOVE);
 			} else if (stick.GetRawButton(3) == true && calMode == 2) {
-				turnWheelBL.Set(-.15);
+				turnWheelBL.Set(-OFFSETMOVE);
 			} else {
 				turnWheelBL.Set(0);
 			}
 			
 			if (stick.GetRawButton(2) == true && calMode == 3) {
-				turnWheelBR.Set(.15);
+				turnWheelBR.Set(OFFSETMOVE);
 			} else if (stick.GetRawButton(3) == true && calMode == 3) {
-				turnWheelBR.Set(-.15);
+				turnWheelBR.Set(-OFFSETMOVE);
 			} else {
 				turnWheelBR.Set(0);
 			}
