@@ -130,6 +130,12 @@ public:
 		if (stick.GetRawButton(5) && stick.GetRawButton(6)) {
 			calibrating = true;
 			calMode = 0;
+			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING**             ");
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "1 NOT SET                   ");
+			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "2 NOT SET                   ");
+			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "3 NOT SET                   ");
+			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "4 NOT SET                   ");
+			dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "                            ");
 		}
 		
 		while (calibrating == true) {
@@ -137,22 +143,22 @@ public:
 			if (stick.GetRawButton(8) && !isButtonPressed){
 				if (calMode == 0){
 					flOffset = posEncFL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "OFFSET(%i) SET TO %f",
+					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "OFFSET(%i) SET TO %f     ",
 												calMode+1, flOffset);
 				}
 				else if (calMode == 1){
 					frOffset = posEncFR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "OFFSET(%i) SET TO %f",
+					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "OFFSET(%i) SET TO %f     ",
 												calMode+1, frOffset);
 				}
 				else if (calMode == 3){
 					blOffset = posEncBL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "OFFSET(%i) SET TO %f",
+					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "OFFSET(%i) SET TO %f     ",
 												calMode+1, blOffset);
 				}
 				else if (calMode == 4){
 					brOffset = posEncBR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "OFFSET(%i) SET TO %f",
+					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "OFFSET(%i) SET TO %f     ",
 												calMode+1, brOffset);
 				}
 				
@@ -169,7 +175,7 @@ public:
 				isButtonPressed = false; 
 			}
 			
-			dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "**CALIBRATING WHEEL %i",
+			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i",
 							calMode+1);
 			if (stick.GetRawButton(2) == true && calMode == 0) {
 			 turnWheelFL.Set(.15);
