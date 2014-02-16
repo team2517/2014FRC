@@ -87,6 +87,10 @@ public:
 		wheelVector wheel[4];
 		int i;
 		int j;
+		bool calibrating;
+		int calMode;
+		bool isButtonPressed;
+		isButtonPressed = false;
 		
 //		moveWheelFL.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelFL.ConfigEncoderCodesPerRev(1000);
@@ -119,6 +123,82 @@ public:
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
+		
+		
+		
+		
+		if (stick.GetRawButton(5) && stick.GetRawButton(6)) {
+			calibrating = true;
+			calMode = 0;
+		}
+		
+		while (calibrating == true) {
+			
+			if (stick.GetRawButton(8) && !isButtonPressed){
+				if (calMode == 0){
+					posEncFL.GetVoltage();
+				}
+				else if (calMode == 1){
+					posEncFR.GetVoltage();
+				}
+				else if (calMode == 3){
+					posEncBL.GetVoltage();
+				}
+				else if (calMode == 4){
+					posEncBR.GetVoltage();
+				}
+				
+				calMode++;
+				isButtonPressed = true;
+				
+				
+				if (calMode >= 4) { calibrating = false; }
+				
+				
+			}
+			
+			else if (isButtonPressed){ 
+				isButtonPressed = false; 
+			}
+			
+			dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "**CALIBRATING WHEEL %i",
+							calMode+1);
+			if (stick.GetRawButton(2) == true && calMode == 0) {
+			 turnWheelFL.Set(.15);
+			 } else if (stick.GetRawButton(3) == true) {
+			 turnWheelFL.Set(-.15);
+			 } else {
+			 turnWheelFL.Set(0);
+			 }
+			
+			if (stick.GetRawButton(2) == true && calMode == 1) {
+						 turnWheelFR.Set(.15);
+						 } else if (stick.GetRawButton(3) == true && calMode == 1) {
+						 turnWheelFR.Set(-.15);
+						 } else {
+						 turnWheelFR.Set(0);
+						 }
+			
+			if (stick.GetRawButton(2) == true && calMode == 2) {
+						 turnWheelBL.Set(.15);
+						 } else if (stick.GetRawButton(3) == true && calMode == 2) {
+						 turnWheelBL.Set(-.15);
+						 } else {
+						 turnWheelBL.Set(0);
+						 }
+			
+			if (stick.GetRawButton(2) == true && calMode == 3) {
+						 turnWheelBR.Set(.15);
+						 } else if (stick.GetRawButton(3) == true && calMode == 3) {
+						 turnWheelBR.Set(-.15);
+						 } else {
+						 turnWheelBR.Set(0);
+						 }
+			
+
+		}
+		
+		
 		
 		
 		for (i = 0; i < 4; i++) {
