@@ -17,7 +17,7 @@
 #define IVALUE					0.0
 #define DVALUE					0
 #define MAXPOWER				1
-#define TESTER                  1
+//#define TESTER                  1
 //#define VOLTAGERATE				10000
 
 float deadBand(float);
