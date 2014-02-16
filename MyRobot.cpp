@@ -23,7 +23,8 @@
 
 float deadBand(float);
 
-struct wheelVector {
+struct wheelVector 
+{
 	float rawx, x, rawy, y, mag, tarTheta, curTheta, diffTheta, turnVel;
 
 	float prevTurnVel;
@@ -64,16 +65,19 @@ public:
 				turnWheelBL(9), moveWheelFL(2), moveWheelFR(45),
 				moveWheelBR(30), moveWheelBL(13), pickUpArm1(12), 
 				pickUpArm2(46), shooterMotor1(1), shooterMotor2(2),
-				posEncFL(5), posEncFR(1), posEncBR(7), posEncBL(3){
+				posEncFL(5), posEncFR(1), posEncBR(7), posEncBL(3)
+	{
 		Watchdog().SetExpiration(1);
 	}
 
 	/**
 	 * Drive left & right motors for 2 seconds then stop
 	 */
-	void Autonomous() {
+	void Autonomous() 
+	{
 
-		while (IsAutonomous() && IsEnabled()) {
+		while (IsAutonomous() && IsEnabled()) 
+		{
 
 		}
 	}
@@ -114,7 +118,6 @@ public:
 //		Watchdog().Feed();
 //		moveWheelBL.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelBL.ConfigEncoderCodesPerRev(1000);
-//		moveWheelBL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
 //		moveWheelBL.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
 //		moveWheelBL.SetPID(PVALUE,IVALUE,DVALUE);
 //		moveWheelBL.EnableControl();
@@ -128,98 +131,7 @@ public:
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
-//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
-		
-		
-		
-		
-		if (stick.GetRawButton(5) && stick.GetRawButton(6)) {
-			calibrating = true;
-			calMode = 0;
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING**             ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "1 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "2 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "3 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "4 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "                            ");
-		}
-		
-		while (calibrating == true) {
-			
-			if (stick.GetRawButton(8) && !isButtonPressed){
-				if (calMode == 0){
-					flOffset = posEncFL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, flOffset);
-				}
-				else if (calMode == 1){
-					frOffset = posEncFR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, frOffset);
-				}
-				else if (calMode == 3){
-					blOffset = posEncBL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, blOffset);
-				}
-				else if (calMode == 4){
-					brOffset = posEncBR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, brOffset);
-				}
-				
-				calMode++;
-				isButtonPressed = true;
-				
-				
-				if (calMode >= 4) { calibrating = false; }
-				
-				
-			}
-			
-			else if (isButtonPressed){ 
-				isButtonPressed = false; 
-			}
-			
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i",
-							calMode+1);
-			if (stick.GetRawButton(2) == true && calMode == 0) {
-				turnWheelFL.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true) {
-				turnWheelFL.Set(-OFFSETMOVE);
-			} else {
-				turnWheelFL.Set(0);
-			}
-			
-			if (stick.GetRawButton(2) == true && calMode == 1) {
-				turnWheelFR.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true && calMode == 1) {
-				turnWheelFR.Set(-OFFSETMOVE);
-			} else {
-				turnWheelFR.Set(0);
-			}
-			
-			if (stick.GetRawButton(2) == true && calMode == 2) {
-				turnWheelBL.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true && calMode == 2) {
-				turnWheelBL.Set(-OFFSETMOVE);
-			} else {
-				turnWheelBL.Set(0);
-			}
-			
-			if (stick.GetRawButton(2) == true && calMode == 3) {
-				turnWheelBR.Set(OFFSETMOVE);
-			} else if (stick.GetRawButton(3) == true && calMode == 3) {
-				turnWheelBR.Set(-OFFSETMOVE);
-			} else {
-				turnWheelBR.Set(0);
-			}
-			
-
-		}
-		
-		
-		
+//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);	
 		
 		for (i = 0; i < 4; i++) {
 			wheel[i].changeSign = false;
@@ -231,12 +143,9 @@ public:
 		turnWheelBR.SetVoltageRampRate(voltageRate);
 		turnWheelBL.SetVoltageRampRate(voltageRate);*/
 
-		while (IsOperatorControl()) {
+		while (IsOperatorControl()) 
+		{
 			Watchdog().Feed();
-
-
-			
-//#define TESTER			1
 
 			leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
 			leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
