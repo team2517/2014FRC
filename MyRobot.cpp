@@ -157,11 +157,13 @@ public:
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 			
 			
-			if (stick.GetRawButton(5) && stick.GetRawButton(6)){
+			if (stick.GetRawButton(5) && stick.GetRawButton(6))
+			{
 				calibrating = true;
 			}
 			
-			while (calibrating == true){
+			while (calibrating == true)
+			{ 
 				
 				if (stick.GetRawButton(8) && !isButtonPressed) 
 				{
@@ -191,7 +193,8 @@ public:
 					}
 	
 					calMode++;
-					if (calMode >= 4){
+					if (calMode >= 4)
+					{
 						calibrating = false;
 					}
 					isButtonPressed = true;
