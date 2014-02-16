@@ -204,13 +204,68 @@ public:
 					isButtonPressed = false;
 				}
 				
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
+						"**CALIBRATING WHEEL %i", calMode+1);
+				if (stick.GetRawButton(2) == true && calMode == 0) 
+				{
+					turnWheelFL.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 0) 
+				{
+					turnWheelFL.Set(-OFFSETMOVE);
+				} 
+				else 
+				{
+					turnWheelFL.Set(0);
+				}
+
+				if (stick.GetRawButton(2) == true && calMode == 1) 
+				{
+					turnWheelFR.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 1) 
+				{
+					turnWheelFR.Set(-OFFSETMOVE);
+				} 
+				else 
+				{
+					turnWheelFR.Set(0);
+				}
+
+				if (stick.GetRawButton(2) == true && calMode == 2) 
+				{
+					turnWheelBL.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 2) 
+				{
+					turnWheelBL.Set(-OFFSETMOVE);
+				} 
+				else 
+				{
+					turnWheelBL.Set(0);
+				}
+
+				if (stick.GetRawButton(2) == true && calMode == 3) 
+				{
+					turnWheelBR.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 3) 
+				{
+					turnWheelBR.Set(-OFFSETMOVE);
+				} 
+				else 
+				{
+					turnWheelBR.Set(0);
 				
+				}
 				
+							
 			}
 			
 			#ifdef TESTER
 				if (stick.GetRawButton(4))
 				{
+					fsakld;jkal;sjdf al;kjfnd m,xcnz.,mvn'';
 					leftStickVec[X] = 0;
 					leftStickVec[Y] = TESTVAL;
 				} 
