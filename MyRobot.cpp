@@ -47,6 +47,8 @@ class RobotDemo : public SimpleRobot {
 	CANJaguar moveWheelFR;
 	CANJaguar moveWheelBR;
 	CANJaguar moveWheelBL;
+	CANJaguar pickUpArm1;
+	CANJaguar pickUpArm2;
 	AnalogChannel posEncFL;
 	AnalogChannel posEncFR;
 	AnalogChannel posEncBR;
@@ -58,8 +60,8 @@ public:
 	RobotDemo() :
 		stick(1), turnWheelFL(4), turnWheelFR(11), turnWheelBR(27),
 				turnWheelBL(9), moveWheelFL(2), moveWheelFR(45),
-				moveWheelBR(30), moveWheelBL(13), posEncFL(5), posEncFR(1),
-				posEncBR(7), posEncBL(3) {
+				moveWheelBR(30), moveWheelBL(13), pickUpArm1(12), pickUpArm2(46),posEncFL(5), posEncFR(1),
+				posEncBR(7), posEncBL(3){
 		Watchdog().SetExpiration(1);
 	}
 
@@ -462,7 +464,9 @@ public:
 		{
 			wheel[i].prevTurnVel = wheel[i].turnVel;
 		}
-
+		
+		
+		
 	}
 }
 
