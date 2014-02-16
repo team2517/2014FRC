@@ -87,7 +87,7 @@ public:
 		wheelVector wheel[4];
 		int i;
 		int j;
-		bool calibrating;
+		bool calibrating = false;
 		int calMode;
 		bool isButtonPressed;
 		isButtonPressed = false;
