@@ -164,6 +164,7 @@ public:
 			
 			while (calibrating == true)
 			{ 
+				Watchdog().Feed();
 				
 				if (stick.GetRawButton(8) && !isButtonPressed) 
 				{
