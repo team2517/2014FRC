@@ -85,7 +85,8 @@ public:
 	/**
 	 * Runs the motors with arcade steering. 
 	 */
-	void OperatorControl() {
+	void OperatorControl() 
+	{
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
@@ -150,25 +151,29 @@ public:
 			leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
 			leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
 			leftStickVec[X] = leftStickVec[RAWX]*sqrt(1-.5*pow(
-					leftStickVec[RAWY], 2));
+				leftStickVec[RAWY], 2));
 			leftStickVec[Y] = -leftStickVec[RAWY]*sqrt(1-.5*pow(
-					leftStickVec[RAWX], 2));
+				leftStickVec[RAWX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 			
 			#ifdef TESTER
-				if (stick.GetRawButton(4)){
+				if (stick.GetRawButton(4))
+				{
 					leftStickVec[X] = 0;
 					leftStickVec[Y] = TESTVAL;
 				} 
-				else if (stick.GetRawButton(3)){
+				else if (stick.GetRawButton(3))
+				{
 					leftStickVec[X] = TESTVAL;
 					leftStickVec[Y] = 0;
 				}
-				else if (stick.GetRawButton(2)){
+				else if (stick.GetRawButton(2))
+				{
 					leftStickVec[X] = 0;
 					leftStickVec[Y] = -TESTVAL;
 				}
-				else if (stick.GetRawButton(1)){
+				else if (stick.GetRawButton(1))
+				{
 					leftStickVec[X] = -TESTVAL;
 					leftStickVec[Y] = 0;
 				}				
@@ -193,27 +198,30 @@ public:
 			wheel[BL].x += leftStickVec[X];
 			wheel[BL].y += leftStickVec[Y];
 			
-			
-			
-
-			for (i = 0; i <= 3; i++) {
-				wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
+			for (i = 0; i <= 3; i++) 
+			{
+				wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) 
+					+ pow(wheel[i].y, 2));
 			}
 
-			for (i = 0; i <= 3; i++) {
-				if (wheel[i].mag > 1 * MAXPOWER) {
+			for (i = 0; i <= 3; i++) 
+			{
+				if (wheel[i].mag > 1 * MAXPOWER) 
+				{
 					largestMag = wheel[i].mag;
-					for (j = 0; j <= 3; j++) {
+					for (j = 0; j <= 3; j++) 
+					{
 						wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
 					}
 				}
-
 			}
 
-			for (i = 0; i <= 3; i++) {
+			for (i = 0; i <= 3; i++) 
+			{
 				wheel[i].tarTheta = atan(wheel[i].y / wheel[i].x);
 
-				if (wheel[i].x < 0) {
+				if (wheel[i].x < 0) 
+				{
 					wheel[i].tarTheta += PI;
 				}
 
@@ -228,40 +236,42 @@ public:
 			wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
 					* PI;
 
-//						if (stick.GetRawButton(2) == true) {
-//						 turnWheelFL.Set(.15);
-//						 } else if (stick.GetRawButton(3) == true) {
-//						 turnWheelFL.Set(-.15);
-//						 } else {
-//						 turnWheelFL.Set(0);
-//						 }
-
-			for (i=0; i <= 3; i++) {
+			for (i=0; i <= 3; i++) 
+			{
 				wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
 
-				if (wheel[i].diffTheta > PI) {
+				if (wheel[i].diffTheta > PI) 
+				{
 					wheel[i].diffTheta -= 2*PI;
-				} else if (wheel[i].diffTheta < -PI) {
+				} 
+				else if (wheel[i].diffTheta < -PI) 
+				{
 					wheel[i].diffTheta += 2*PI;
 				}
 
-				if (wheel[i].diffTheta > PI/2) {
+				if (wheel[i].diffTheta > PI/2) 
+				{
 					wheel[i].diffTheta -= PI;
 					wheel[i].mag = wheel[i].mag * -1;
-				} else if (wheel[i].diffTheta < -PI/2) {
+				} 
+				else if (wheel[i].diffTheta < -PI/2) 
+				{
 					wheel[i].diffTheta += PI;
 					wheel[i].mag = wheel[i].mag * -1;
 				}
 
 				wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
 				
-				if (0 < wheel[i].turnVel && wheel[i].turnVel < .17){
+				if (0 < wheel[i].turnVel && wheel[i].turnVel < .17)
+				{
 					wheel[i].turnVel = .17;
 				} 
-				if (0 > wheel[i].turnVel && wheel[i].turnVel > -.17){
+				if (0 > wheel[i].turnVel && wheel[i].turnVel > -.17)
+				{
 					wheel[i].turnVel = -.17;
 				}
-				if (fabs(wheel[i].diffTheta) < PI/45 ){
+				if (fabs(wheel[i].diffTheta) < PI/45 )
+				{
 					wheel[i].turnVel = 0;
 				}
 			}
@@ -270,11 +280,11 @@ public:
 				wheel[FL].mag);
 			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
 				wheel[FL].diffTheta);
-			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
-				wheel[FL].x, wheel[FL].y);
+			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, 
+				"Coords: (%3.2f,%3.2f)        ",wheel[FL].x, wheel[FL].y);
 			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
 			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
-							moveWheelFL.GetPosition());
+				moveWheelFL.GetPosition());
 			dsLCD->UpdateLCD();
 			
 			for (i = 0; i < 4; i++) 
@@ -286,134 +296,105 @@ public:
 					wheel[i].changeSign = true;
 					wheel[i].moveTime = baneTimer.Get() + .1;
 				}
-				if (wheel[i].changeSign) {
+				if (wheel[i].changeSign) 
+				{
 					wheel[i].turnVel = 0;
-					if (wheel[i].moveTime < baneTimer.Get()) {
+					if (wheel[i].moveTime < baneTimer.Get()) 
+					{
 						wheel[i].changeSign = false;
 					}
 				}
-				
-
 			}
 		
 
-		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
-			turnWheelFL.Set(-wheel[FL].turnVel);
-			//				turnWheelFR.Set(wheel[FR].turnVel);
-			//				 turnWheelBR.Set(wheel[BR].turnVel);
-			//				 turnWheelBL.Set(wheel[BL].turnVel);
-			//				 
-			moveWheelFL.Set(wheel[FL].mag);
-			//				 moveWheelFR.Set(wheel[FR].mag);
-			//				 moveWheelBR.Set(wheel[BR].mag);
-			//				 moveWheelBL.Set(wheel[BL].mag);
+			if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
+			{
+				turnWheelFL.Set(-wheel[FL].turnVel);
+				moveWheelFL.Set(wheel[FL].mag);
+			} 
+			else 
+			{
+				turnWheelFL.Set(0);
+				moveWheelFL.Set(0);
+			}
+			if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
+			{
+				turnWheelFR.Set(-wheel[FR].turnVel);		 
+				moveWheelFR.Set(wheel[FR].mag);
+			} 
+			else 
+			{
+				turnWheelFR.Set(0);
+				moveWheelFR.Set(0);
+			}
+			if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
+			{
+				turnWheelBL.Set(-wheel[BL].turnVel);				 
+				moveWheelBL.Set(wheel[BL].mag);
+			} else 
+			{
+				turnWheelBL.Set(0);
+				moveWheelBL.Set(0);
+			}
+			if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
+			{
+				turnWheelBR.Set(-wheel[BR].turnVel);
+			 
+				moveWheelBR.Set(wheel[BR].mag);\
+			} 
+			else 
+			{
+				turnWheelBR.Set(0);
+				moveWheelBR.Set(0);
+			}
 
-		} else {
-			turnWheelFL.Set(0);
-			moveWheelFL.Set(0);
-
-			//				turnWheelFR.Set(0);
-			//				turnWheelBR.Set(0);
-			//				turnWheelBL.Set(0);
+			for(i=0; i<4; i++)
+			{
+				wheel[i].prevTurnVel = wheel[i].turnVel;
+			}
+			if (stick.GetRawButton(7))
+			{
+				pickUpArm1.Set(1);
+				pickUpArm2.Set(-1);
+			}
+			else if (stick.GetRawButton(5))
+			{
+				pickUpArm1.Set(-1);
+				pickUpArm2.Set(1);
+			if (stick.GetRawButton(6))
+			{
+				shooterMotor1.Set(1);
+				shooterMotor2.Set(1);
+			}
+			else if (stick.GetRawButton(8))
+			{
+				shooterMotor1.Set(-1);
+				shooterMotor2.Set(-1);
+			}
 		}
-		if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
-			turnWheelFR.Set(-wheel[FR].turnVel);
-			//				turnWheelFR.Set(wheel[FR].turnVel);
-			//				 turnWheelBR.Set(wheel[BR].turnVel);
-			//				 turnWheelBL.Set(wheel[BL].turnVel);
-			//				 
-			moveWheelFR.Set(wheel[FR].mag);
-			//				 moveWheelFR.Set(wheel[FR].mag);
-			//				 moveWheelBR.Set(wheel[BR].mag);
-			//				 moveWheelBL.Set(wheel[BL].mag);
-
-		} else {
-			turnWheelFR.Set(0);
-			moveWheelFR.Set(0);
-
-			//				turnWheelFR.Set(0);
-			//				turnWheelBR.Set(0);
-			//				turnWheelBL.Set(0);
-		}
-		if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
-			turnWheelBL.Set(-wheel[BL].turnVel);
-//				turnWheelBL.Set(wheel[BL].turnVel);
-//				 turnWheelBR.Set(wheel[BR].turnVel);
-//				 turnWheelBL.Set(wheel[BL].turnVel);
-//				 
-			moveWheelBL.Set(wheel[BL].mag);
-//				 moveWheelBL.Set(wheel[BL].mag);
-//				 moveWheelBR.Set(wheel[BR].mag);
-//				 moveWheelBL.Set(wheel[BL].mag);
-
-		} else {
-			turnWheelBL.Set(0);
-			moveWheelBL.Set(0);
-//				turnWheelBL.Set(0);
-//				turnWheelBR.Set(0);
-//				turnWheelBL.Set(0);
-		}
-		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
-			turnWheelBR.Set(-wheel[BR].turnVel);
-		//				turnWheelBL.Set(wheel[BL].turnVel);
-		//				 turnWheelBR.Set(wheel[BR].turnVel);
-		//				 turnWheelBL.Set(wheel[BL].turnVel);
-		//				 
-			moveWheelBR.Set(wheel[BR].mag);
-		//				 moveWheelBL.Set(wheel[BL].mag);
-		//				 moveWheelBR.Set(wheel[BR].mag);
-		//				 moveWheelBL.Set(wheel[BL].mag);
-
-		} else {
-			turnWheelBR.Set(0);
-			moveWheelBR.Set(0);
-		//				turnWheelBL.Set(0);
-		//				turnWheelBR.Set(0);
-		//				turnWheelBL.Set(0);
-		}
-
-		for(i=0; i<4; i++)
-		{
-			wheel[i].prevTurnVel = wheel[i].turnVel;
-		}
-		if (stick.GetRawButton(7)){
-			pickUpArm1.Set(1);
-			pickUpArm2.Set(-1);
-		}
-		else if (stick.GetRawButton(5)){
-			pickUpArm1.Set(-1);
-			pickUpArm2.Set(1);
-		if (stick.GetRawButton(6)){
-			shooterMotor1.Set(1);
-			shooterMotor2.Set(1);
-		}
-		else if (stick.GetRawButton(8)){
-			shooterMotor1.Set(-1);
-			shooterMotor2.Set(-1);
-		}
-		}
-		
 	}
 }
 
 /**
  * Runs during test mode
  */
-void Test() {
+void Test() 
+{
 
 }
 };
 
-START_ROBOT_CLASS(RobotDemo)
-;
+START_ROBOT_CLASS(RobotDemo);
 
-float deadBand(float axisValue) {
-	if (axisValue < -.05 || axisValue> .05){
-	return axisValue;
-}
-else
+float deadBand(float axisValue) 
 {
-	return 0.0;
-}
+	if (axisValue < -.05 || axisValue> .05)
+	{
+		return axisValue;
+	}
+	else
+	{
+		return 0.0;
+	}
 }
 
