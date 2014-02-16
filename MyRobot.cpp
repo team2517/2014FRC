@@ -156,6 +156,51 @@ public:
 				leftStickVec[RAWX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 			
+			
+			if (stick.GetRawButton(5) && stick.GetRawButton(6)){
+				calibrating = true;
+			}
+			
+			while (calibrating == true){
+				
+				if (stick.GetRawButton(8) && !isButtonPressed) 
+				{
+					if (calMode == 0) 
+					{
+						flOffset = posEncFL.GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+					} 
+					else if (calMode == 1) 
+					{
+						frOffset = posEncFR.GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+					} 
+					else if (calMode == 2) 
+					{
+						blOffset = posEncBL.GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
+					} 
+					else if (calMode == 3) 
+					{
+						brOffset = posEncBR.GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+					}
+	
+					calMode++;
+					if (calMode >= 4){
+						calibrating = false;
+					}
+					isButtonPressed = true;
+				}
+				
+				
+				
+			}
+			
 			#ifdef TESTER
 				if (stick.GetRawButton(4))
 				{
@@ -352,25 +397,25 @@ public:
 			{
 				wheel[i].prevTurnVel = wheel[i].turnVel;
 			}
-			if (stick.GetRawButton(7))
-			{
-				pickUpArm1.Set(1);
-				pickUpArm2.Set(-1);
-			}
-			else if (stick.GetRawButton(5))
-			{
-				pickUpArm1.Set(-1);
-				pickUpArm2.Set(1);
-			if (stick.GetRawButton(6))
-			{
-				shooterMotor1.Set(1);
-				shooterMotor2.Set(1);
-			}
-			else if (stick.GetRawButton(8))
-			{
-				shooterMotor1.Set(-1);
-				shooterMotor2.Set(-1);
-			}
+//			if (stick.GetRawButton(7))
+//			{
+//				pickUpArm1.Set(1);
+//				pickUpArm2.Set(-1);
+//			}
+//			else if (stick.GetRawButton(5))
+//			{
+//				pickUpArm1.Set(-1);
+//				pickUpArm2.Set(1);
+//			if (stick.GetRawButton(6))
+//			{
+//				shooterMotor1.Set(1);
+//				shooterMotor2.Set(1);
+//			}
+//			else if (stick.GetRawButton(8))
+//			{
+//				shooterMotor1.Set(-1);
+//				shooterMotor2.Set(-1);
+//			}
 		}
 	}
 }
