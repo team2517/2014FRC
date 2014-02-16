@@ -273,10 +273,10 @@ public:
 			wheel[FL].y += leftStickVec[Y];
 			wheel[FR].x += leftStickVec[X];
 			wheel[FR].y += leftStickVec[Y];
-			wheel[BL].x += leftStickVec[X];
-			wheel[BL].y += leftStickVec[Y];
 			wheel[BR].x += leftStickVec[X];
 			wheel[BR].y += leftStickVec[Y];
+			wheel[BL].x += leftStickVec[X];
+			wheel[BL].y += leftStickVec[Y];
 			
 			
 			
@@ -437,6 +437,24 @@ public:
 //				turnWheelBL.Set(0);
 //				turnWheelBR.Set(0);
 //				turnWheelBL.Set(0);
+		}
+		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
+			turnWheelBR.Set(-wheel[BR].turnVel);
+		//				turnWheelBL.Set(wheel[BL].turnVel);
+		//				 turnWheelBR.Set(wheel[BR].turnVel);
+		//				 turnWheelBL.Set(wheel[BL].turnVel);
+		//				 
+			moveWheelBR.Set(wheel[BR].mag);
+		//				 moveWheelBL.Set(wheel[BL].mag);
+		//				 moveWheelBR.Set(wheel[BR].mag);
+		//				 moveWheelBL.Set(wheel[BL].mag);
+
+		} else {
+			turnWheelBR.Set(0);
+			moveWheelBR.Set(0);
+		//				turnWheelBL.Set(0);
+		//				turnWheelBR.Set(0);
+		//				turnWheelBL.Set(0);
 		}
 
 		for(i=0; i<4; i++)
