@@ -162,7 +162,7 @@ public:
 				calibrating = true;
 			}
 			
-			while (calibrating == true)
+			while (calibrating == true && IsOperatorControl())
 			{ 
 				Watchdog().Feed();
 				
