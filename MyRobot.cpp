@@ -162,7 +162,7 @@ public:
 				calibrating = true;
 			}
 			
-			while (calibrating == true && IsOperatorControl())
+			if (calibrating == true && IsOperatorControl())
 			{ 
 				Watchdog().Feed();
 				
@@ -262,224 +262,227 @@ public:
 				
 							
 			}
-			
-			#ifdef TESTER
-				if (stick.GetRawButton(4))
-				{
-					fsakld;jkal;sjdf al;kjfnd m,xcnz.,mvn'';
-					leftStickVec[X] = 0;
-					leftStickVec[Y] = TESTVAL;
-				} 
-				else if (stick.GetRawButton(3))
-				{
-					leftStickVec[X] = TESTVAL;
-					leftStickVec[Y] = 0;
-				}
-				else if (stick.GetRawButton(2))
-				{
-					leftStickVec[X] = 0;
-					leftStickVec[Y] = -TESTVAL;
-				}
-				else if (stick.GetRawButton(1))
-				{
-					leftStickVec[X] = -TESTVAL;
-					leftStickVec[Y] = 0;
-				}				
-			#endif
-			
-			//Need to change these values based on center/wheel placement.
-			wheel[FL].x = .707 * phi;
-			wheel[FL].y = .707 * phi;
-			wheel[FR].x = .707 * phi;
-			wheel[FR].y = -.707 * phi;
-			wheel[BL].x = -.707 * phi;
-			wheel[BL].y = -.707 * phi;
-			wheel[BR].x = -.707 * phi;
-			wheel[BR].y = .707 * phi;
-
-			wheel[FL].x += leftStickVec[X];
-			wheel[FL].y += leftStickVec[Y];
-			wheel[FR].x += leftStickVec[X];
-			wheel[FR].y += leftStickVec[Y];
-			wheel[BR].x += leftStickVec[X];
-			wheel[BR].y += leftStickVec[Y];
-			wheel[BL].x += leftStickVec[X];
-			wheel[BL].y += leftStickVec[Y];
-			
-			for (i = 0; i <= 3; i++) 
+			else
 			{
-				wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) 
-					+ pow(wheel[i].y, 2));
-			}
-
-			for (i = 0; i <= 3; i++) 
-			{
-				if (wheel[i].mag > 1 * MAXPOWER) 
-				{
-					largestMag = wheel[i].mag;
-					for (j = 0; j <= 3; j++) 
-					{
-						wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
-					}
-				}
-			}
-
-			for (i = 0; i <= 3; i++) 
-			{
-				wheel[i].tarTheta = atan(wheel[i].y / wheel[i].x);
-
-				if (wheel[i].x < 0) 
-				{
-					wheel[i].tarTheta += PI;
-				}
-
-			}
-
-			wheel[FL].curTheta = -(posEncFL.GetVoltage() - flOffset ) / 5 * 2
-					* PI;
-			wheel[FR].curTheta = -(posEncFR.GetVoltage() - frOffset) / 5 * 2
-					* PI;
-			wheel[BR].curTheta = -(posEncBR.GetVoltage() - blOffset)/ 5 * 2
-					* PI;
-			wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
-					* PI;
-
-			for (i=0; i <= 3; i++) 
-			{
-				wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
-
-				if (wheel[i].diffTheta > PI) 
-				{
-					wheel[i].diffTheta -= 2*PI;
-				} 
-				else if (wheel[i].diffTheta < -PI) 
-				{
-					wheel[i].diffTheta += 2*PI;
-				}
-
-				if (wheel[i].diffTheta > PI/2) 
-				{
-					wheel[i].diffTheta -= PI;
-					wheel[i].mag = wheel[i].mag * -1;
-				} 
-				else if (wheel[i].diffTheta < -PI/2) 
-				{
-					wheel[i].diffTheta += PI;
-					wheel[i].mag = wheel[i].mag * -1;
-				}
-
-				wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
 				
-				if (0 < wheel[i].turnVel && wheel[i].turnVel < .17)
-				{
-					wheel[i].turnVel = .17;
-				} 
-				if (0 > wheel[i].turnVel && wheel[i].turnVel > -.17)
-				{
-					wheel[i].turnVel = -.17;
-				}
-				if (fabs(wheel[i].diffTheta) < PI/45 )
-				{
-					wheel[i].turnVel = 0;
-				}
-			}
-			
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
-				wheel[FL].mag);
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
-				wheel[FL].diffTheta);
-			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, 
-				"Coords: (%3.2f,%3.2f)        ",wheel[FL].x, wheel[FL].y);
-			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
-			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
-				moveWheelFL.GetPosition());
-			dsLCD->UpdateLCD();
-			
-			for (i = 0; i < 4; i++) 
-			{
-				if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
-						|| (wheel[i].turnVel < 0&& wheel[i].prevTurnVel> 0)) 
-						&& !wheel[i].changeSign)
-				{
-					wheel[i].changeSign = true;
-					wheel[i].moveTime = baneTimer.Get() + .1;
-				}
-				if (wheel[i].changeSign) 
-				{
-					wheel[i].turnVel = 0;
-					if (wheel[i].moveTime < baneTimer.Get()) 
+				#ifdef TESTER
+					if (stick.GetRawButton(4))
 					{
-						wheel[i].changeSign = false;
+						fsakld;jkal;sjdf al;kjfnd m,xcnz.,mvn'';
+						leftStickVec[X] = 0;
+						leftStickVec[Y] = TESTVAL;
+					} 
+					else if (stick.GetRawButton(3))
+					{
+						leftStickVec[X] = TESTVAL;
+						leftStickVec[Y] = 0;
+					}
+					else if (stick.GetRawButton(2))
+					{
+						leftStickVec[X] = 0;
+						leftStickVec[Y] = -TESTVAL;
+					}
+					else if (stick.GetRawButton(1))
+					{
+						leftStickVec[X] = -TESTVAL;
+						leftStickVec[Y] = 0;
+					}				
+				#endif
+				
+				//Need to change these values based on center/wheel placement.
+				wheel[FL].x = .707 * phi;
+				wheel[FL].y = .707 * phi;
+				wheel[FR].x = .707 * phi;
+				wheel[FR].y = -.707 * phi;
+				wheel[BL].x = -.707 * phi;
+				wheel[BL].y = -.707 * phi;
+				wheel[BR].x = -.707 * phi;
+				wheel[BR].y = .707 * phi;
+	
+				wheel[FL].x += leftStickVec[X];
+				wheel[FL].y += leftStickVec[Y];
+				wheel[FR].x += leftStickVec[X];
+				wheel[FR].y += leftStickVec[Y];
+				wheel[BR].x += leftStickVec[X];
+				wheel[BR].y += leftStickVec[Y];
+				wheel[BL].x += leftStickVec[X];
+				wheel[BL].y += leftStickVec[Y];
+				
+				for (i = 0; i <= 3; i++) 
+				{
+					wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) 
+						+ pow(wheel[i].y, 2));
+				}
+	
+				for (i = 0; i <= 3; i++) 
+				{
+					if (wheel[i].mag > 1 * MAXPOWER) 
+					{
+						largestMag = wheel[i].mag;
+						for (j = 0; j <= 3; j++) 
+						{
+							wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
+						}
 					}
 				}
+	
+				for (i = 0; i <= 3; i++) 
+				{
+					wheel[i].tarTheta = atan(wheel[i].y / wheel[i].x);
+	
+					if (wheel[i].x < 0) 
+					{
+						wheel[i].tarTheta += PI;
+					}
+	
+				}
+	
+				wheel[FL].curTheta = -(posEncFL.GetVoltage() - flOffset ) / 5 * 2
+						* PI;
+				wheel[FR].curTheta = -(posEncFR.GetVoltage() - frOffset) / 5 * 2
+						* PI;
+				wheel[BR].curTheta = -(posEncBR.GetVoltage() - blOffset)/ 5 * 2
+						* PI;
+				wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
+						* PI;
+	
+				for (i=0; i <= 3; i++) 
+				{
+					wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
+	
+					if (wheel[i].diffTheta > PI) 
+					{
+						wheel[i].diffTheta -= 2*PI;
+					} 
+					else if (wheel[i].diffTheta < -PI) 
+					{
+						wheel[i].diffTheta += 2*PI;
+					}
+	
+					if (wheel[i].diffTheta > PI/2) 
+					{
+						wheel[i].diffTheta -= PI;
+						wheel[i].mag = wheel[i].mag * -1;
+					} 
+					else if (wheel[i].diffTheta < -PI/2) 
+					{
+						wheel[i].diffTheta += PI;
+						wheel[i].mag = wheel[i].mag * -1;
+					}
+	
+					wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
+					
+					if (0 < wheel[i].turnVel && wheel[i].turnVel < .17)
+					{
+						wheel[i].turnVel = .17;
+					} 
+					if (0 > wheel[i].turnVel && wheel[i].turnVel > -.17)
+					{
+						wheel[i].turnVel = -.17;
+					}
+					if (fabs(wheel[i].diffTheta) < PI/45 )
+					{
+						wheel[i].turnVel = 0;
+					}
+				}
+				
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
+					wheel[FL].mag);
+				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
+					wheel[FL].diffTheta);
+				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, 
+					"Coords: (%3.2f,%3.2f)        ",wheel[FL].x, wheel[FL].y);
+				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
+				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
+					moveWheelFL.GetPosition());
+				dsLCD->UpdateLCD();
+				
+				for (i = 0; i < 4; i++) 
+				{
+					if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
+							|| (wheel[i].turnVel < 0&& wheel[i].prevTurnVel> 0)) 
+							&& !wheel[i].changeSign)
+					{
+						wheel[i].changeSign = true;
+						wheel[i].moveTime = baneTimer.Get() + .1;
+					}
+					if (wheel[i].changeSign) 
+					{
+						wheel[i].turnVel = 0;
+						if (wheel[i].moveTime < baneTimer.Get()) 
+						{
+							wheel[i].changeSign = false;
+						}
+					}
+				}
+			
+	
+				if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
+				{
+					turnWheelFL.Set(-wheel[FL].turnVel);
+					moveWheelFL.Set(wheel[FL].mag);
+				} 
+				else 
+				{
+					turnWheelFL.Set(0);
+					moveWheelFL.Set(0);
+				}
+				if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
+				{
+					turnWheelFR.Set(-wheel[FR].turnVel);		 
+					moveWheelFR.Set(wheel[FR].mag);
+				} 
+				else 
+				{
+					turnWheelFR.Set(0);
+					moveWheelFR.Set(0);
+				}
+				if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
+				{
+					turnWheelBL.Set(-wheel[BL].turnVel);				 
+					moveWheelBL.Set(wheel[BL].mag);
+				} else 
+				{
+					turnWheelBL.Set(0);
+					moveWheelBL.Set(0);
+				}
+				if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
+				{
+					turnWheelBR.Set(-wheel[BR].turnVel);
+				 
+					moveWheelBR.Set(wheel[BR].mag);\
+				} 
+				else 
+				{
+					turnWheelBR.Set(0);
+					moveWheelBR.Set(0);
+				}
+	
+				for(i=0; i<4; i++)
+				{
+					wheel[i].prevTurnVel = wheel[i].turnVel;
+				}
+	//			if (stick.GetRawButton(7))
+	//			{
+	//				pickUpArm1.Set(1);
+	//				pickUpArm2.Set(-1);
+	//			}
+	//			else if (stick.GetRawButton(5))
+	//			{
+	//				pickUpArm1.Set(-1);
+	//				pickUpArm2.Set(1);
+	//			}
+	//			if (stick.GetRawButton(6))
+	//			{
+	//				shooterMotor1.Set(1);
+	//				shooterMotor2.Set(1);
+	//			}
+	//			else if (stick.GetRawButton(8))
+	//			{
+	//				shooterMotor1.Set(-1);
+	//				shooterMotor2.Set(-1);
+	//			}
 			}
-		
-
-			if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
-			{
-				turnWheelFL.Set(-wheel[FL].turnVel);
-				moveWheelFL.Set(wheel[FL].mag);
-			} 
-			else 
-			{
-				turnWheelFL.Set(0);
-				moveWheelFL.Set(0);
-			}
-			if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
-			{
-				turnWheelFR.Set(-wheel[FR].turnVel);		 
-				moveWheelFR.Set(wheel[FR].mag);
-			} 
-			else 
-			{
-				turnWheelFR.Set(0);
-				moveWheelFR.Set(0);
-			}
-			if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
-			{
-				turnWheelBL.Set(-wheel[BL].turnVel);				 
-				moveWheelBL.Set(wheel[BL].mag);
-			} else 
-			{
-				turnWheelBL.Set(0);
-				moveWheelBL.Set(0);
-			}
-			if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
-			{
-				turnWheelBR.Set(-wheel[BR].turnVel);
-			 
-				moveWheelBR.Set(wheel[BR].mag);\
-			} 
-			else 
-			{
-				turnWheelBR.Set(0);
-				moveWheelBR.Set(0);
-			}
-
-			for(i=0; i<4; i++)
-			{
-				wheel[i].prevTurnVel = wheel[i].turnVel;
-			}
-//			if (stick.GetRawButton(7))
-//			{
-//				pickUpArm1.Set(1);
-//				pickUpArm2.Set(-1);
-//			}
-//			else if (stick.GetRawButton(5))
-//			{
-//				pickUpArm1.Set(-1);
-//				pickUpArm2.Set(1);
-//			}
-//			if (stick.GetRawButton(6))
-//			{
-//				shooterMotor1.Set(1);
-//				shooterMotor2.Set(1);
-//			}
-//			else if (stick.GetRawButton(8))
-//			{
-//				shooterMotor1.Set(-1);
-//				shooterMotor2.Set(-1);
-//			}
 		}
 	}
 
