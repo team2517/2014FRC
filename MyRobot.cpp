@@ -49,7 +49,7 @@ struct wheelVector
  */
 class RobotDemo : public SimpleRobot {
 	wheelVector wheel[4];
-	Joystick stick; // only joystick
+	Joystick driveStick; // only joystick
 	CANJaguar pickUpArm1;
 	CANJaguar pickUpArm2;
 	Victor shooterMotor1;
@@ -59,7 +59,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), pickUpArm1(12), pickUpArm2(46), shooterMotor1(1), shooterMotor2(2)
+		driveStick(1), pickUpArm1(12), pickUpArm2(46), shooterMotor1(1), shooterMotor2(2)
 	{
 		Watchdog().SetExpiration(1);
 		wheel[FL].turnWheel = new CANJaguar(4);
@@ -158,17 +158,17 @@ public:
 		{
 			Watchdog().Feed();
 
-			leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
-			leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
+			leftStickVec[RAWX] = deadBand(driveStick.GetRawAxis(1));
+			leftStickVec[RAWY] = deadBand(driveStick.GetRawAxis(2));
 			leftStickVec[X] = leftStickVec[RAWX]*sqrt(1-.5*pow(
 				leftStickVec[RAWY], 2));
 			leftStickVec[Y] = -leftStickVec[RAWY]*sqrt(1-.5*pow(
 				leftStickVec[RAWX], 2));
-			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
+			phi = deadBand(driveStick.GetRawAxis(3)); //Should be right driveStick x.
 			
 			
 			
-			if (stick.GetRawButton(9)){
+			if (driveStick.GetRawButton(9)){
 				for (i = 0; i <= 3; i++){
 					wheel[i].disable = false;
 				}
@@ -176,7 +176,7 @@ public:
 			}
 			
 			
-			if (stick.GetRawButton(10))
+			if (driveStick.GetRawButton(10))
 			{
 				calibrating = true;
 			}
@@ -185,7 +185,7 @@ public:
 						{ 
 							Watchdog().Feed();
 							
-							if (stick.GetRawButton(8) && !isButtonPressed) 
+							if (driveStick.GetRawButton(8) && !isButtonPressed) 
 							{
 								if (calMode == 0) 
 								{
@@ -220,7 +220,7 @@ public:
 								}
 								isButtonPressed = true;
 							}
-							else if (!stick.GetRawButton(8)) 
+							else if (!driveStick.GetRawButton(8)) 
 							{
 								isButtonPressed = false;
 							}
@@ -228,11 +228,11 @@ public:
 							dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
 									"Calibrating Wheel %i          ", calMode+1);
 							
-							if(stick.GetRawButton(2))
+							if(driveStick.GetRawButton(2))
 							{
 								wheel[calMode].turnWheel->Set(OFFSETMOVE);
 							}
-							else if (stick.GetRawButton(3))
+							else if (driveStick.GetRawButton(3))
 							{
 								wheel[calMode].turnWheel->Set(-OFFSETMOVE);
 							}
@@ -252,23 +252,23 @@ public:
 			{
 				
 				#ifdef TESTER
-					if (stick.GetRawButton(4))
+					if (driveStick.GetRawButton(4))
 					{
 						fsakld;jkal;sjdf al;kjfnd m,xcnz.,mvn'';
 						leftStickVec[X] = 0;
 						leftStickVec[Y] = TESTVAL;
 					} 
-					else if (stick.GetRawButton(3))
+					else if (driveStick.GetRawButton(3))
 					{
 						leftStickVec[X] = TESTVAL;
 						leftStickVec[Y] = 0;
 					}
-					else if (stick.GetRawButton(2))
+					else if (driveStick.GetRawButton(2))
 					{
 						leftStickVec[X] = 0;
 						leftStickVec[Y] = -TESTVAL;
 					}
-					else if (stick.GetRawButton(1))
+					else if (driveStick.GetRawButton(1))
 					{
 						leftStickVec[X] = -TESTVAL;
 						leftStickVec[Y] = 0;
@@ -438,22 +438,22 @@ public:
 				{
 					wheel[i].prevTurnVel = wheel[i].turnVel;
 				}
-	//			if (stick.GetRawButton(7))
+	//			if (driveStick.GetRawButton(7))
 	//			{
 	//				pickUpArm1.Set(1);
 	//				pickUpArm2.Set(-1);
 	//			}
-	//			else if (stick.GetRawButton(5))
+	//			else if (driveStick.GetRawButton(5))
 	//			{
 	//				pickUpArm1.Set(-1);
 	//				pickUpArm2.Set(1);
 	//			}
-	//			if (stick.GetRawButton(6))
+	//			if (driveStick.GetRawButton(6))
 	//			{
 	//				shooterMotor1.Set(1);
 	//				shooterMotor2.Set(1);
 	//			}
-	//			else if (stick.GetRawButton(8))
+	//			else if (driveStick.GetRawButton(8))
 	//			{
 	//				shooterMotor1.Set(-1);
 	//				shooterMotor2.Set(-1);
