@@ -3,6 +3,8 @@
 #include "controls.h"
 #include "offsets.h"
 //#include "util.h"
+#define XROTCOMP				.707
+#define YROTCOMP				.707
 #define TESTVAL                 .4
 #define OFFSETMOVE				.2
 #define FL                      0
@@ -274,14 +276,14 @@ public:
 				#endif
 				
 				//Need to change these values based on center/wheel placement.
-				wheel[FL].x = .707 * phi;
-				wheel[FL].y = .707 * phi;
-				wheel[FR].x = .707 * phi;
-				wheel[FR].y = -.707 * phi;
-				wheel[BL].x = -.707 * phi;
-				wheel[BL].y = -.707 * phi;
-				wheel[BR].x = -.707 * phi;
-				wheel[BR].y = .707 * phi;
+				wheel[FL].x = XROTCOMP * phi;
+				wheel[FL].y = YROTCOMP * phi;
+				wheel[FR].x = XROTCOMP * phi;
+				wheel[FR].y = -YROTCOMP * phi;
+				wheel[BL].x = -XROTCOMP * phi;
+				wheel[BL].y = -YROTCOMP * phi;
+				wheel[BR].x = -XROTCOMP * phi;
+				wheel[BR].y = YROTCOMP * phi;
 	
 				wheel[FL].x += leftStickVec[X];
 				wheel[FL].y += leftStickVec[Y];
