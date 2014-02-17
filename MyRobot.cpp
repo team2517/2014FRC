@@ -163,10 +163,6 @@ public:
 				leftStickVec[RAWX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 			
-<<<<<<< HEAD
-			if (stick.GetRawButton(5) && stick.GetRawButton(6))
-=======
-			//
 			
 			
 			if (stick.GetRawButton(9)){
@@ -176,18 +172,8 @@ public:
 				
 			}
 			
-			for (i = 0; i <= 3; i++)
-			{
-				if (wheel[i].curTheta - wheel[i].prevTheta < STALLTHERESHOLD){
-					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "M%i STALLED          ",
-										i+1);
-					wheel[i].disable = true;
-				}
-			}
-			
 			
 			if (stick.GetRawButton(10) && stick.GetRawButton(10))
->>>>>>> 0f17f35cf39f6e899aa0fb335a91bf87f74551ab
 			{
 				calibrating = true;
 			}
