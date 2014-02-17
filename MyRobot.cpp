@@ -27,8 +27,9 @@ float deadBand(float);
 struct wheelVector 
 {
 	float rawx, x, rawy, y, mag, tarTheta, curTheta, diffTheta, turnVel, prevTheta;
-
+	
 	float prevTurnVel;
+	bool disable;
 	bool changeSign;
 	float moveTime;
 };
@@ -90,6 +91,7 @@ public:
 	{
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
+		dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Robot Enabled.          ");
 
 		baneTimer.Start();
 
@@ -141,6 +143,7 @@ public:
 		for (i = 0; i < 4; i++) {
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
+			wheel[i].disable = false;
 		}
 		
 		/*turnWheelFL.SetVoltageRampRate(voltageRate);
@@ -165,8 +168,9 @@ public:
 			for (i = 0; i <= 3; i++)
 			{
 				if (wheel[i].curTheta - wheel[i].prevTheta < STALLTHERESHOLD){
-					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "M%i STALLED",
-										i);
+					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "M%i STALLED          ",
+										i+1);
+					wheel[i].disable = true;
 				}
 			}
 			
@@ -220,12 +224,12 @@ public:
 							}
 							
 							dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
-									"**CALIBRATING WHEEL %i", calMode+1);
-							if (stick.GetRawButton(2) == true && calMode == 0) 
+									"Calibrating Wheel %i          ", calMode+1);
+							if (stick.GetRawButton(2) == true && calMode == 0 && wheel[FL].disable != true) 
 							{
 								turnWheelFL.Set(OFFSETMOVE);
 							} 
-							else if (stick.GetRawButton(3) == true && calMode == 0) 
+							else if (stick.GetRawButton(3) == true && calMode == 0 && wheel[FL].disable != true) 
 							{
 								turnWheelFL.Set(-OFFSETMOVE);
 							} 
@@ -234,11 +238,11 @@ public:
 								turnWheelFL.Set(0);
 							}
 
-							if (stick.GetRawButton(2) == true && calMode == 1) 
+							if (stick.GetRawButton(2) == true && calMode == 1 && wheel[FR].disable != true) 
 							{
 								turnWheelFR.Set(OFFSETMOVE);
 							} 
-							else if (stick.GetRawButton(3) == true && calMode == 1) 
+							else if (stick.GetRawButton(3) == true && calMode == 1 && wheel[FR].disable != true) 
 							{
 								turnWheelFR.Set(-OFFSETMOVE);
 							} 
@@ -247,11 +251,11 @@ public:
 								turnWheelFR.Set(0);
 							}
 
-							if (stick.GetRawButton(2) == true && calMode == 2) 
+							if (stick.GetRawButton(2) == true && calMode == 2 && wheel[BL].disable != true) 
 							{
 								turnWheelBL.Set(OFFSETMOVE);
 							} 
-							else if (stick.GetRawButton(3) == true && calMode == 2) 
+							else if (stick.GetRawButton(3) == true && calMode == 2 && wheel[BL].disable != true) 
 							{
 								turnWheelBL.Set(-OFFSETMOVE);
 							} 
@@ -260,11 +264,11 @@ public:
 								turnWheelBL.Set(0);
 							}
 
-							if (stick.GetRawButton(2) == true && calMode == 3) 
+							if (stick.GetRawButton(2) == true && calMode == 3 && wheel[BR].disable != true) 
 							{
 								turnWheelBR.Set(OFFSETMOVE);
 							} 
-							else if (stick.GetRawButton(3) == true && calMode == 3) 
+							else if (stick.GetRawButton(3) == true && calMode == 3 && wheel[BR].disable != true) 
 							{
 								turnWheelBR.Set(-OFFSETMOVE);
 							} 
@@ -444,7 +448,7 @@ public:
 				}
 			
 	
-				if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
+				if (!(wheel[FL].x == 0 && wheel[FL].y == 0 && wheel[FR].disable != true)) 
 				{
 					turnWheelFL.Set(-wheel[FL].turnVel);
 					moveWheelFL.Set(wheel[FL].mag);
@@ -454,7 +458,7 @@ public:
 					turnWheelFL.Set(0);
 					moveWheelFL.Set(0);
 				}
-				if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
+				if (!(wheel[FR].x == 0 && wheel[FR].y == 0 && wheel[FR].disable != true)) 
 				{
 					turnWheelFR.Set(-wheel[FR].turnVel);		 
 					moveWheelFR.Set(wheel[FR].mag);
@@ -464,7 +468,7 @@ public:
 					turnWheelFR.Set(0);
 					moveWheelFR.Set(0);
 				}
-				if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
+				if (!(wheel[BL].x == 0 && wheel[BL].y == 0 && wheel[FR].disable != true)) 
 				{
 					turnWheelBL.Set(-wheel[BL].turnVel);				 
 					moveWheelBL.Set(wheel[BL].mag);
@@ -473,7 +477,7 @@ public:
 					turnWheelBL.Set(0);
 					moveWheelBL.Set(0);
 				}
-				if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
+				if (!(wheel[BR].x == 0 && wheel[BR].y == 0 && wheel[FR].disable != true)) 
 				{
 					turnWheelBR.Set(-wheel[BR].turnVel);
 				 
