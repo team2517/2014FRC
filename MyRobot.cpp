@@ -163,18 +163,6 @@ public:
 				leftStickVec[RAWX], 2));
 			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 			
-			//
-			
-			for (i = 0; i <= 3; i++)
-			{
-				if (wheel[i].curTheta - wheel[i].prevTheta < STALLTHERESHOLD){
-					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "M%i STALLED          ",
-										i+1);
-					wheel[i].disable = true;
-				}
-			}
-			
-			
 			if (stick.GetRawButton(5) && stick.GetRawButton(6))
 			{
 				calibrating = true;
@@ -444,6 +432,17 @@ public:
 						{
 							wheel[i].changeSign = false;
 						}
+					}
+				}
+				
+				for (i = 0; i <= 3; i++)
+				{
+					if (wheel[i].curTheta - wheel[i].prevTheta 
+						< STALLTHERESHOLD && abs(wheel[i].turnVel) 
+						> .17 ){
+						dsLCD->Printf(DriverStationLCD::kUser_Line1, 
+							1, "M%i STALLED          ",i+1);
+						wheel[i].disable = true;
 					}
 				}
 			
