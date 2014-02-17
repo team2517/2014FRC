@@ -143,7 +143,8 @@ public:
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);	
 		
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) 
+		{
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
 			wheel[i].disable = false;
@@ -168,8 +169,10 @@ public:
 			
 			
 			
-			if (driveStick.GetRawButton(9)){
-				for (i = 0; i <= 3; i++){
+			if (driveStick.GetRawButton(9))
+			{
+				for (i = 0; i <= 3; i++)
+				{
 					wheel[i].disable = false;
 				}
 				
@@ -182,71 +185,71 @@ public:
 			}
 			
 			if (calibrating == true && IsOperatorControl())
-						{ 
-							Watchdog().Feed();
-							
-							if (driveStick.GetRawButton(8) && !isButtonPressed) 
-							{
-								if (calMode == 0) 
-								{
-									//flOffset = posEncFL.GetVoltage();
-									flOffset = wheel[FL].posEncoder->GetVoltage();
-									dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-										"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
-								} 
-								else if (calMode == 1) 
-								{
-									frOffset = wheel[FR].posEncoder->GetVoltage();
-									dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-										"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
-								} 
-								else if (calMode == 2) 
-								{
-									brOffset = wheel[BR].posEncoder->GetVoltage();
-									dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-										"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
-								} 
-								else if (calMode == 3) 
-								{
-									brOffset = wheel[BL].posEncoder->GetVoltage();
-									dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-										"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
-								}
+			{ 
+				Watchdog().Feed();
 				
-								calMode++;
-								if (calMode >= 4)
-								{
-									calibrating = false;
-								}
-								isButtonPressed = true;
-							}
-							else if (!driveStick.GetRawButton(8)) 
-							{
-								isButtonPressed = false;
-							}
+				if (driveStick.GetRawButton(8) && !isButtonPressed) 
+				{
+					if (calMode == 0) 
+					{
+						//flOffset = posEncFL.GetVoltage();
+						flOffset = wheel[FL].posEncoder->GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+					} 
+					else if (calMode == 1) 
+					{
+						frOffset = wheel[FR].posEncoder->GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+					} 
+					else if (calMode == 2) 
+					{
+						brOffset = wheel[BR].posEncoder->GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
+					} 
+					else if (calMode == 3) 
+					{
+						brOffset = wheel[BL].posEncoder->GetVoltage();
+						dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
+							"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+					}
+	
+					calMode++;
+					if (calMode >= 4)
+					{
+						calibrating = false;
+					}
+					isButtonPressed = true;
+				}
+				else if (!driveStick.GetRawButton(8)) 
+				{
+					isButtonPressed = false;
+				}
+				
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
+						"Calibrating Wheel %i          ", calMode+1);
+				
+				if(driveStick.GetRawButton(2))
+				{
+					wheel[calMode].turnWheel->Set(OFFSETMOVE);
+				}
+				else if (driveStick.GetRawButton(3))
+				{
+					wheel[calMode].turnWheel->Set(-OFFSETMOVE);
+				}
+				else
+				{
+					wheel[calMode].turnWheel->Set(0);
+				}
+				
+				if(calMode > 3)
+				{
+					calMode = 0;
+				}
 							
-							dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
-									"Calibrating Wheel %i          ", calMode+1);
-							
-							if(driveStick.GetRawButton(2))
-							{
-								wheel[calMode].turnWheel->Set(OFFSETMOVE);
-							}
-							else if (driveStick.GetRawButton(3))
-							{
-								wheel[calMode].turnWheel->Set(-OFFSETMOVE);
-							}
-							else
-							{
-								wheel[calMode].turnWheel->Set(0);
-							}
-							
-							if(calMode > 3)
-							{
-								calMode = 0;
-							}
-										
-						}
+			}
 			
 			else
 			{
@@ -322,18 +325,19 @@ public:
 					}
 	
 				}
-	
-				if (isThetaCalculated == true){
-					for(i=0;i<4;i++)
-					{
-						wheel[i].prevTheta = wheel[i].curTheta;
-					}
-				}
 				
 				for(i=0; i<4; i++)
 				{
 					wheel[i].curTheta = -(wheel[i].posEncoder->GetVoltage() 
 						- flOffset ) / 5 * 2 * PI;
+				}
+				
+				if (isThetaCalculated == true)
+				{
+					for(i=0;i<4;i++)
+					{
+						wheel[i].prevTheta = wheel[i].curTheta;
+					}
 				}
 				
 				isThetaCalculated = true;
