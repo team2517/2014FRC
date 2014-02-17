@@ -437,7 +437,6 @@ public:
 				for(i=0; i<4; i++)
 				{
 					wheel[i].prevTurnVel = wheel[i].turnVel;
-					wheel[i].prevTheta = wheel[i].curTheta;
 				}
 	//			if (stick.GetRawButton(7))
 	//			{
