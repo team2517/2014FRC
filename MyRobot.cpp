@@ -469,10 +469,10 @@ public:
 /**
  * Runs during test mode
  */
-void Test() 
-{
+	void Test() 
+	{
 
-}
+	}
 };
 
 START_ROBOT_CLASS(RobotDemo);
