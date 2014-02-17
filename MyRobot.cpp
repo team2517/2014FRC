@@ -448,7 +448,7 @@ public:
 				for (i = 0; i <= 3; i++)
 				{
 					if (wheel[i].curTheta - wheel[i].prevTheta 
-						< STALLTHERESHOLD && abs(wheel[i].turnVel) 
+						< STALLTHERESHOLD && fabs(wheel[i].turnVel) 
 						> .17 ){
 						dsLCD->Printf(DriverStationLCD::kUser_Line1, 
 							1, "M%i STALLED          ",i+1);
