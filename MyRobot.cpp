@@ -324,10 +324,10 @@ public:
 				}
 	
 				if (isThetaCalculated == true){
-					wheel[FL].prevTheta = wheel[FL].curTheta;
-					wheel[FR].prevTheta = wheel[FR].curTheta;
-					wheel[BL].prevTheta = wheel[BL].curTheta;
-					wheel[BR].prevTheta = wheel[BR].curTheta;
+					for(i=0;i<4;i++)
+					{
+						wheel[i].prevTheta = wheel[i].curTheta;
+					}
 				}
 				
 				for(i=0; i<4; i++)
