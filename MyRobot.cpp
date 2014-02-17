@@ -32,6 +32,11 @@ struct wheelVector
 	bool disable;
 	bool changeSign;
 	float moveTime;
+	
+	CANJaguar *turnWheel;
+	CANJaguar *moveWheel;
+	AnalogChannel *posEncoder;
+	
 };
 
 /**
@@ -41,35 +46,32 @@ struct wheelVector
  * the driver station or the field controls.
  */
 class RobotDemo : public SimpleRobot {
+	wheelVector wheel[4];
 	Joystick stick; // only joystick
-	CANJaguar turnWheelFL;
-	CANJaguar turnWheelFR;
-	CANJaguar turnWheelBR;
-	CANJaguar turnWheelBL;
-	CANJaguar moveWheelFL;
-	CANJaguar moveWheelFR;
-	CANJaguar moveWheelBR;
-	CANJaguar moveWheelBL;
 	CANJaguar pickUpArm1;
 	CANJaguar pickUpArm2;
 	Victor shooterMotor1;
 	Victor shooterMotor2;
-	AnalogChannel posEncFL;
-	AnalogChannel posEncFR;
-	AnalogChannel posEncBR;
-	AnalogChannel posEncBL;
 	Timer baneTimer;
 	//float magmodifier;
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(4), turnWheelFR(11), turnWheelBR(27),
-				turnWheelBL(9), moveWheelFL(2), moveWheelFR(45),
-				moveWheelBR(30), moveWheelBL(13), pickUpArm1(12), 
-				pickUpArm2(46), shooterMotor1(1), shooterMotor2(2),
-				posEncFL(5), posEncFR(1), posEncBR(7), posEncBL(3)
+		stick(1), pickUpArm1(12), pickUpArm2(46), shooterMotor1(1), shooterMotor2(2)
 	{
 		Watchdog().SetExpiration(1);
+		wheel[FL].turnWheel = new CANJaguar(4);
+		wheel[FL].moveWheel = new CANJaguar(2);
+		wheel[FL].posEncoder = new AnalogChannel(5);
+		wheel[FR].turnWheel = new CANJaguar(11);
+		wheel[FR].moveWheel = new CANJaguar(45);
+		wheel[FR].posEncoder = new AnalogChannel(1);
+		wheel[BR].turnWheel = new CANJaguar(27);
+		wheel[BR].moveWheel = new CANJaguar(30);
+		wheel[BR].posEncoder = new AnalogChannel(7);
+		wheel[BL].turnWheel = new CANJaguar(9);
+		wheel[BL].moveWheel = new CANJaguar(13);
+		wheel[BL].posEncoder = new AnalogChannel(3);
 	}
 
 	/**
@@ -98,7 +100,6 @@ public:
 		float leftStickVec[4];
 		float phi;
 		float largestMag;
-		wheelVector wheel[4];
 		int i;
 		int j;
 		bool calibrating = false;
@@ -186,25 +187,26 @@ public:
 							{
 								if (calMode == 0) 
 								{
-									flOffset = posEncFL.GetVoltage();
+									//flOffset = posEncFL.GetVoltage();
+									flOffset = wheel[FL].posEncoder->GetVoltage();
 									dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
 										"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
 								} 
 								else if (calMode == 1) 
 								{
-									frOffset = posEncFR.GetVoltage();
+									frOffset = wheel[FR].posEncoder->GetVoltage();
 									dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
 										"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
 								} 
 								else if (calMode == 2) 
 								{
-									blOffset = posEncBL.GetVoltage();
+									brOffset = wheel[BR].posEncoder->GetVoltage();
 									dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
 										"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
 								} 
 								else if (calMode == 3) 
 								{
-									brOffset = posEncBR.GetVoltage();
+									brOffset = wheel[BL].posEncoder->GetVoltage();
 									dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
 										"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
 								}
@@ -223,59 +225,24 @@ public:
 							
 							dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
 									"Calibrating Wheel %i          ", calMode+1);
-							if (stick.GetRawButton(2) == true && calMode == 0 && wheel[FL].disable != true) 
-							{
-								turnWheelFL.Set(OFFSETMOVE);
-							} 
-							else if (stick.GetRawButton(3) == true && calMode == 0 && wheel[FL].disable != true) 
-							{
-								turnWheelFL.Set(-OFFSETMOVE);
-							} 
-							else 
-							{
-								turnWheelFL.Set(0);
-							}
-
-							if (stick.GetRawButton(2) == true && calMode == 1 && wheel[FR].disable != true) 
-							{
-								turnWheelFR.Set(OFFSETMOVE);
-							} 
-							else if (stick.GetRawButton(3) == true && calMode == 1 && wheel[FR].disable != true) 
-							{
-								turnWheelFR.Set(-OFFSETMOVE);
-							} 
-							else 
-							{
-								turnWheelFR.Set(0);
-							}
-
-							if (stick.GetRawButton(2) == true && calMode == 2 && wheel[BL].disable != true) 
-							{
-								turnWheelBL.Set(OFFSETMOVE);
-							} 
-							else if (stick.GetRawButton(3) == true && calMode == 2 && wheel[BL].disable != true) 
-							{
-								turnWheelBL.Set(-OFFSETMOVE);
-							} 
-							else 
-							{
-								turnWheelBL.Set(0);
-							}
-
-							if (stick.GetRawButton(2) == true && calMode == 3 && wheel[BR].disable != true) 
-							{
-								turnWheelBR.Set(OFFSETMOVE);
-							} 
-							else if (stick.GetRawButton(3) == true && calMode == 3 && wheel[BR].disable != true) 
-							{
-								turnWheelBR.Set(-OFFSETMOVE);
-							} 
-							else 
-							{
-								turnWheelBR.Set(0);
 							
+							if(stick.GetRawButton(2))
+							{
+								wheel[calMode].turnWheel->Set(OFFSETMOVE);
+							}
+							else if (stick.GetRawButton(3))
+							{
+								wheel[calMode].turnWheel->Set(-OFFSETMOVE);
+							}
+							else
+							{
+								wheel[calMode].turnWheel->Set(0);
 							}
 							
+							if(calMode > 3)
+							{
+								calMode = 0;
+							}
 										
 						}
 			
@@ -361,16 +328,11 @@ public:
 					wheel[BR].prevTheta = wheel[BR].curTheta;
 				}
 				
-				
-				
-				wheel[FL].curTheta = -(posEncFL.GetVoltage() - flOffset ) / 5 * 2
-						* PI;
-				wheel[FR].curTheta = -(posEncFR.GetVoltage() - frOffset) / 5 * 2
-						* PI;
-				wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
-						* PI;
-				wheel[BR].curTheta = -(posEncBR.GetVoltage() - blOffset)/ 5 * 2
-						* PI;
+				for(i=0; i<4; i++)
+				{
+					wheel[i].curTheta = -(wheel[i].posEncoder->GetVoltage() 
+						- flOffset ) / 5 * 2 * PI;
+				}
 				
 				isThetaCalculated = true;
 
@@ -423,7 +385,7 @@ public:
 					"Coords: (%3.2f,%3.2f)        ",wheel[FL].x, wheel[FL].y);
 				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "Turn Val: %f         ", wheel[FL].turnVel);
 				dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "EncoderPos: %f        ",
-					moveWheelFL.GetPosition());
+					wheel[FL].moveWheel->GetPosition());
 				dsLCD->UpdateLCD();
 				
 				for (i = 0; i < 4; i++) 
@@ -455,47 +417,19 @@ public:
 						wheel[i].disable = true;
 					}
 				}
-			
-	
-				if (!(wheel[FL].x == 0 && wheel[FL].y == 0 && wheel[FR].disable != true)) 
+				
+				for(i=0;i<4;i++)
 				{
-					turnWheelFL.Set(-wheel[FL].turnVel);
-					moveWheelFL.Set(wheel[FL].mag);
-				} 
-				else 
-				{
-					turnWheelFL.Set(0);
-					moveWheelFL.Set(0);
-				}
-				if (!(wheel[FR].x == 0 && wheel[FR].y == 0 && wheel[FR].disable != true)) 
-				{
-					turnWheelFR.Set(-wheel[FR].turnVel);		 
-					moveWheelFR.Set(wheel[FR].mag);
-				} 
-				else 
-				{
-					turnWheelFR.Set(0);
-					moveWheelFR.Set(0);
-				}
-				if (!(wheel[BL].x == 0 && wheel[BL].y == 0 && wheel[FR].disable != true)) 
-				{
-					turnWheelBL.Set(-wheel[BL].turnVel);				 
-					moveWheelBL.Set(wheel[BL].mag);
-				} else 
-				{
-					turnWheelBL.Set(0);
-					moveWheelBL.Set(0);
-				}
-				if (!(wheel[BR].x == 0 && wheel[BR].y == 0 && wheel[FR].disable != true)) 
-				{
-					turnWheelBR.Set(-wheel[BR].turnVel);
-				 
-					moveWheelBR.Set(wheel[BR].mag);
-				} 
-				else 
-				{
-					turnWheelBR.Set(0);
-					moveWheelBR.Set(0);
+					if (!(wheel[i].x == 0 && wheel[i].y == 0 && wheel[i].disable != true))
+					{
+						wheel[i].turnWheel->Set(-wheel[i].turnVel);
+						wheel[i].moveWheel->Set(wheel[i].mag);
+					}
+					else 
+					{
+						wheel[i].turnWheel->Set(0);
+						wheel[i].moveWheel->Set(0);
+					}
 				}
 	
 				for(i=0; i<4; i++)
