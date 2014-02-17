@@ -165,6 +165,14 @@ public:
 			
 			//
 			
+			
+			if (stick.GetRawButton(9)){
+				for (i = 0; i <= 3; i++){
+					wheel[i].disable = false;
+				}
+				
+			}
+			
 			for (i = 0; i <= 3; i++)
 			{
 				if (wheel[i].curTheta - wheel[i].prevTheta < STALLTHERESHOLD){
