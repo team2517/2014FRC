@@ -183,7 +183,7 @@ public:
 			}
 			
 			
-			if (stick.GetRawButton(5) && stick.GetRawButton(6))
+			if (stick.GetRawButton(10) && stick.GetRawButton(10))
 			{
 				calibrating = true;
 			}
