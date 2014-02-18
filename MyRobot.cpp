@@ -59,14 +59,14 @@ class RobotDemo : public SimpleRobot {
 	Joystick driveStick; // only joystick
 	CANJaguar pickUpArm1;
 	CANJaguar pickUpArm2;
-	Victor shooterMotor1;
-	Victor shooterMotor2;
+	Talon shooterMotor1;
+	Talon shooterMotor2;
 	Timer baneTimer;
 	//float magmodifier;
 
 public:
 	RobotDemo() :
-		driveStick(1), pickUpArm1(12), pickUpArm2(46), shooterMotor1(1), shooterMotor2(2)
+		driveStick(1), pickUpArm1(12), pickUpArm2(46), shooterMotor1(1), shooterMotor2(10)
 	{
 		Watchdog().SetExpiration(1);
 		wheel[FL].turnWheel = new CANJaguar(4);
