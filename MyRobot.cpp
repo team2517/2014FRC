@@ -21,6 +21,11 @@
 #define DVALUE					0
 #define MAXPOWER				1
 #define STALLTHERESHOLD			0
+#include <deque>
+#include <fstream>
+#include <iostream>
+#include <string>
+using namespace std;
 //#define TESTER                  1
 //#define VOLTAGERATE				10000
 
