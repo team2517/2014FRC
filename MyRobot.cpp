@@ -4,7 +4,6 @@
 #include "offsets.h"
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <iomanip>
 //#include "util.h"
 using namespace std;
@@ -116,11 +115,9 @@ public:
 		bool isThetaCalculated;
 		isThetaCalculated = false;
 		isButtonPressed = false;
-		ofstream calFile;
-		string calFileLine1;
-		string calFileLine2;
-		string calFileLine3;
-		string calFileLine4;
+		ifstream calFileIn;
+		ofstream calFileOut;
+		char calReadOutput[4];
 		
 //		moveWheelFL.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelFL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
@@ -165,6 +162,17 @@ public:
 		turnWheelFR.SetVoltageRampRate(voltageRate);
 		turnWheelBR.SetVoltageRampRate(voltageRate);
 		turnWheelBL.SetVoltageRampRate(voltageRate);*/
+		
+		
+		calFileIn.open("2517_swerve_calibration.txt");
+		if (calFileIn.is_open()){
+			while (!calFileIn.eof())
+			{
+				calFileIn >> calReadOutput;
+				cout<<calReadOutput;
+			}
+		}
+		
 
 		while (IsOperatorControl()) 
 		{
@@ -233,12 +241,12 @@ public:
 						calibrating = false;
 						
 						
-						calFile.open("2517_swerve_calibration.txt");
-						calFile << fixed << setprecision(2) << flOffset <<endl;
-						calFile << fixed << setprecision(2) << frOffset <<endl;
-						calFile << fixed << setprecision(2) << blOffset <<endl;
-						calFile << fixed << setprecision(2) << brOffset <<endl;
-						calFile.close();
+						calFileOut.open("2517_swerve_calibration.txt");
+						calFileOut << fixed << setprecision(2) << flOffset <<endl;
+						calFileOut << fixed << setprecision(2) << frOffset <<endl;
+						calFileOut << fixed << setprecision(2) << blOffset <<endl;
+						calFileOut << fixed << setprecision(2) << brOffset <<endl;
+						calFileOut.close();
 					}
 					isButtonPressed = true;
 				}
