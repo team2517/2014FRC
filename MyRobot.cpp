@@ -2,7 +2,11 @@
 #include "math.h"
 #include "controls.h"
 #include "offsets.h"
+#include <fstream>
+#include <iostream>
 //#include "util.h"
+using namespace std;
+
 #define XROTCOMP				.707
 #define YROTCOMP				.707
 #define TESTVAL                 .4
@@ -21,11 +25,6 @@
 #define DVALUE					0
 #define MAXPOWER				1
 #define STALLTHERESHOLD			0
-#include <deque>
-#include <fstream>
-#include <iostream>
-#include <string>
-using namespace std;
 //#define TESTER                  1
 //#define VOLTAGERATE				10000
 
@@ -225,6 +224,10 @@ public:
 					if (calMode >= 4)
 					{
 						calibrating = false;
+						ofstream calFile;
+						calFile.open("2517_swerve_calibration.txt");
+						calFile << "%f/n%f/n%f/n%f/n";
+						calFile.close();
 					}
 					isButtonPressed = true;
 				}
