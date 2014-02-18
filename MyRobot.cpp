@@ -226,7 +226,10 @@ public:
 						calibrating = false;
 						ofstream calFile;
 						calFile.open("2517_swerve_calibration.txt");
-						calFile << "%f/n%f/n%f/n%f/n";
+						calFile << "%f/n", flOffset;
+						calFile << "%f/n", frOffset;
+						calFile << "%f/n", blOffset;
+						calFile << "%f/n", brOffset;
 						calFile.close();
 					}
 					isButtonPressed = true;
