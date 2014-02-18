@@ -4,6 +4,8 @@
 #include "offsets.h"
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <iomanip>
 //#include "util.h"
 using namespace std;
 
@@ -114,6 +116,11 @@ public:
 		bool isThetaCalculated;
 		isThetaCalculated = false;
 		isButtonPressed = false;
+		ofstream calFile;
+		string calFileLine1;
+		string calFileLine2;
+		string calFileLine3;
+		string calFileLine4;
 		
 //		moveWheelFL.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelFL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
@@ -224,12 +231,13 @@ public:
 					if (calMode >= 4)
 					{
 						calibrating = false;
-						ofstream calFile;
+						
+						
 						calFile.open("2517_swerve_calibration.txt");
-						calFile << "%f/n", flOffset;
-						calFile << "%f/n", frOffset;
-						calFile << "%f/n", blOffset;
-						calFile << "%f/n", brOffset;
+						calFile << fixed << setprecision(2) << flOffset <<endl;
+						calFile << fixed << setprecision(2) << frOffset <<endl;
+						calFile << fixed << setprecision(2) << blOffset <<endl;
+						calFile << fixed << setprecision(2) << brOffset <<endl;
 						calFile.close();
 					}
 					isButtonPressed = true;
@@ -487,6 +495,9 @@ public:
 };
 
 START_ROBOT_CLASS(RobotDemo);
+
+
+
 
 float deadBand(float axisValue) 
 {
