@@ -2,7 +2,14 @@
 #include "math.h"
 #include "controls.h"
 #include "offsets.h"
+#include <fstream>
+#include <iostream>
+#include <iomanip>
 //#include "util.h"
+
+using namespace std;
+
+
 #define XROTCOMP				.707
 #define YROTCOMP				.707
 #define TESTVAL                 .4
@@ -110,6 +117,9 @@ public:
 		bool isThetaCalculated;
 		isThetaCalculated = false;
 		isButtonPressed = false;
+		ifstream calFileIn;
+		ofstream calFileOut;
+		char calReadOutput[4];
 		
 //		moveWheelFL.ChangeControlMode(CANJaguar::kSpeed);
 //		moveWheelFL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
@@ -154,6 +164,17 @@ public:
 		turnWheelFR.SetVoltageRampRate(voltageRate);
 		turnWheelBR.SetVoltageRampRate(voltageRate);
 		turnWheelBL.SetVoltageRampRate(voltageRate);*/
+		
+		
+		calFileIn.open("2517_swerve_calibration.txt");
+		if (calFileIn.is_open()){
+			while (!calFileIn.eof())
+			{
+				calFileIn >> calReadOutput;
+				cout<<calReadOutput;
+			}
+		}
+		
 
 		while (IsOperatorControl()) 
 		{
@@ -220,6 +241,16 @@ public:
 					if (calMode >= 4)
 					{
 						calibrating = false;
+
+						
+						
+						calFileOut.open("2517_swerve_calibration.txt");
+						calFileOut << fixed << setprecision(2) << flOffset <<endl;
+						calFileOut << fixed << setprecision(2) << frOffset <<endl;
+						calFileOut << fixed << setprecision(2) << blOffset <<endl;
+						calFileOut << fixed << setprecision(2) << brOffset <<endl;
+						calFileOut.close();
+
 					}
 					isButtonPressed = true;
 				}
@@ -477,6 +508,9 @@ public:
 
 START_ROBOT_CLASS(RobotDemo);
 
+
+
+
 float deadBand(float axisValue) 
 {
 	if (axisValue < -.05 || axisValue> .05)
@@ -488,4 +522,3 @@ float deadBand(float axisValue)
 		return 0.0;
 	}
 }
-
