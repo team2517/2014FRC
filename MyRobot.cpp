@@ -233,7 +233,7 @@ public:
 					} 
 					else if (calMode == 2) 
 					{
-						wheel[BR].offset = wheel[BR].posEncoder->GetVoltage();
+						wheel[BL].offset = wheel[BL].posEncoder->GetVoltage();
 						dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
 							"OFFSET(%i) SET TO %f     ", calMode+1, wheel[BL].offset);
 					} 
