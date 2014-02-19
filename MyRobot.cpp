@@ -41,6 +41,7 @@ struct wheelVector
 	bool disable;
 	bool changeSign;
 	float moveTime;
+	float offset;
 	
 	CANJaguar *turnWheel;
 	CANJaguar *moveWheel;
@@ -153,6 +154,12 @@ public:
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);	
 		
+		wheel[FL].offset = 1.6;
+		wheel[FR].offset = 1.31;
+		wheel[BL].offset = 1;
+		wheel[BR].offset = 0.59;
+		
+		
 		for (i = 0; i < 4; i++) 
 		{
 			wheel[i].changeSign = false;
@@ -213,28 +220,28 @@ public:
 				{
 					if (calMode == 0) 
 					{
-						//flOffset = posEncFL.GetVoltage();
-						flOffset = wheel[FL].posEncoder->GetVoltage();
+						//wheel[FL].offset = posEncFL.GetVoltage();
+						wheel[FL].offset = wheel[FL].posEncoder->GetVoltage();
 						dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+							"OFFSET(%i) SET TO %f     ", calMode+1, wheel[FL].offset);
 					} 
 					else if (calMode == 1) 
 					{
-						frOffset = wheel[FR].posEncoder->GetVoltage();
+						wheel[FR].offset = wheel[FR].posEncoder->GetVoltage();
 						dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+							"OFFSET(%i) SET TO %f     ", calMode+1, wheel[FR].offset);
 					} 
 					else if (calMode == 2) 
 					{
-						brOffset = wheel[BR].posEncoder->GetVoltage();
+						wheel[BR].offset = wheel[BR].posEncoder->GetVoltage();
 						dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
+							"OFFSET(%i) SET TO %f     ", calMode+1, wheel[BL].offset);
 					} 
 					else if (calMode == 3) 
 					{
-						brOffset = wheel[BL].posEncoder->GetVoltage();
+						wheel[BR].offset = wheel[BL].posEncoder->GetVoltage();
 						dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-							"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+							"OFFSET(%i) SET TO %f     ", calMode+1, wheel[BR].offset);
 					}
 	
 					calMode++;
@@ -245,10 +252,10 @@ public:
 						
 						
 						calFileOut.open("2517_swerve_calibration.txt");
-						calFileOut << fixed << setprecision(2) << flOffset <<endl;
-						calFileOut << fixed << setprecision(2) << frOffset <<endl;
-						calFileOut << fixed << setprecision(2) << blOffset <<endl;
-						calFileOut << fixed << setprecision(2) << brOffset <<endl;
+						calFileOut << fixed << setprecision(2) << wheel[FL].offset <<endl;
+						calFileOut << fixed << setprecision(2) << wheel[FR].offset <<endl;
+						calFileOut << fixed << setprecision(2) << wheel[BL].offset <<endl;
+						calFileOut << fixed << setprecision(2) << wheel[BR].offset <<endl;
 						calFileOut.close();
 
 					}
@@ -360,7 +367,7 @@ public:
 				for(i=0; i<4; i++)
 				{
 					wheel[i].curTheta = -(wheel[i].posEncoder->GetVoltage() 
-						- flOffset ) / 5 * 2 * PI;
+						- wheel[FL].offset ) / 5 * 2 * PI;
 				}
 				
 				if (isThetaCalculated == true)
