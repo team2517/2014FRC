@@ -367,7 +367,7 @@ public:
 				for(i=0; i<4; i++)
 				{
 					wheel[i].curTheta = -(wheel[i].posEncoder->GetVoltage() 
-						- wheel[FL].offset ) / 5 * 2 * PI;
+						- wheel[i].offset ) / 5 * 2 * PI;
 				}
 				
 				if (isThetaCalculated == true)
