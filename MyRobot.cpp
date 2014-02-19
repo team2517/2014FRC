@@ -481,12 +481,12 @@ public:
 		if (stick.GetRawButton(6))
 		{
 			shooterMotor1.Set(1);
-			shooterMotor2.Set(1);
+			shooterMotor2.Set(-1);
 		}
 		else if (stick.GetRawButton(8))
 		{
 			shooterMotor1.Set(-1);
-			shooterMotor2.Set(-1);
+			shooterMotor2.Set(1);
 		}
 
 	}
