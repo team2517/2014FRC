@@ -17,7 +17,7 @@
 #define IVALUE					0.0
 #define DVALUE					0
 #define MAXPOWER				1
-//#define TESTER                  1
+#define TESTER                  1
 //#define VOLTAGERATE				10000
 
 float deadBand(float);
@@ -340,11 +340,11 @@ public:
 
 				wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
 				
-				if (0 < wheel[i].turnVel && wheel[i].turnVel < .17){
-					wheel[i].turnVel = .17;
+				if (0 < wheel[i].turnVel && wheel[i].turnVel < .25){
+					wheel[i].turnVel = .25;
 				} 
-				if (0 > wheel[i].turnVel && wheel[i].turnVel > -.17){
-					wheel[i].turnVel = -.17;
+				if (0 > wheel[i].turnVel && wheel[i].turnVel > -.25){
+					wheel[i].turnVel = -.25;
 				}
 				if (fabs(wheel[i].diffTheta) < PI/45 ){
 					wheel[i].turnVel = 0;
