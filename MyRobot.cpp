@@ -264,10 +264,10 @@ public:
 			wheel[FL].y = .707 * phi;
 			wheel[FR].x = .707 * phi;
 			wheel[FR].y = -.707 * phi;
-			wheel[BL].x = -.707 * phi;
-			wheel[BL].y = -.707 * phi;
 			wheel[BR].x = -.707 * phi;
-			wheel[BR].y = .707 * phi;
+			wheel[BR].y = -.707 * phi;
+			wheel[BL].x = -.707 * phi;
+			wheel[BL].y = .707 * phi;
 
 			wheel[FL].x += leftStickVec[X];
 			wheel[FL].y += leftStickVec[Y];
