@@ -1,7 +1,6 @@
 #include "WPILib.h"
 #include "math.h"
 #include "controls.h"
-#include "offsets.h"
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -160,17 +159,29 @@ public:
 		wheel[BL].offset = 1;
 		wheel[BR].offset = 0.59;
 		
-		if (secondStick.GetRawButton(1)){
+		if (secondStick.GetRawButton(6) && !secondStick.GetRawButton(3)){
 			wheel[FL].disable = true;
 		}
-		else if (secondStick.GetRawButton(2)){
+		else if (secondStick.GetRawButton(11) && !secondStick.GetRawButton(3)){
 			wheel[FR].disable = true;
 		}
-		else if (secondStick.GetRawButton(3)){
+		else if (secondStick.GetRawButton(7) && !secondStick.GetRawButton(3)){
 			wheel[BL].disable = true;
 		}
-		else if (secondStick.GetRawButton(4)){
+		else if (secondStick.GetRawButton(10) && !secondStick.GetRawButton(3)){
 			wheel[BR].disable = true;
+		}
+		else if (secondStick.GetRawButton(6) && secondStick.GetRawButton(3)){
+			wheel[FL].disable = false;
+		}
+		else if (secondStick.GetRawButton(11) && secondStick.GetRawButton(3)){
+			wheel[FR].disable = false;
+		}
+		else if (secondStick.GetRawButton(7) && secondStick.GetRawButton(3)){
+			wheel[BL].disable = false;
+		}
+		else if (secondStick.GetRawButton(10) && secondStick.GetRawButton(3)){
+			wheel[BR].disable = false;
 		}
 		
 		
