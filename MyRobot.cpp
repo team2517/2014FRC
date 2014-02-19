@@ -308,7 +308,7 @@ public:
 					* PI;
 			wheel[FR].curTheta = -(posEncFR.GetVoltage() - frOffset) / 5 * 2
 					* PI;
-			wheel[BR].curTheta = -(posEncBR.GetVoltage() - blOffset)/ 5 * 2
+			wheel[BR].curTheta = -(posEncBR.GetVoltage() - brOffset)/ 5 * 2
 					* PI;
 			wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
 					* PI;
@@ -426,7 +426,7 @@ public:
 //				 turnWheelBR.Set(wheel[BR].turnVel);
 //				 turnWheelBL.Set(wheel[BL].turnVel);
 //				 
-			moveWheelBL.Set(wheel[BL].mag);
+			moveWheelBL.Set(-wheel[BL].mag);
 //				 moveWheelBL.Set(wheel[BL].mag);
 //				 moveWheelBR.Set(wheel[BR].mag);
 //				 moveWheelBL.Set(wheel[BL].mag);
