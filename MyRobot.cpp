@@ -55,10 +55,10 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(4), turnWheelFR(11), turnWheelBR(27),
-				turnWheelBL(9), moveWheelFL(2), moveWheelFR(45),
-				moveWheelBR(30), moveWheelBL(13), posEncFL(5), posEncFR(1),
-				posEncBR(7), posEncBL(3) {
+		stick(1), turnWheelFL(45), turnWheelFR(30), turnWheelBR(9),
+			turnWheelBL(11), moveWheelFL(2), moveWheelFR(12),
+			moveWheelBR(27), moveWheelBL(4), posEncFL(4), posEncFR(1),
+			posEncBR(2), posEncBL(3) {
 		Watchdog().SetExpiration(1);
 	}
 
@@ -87,7 +87,7 @@ public:
 		wheelVector wheel[4];
 		int i;
 		int j;
-		bool calibrating;
+		bool calibrating = false;
 		int calMode;
 		bool isButtonPressed;
 		isButtonPressed = false;
@@ -126,91 +126,91 @@ public:
 		
 		
 		
-		
-		if (stick.GetRawButton(5) && stick.GetRawButton(6)) {
-			calibrating = true;
-			calMode = 0;
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING**             ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "1 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "2 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "3 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "4 NOT SET                   ");
-			dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "                            ");
-		}
-		
-		while (calibrating == true) {
-			
-			if (stick.GetRawButton(8) && !isButtonPressed){
-				if (calMode == 0){
-					flOffset = posEncFL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, flOffset);
-				}
-				else if (calMode == 1){
-					frOffset = posEncFR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, frOffset);
-				}
-				else if (calMode == 3){
-					blOffset = posEncBL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, blOffset);
-				}
-				else if (calMode == 4){
-					brOffset = posEncBR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "OFFSET(%i) SET TO %f     ",
-												calMode+1, brOffset);
-				}
-				
-				calMode++;
-				isButtonPressed = true;
-				
-				
-				if (calMode >= 4) { calibrating = false; }
-				
-				
-			}
-			
-			else if (isButtonPressed){ 
-				isButtonPressed = false; 
-			}
-			
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i",
-							calMode+1);
-			if (stick.GetRawButton(2) == true && calMode == 0) {
-			 turnWheelFL.Set(.15);
-			 } else if (stick.GetRawButton(3) == true) {
-			 turnWheelFL.Set(-.15);
-			 } else {
-			 turnWheelFL.Set(0);
-			 }
-			
-			if (stick.GetRawButton(2) == true && calMode == 1) {
-						 turnWheelFR.Set(.15);
-						 } else if (stick.GetRawButton(3) == true && calMode == 1) {
-						 turnWheelFR.Set(-.15);
-						 } else {
-						 turnWheelFR.Set(0);
-						 }
-			
-			if (stick.GetRawButton(2) == true && calMode == 2) {
-						 turnWheelBL.Set(.15);
-						 } else if (stick.GetRawButton(3) == true && calMode == 2) {
-						 turnWheelBL.Set(-.15);
-						 } else {
-						 turnWheelBL.Set(0);
-						 }
-			
-			if (stick.GetRawButton(2) == true && calMode == 3) {
-						 turnWheelBR.Set(.15);
-						 } else if (stick.GetRawButton(3) == true && calMode == 3) {
-						 turnWheelBR.Set(-.15);
-						 } else {
-						 turnWheelBR.Set(0);
-						 }
-			
-
-		}
+//		
+//		if (stick.GetRawButton(5) && stick.GetRawButton(6)) {
+//			calibrating = true;
+//			calMode = 0;
+//			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING**             ");
+//			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "1 NOT SET                   ");
+//			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "2 NOT SET                   ");
+//			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "3 NOT SET                   ");
+//			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "4 NOT SET                   ");
+//			dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "                            ");
+//		}
+//		
+//		while (calibrating == true) {
+//			
+//			if (stick.GetRawButton(8) && !isButtonPressed){
+//				if (calMode == 0){
+//					flOffset = posEncFL.GetVoltage();
+//					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "OFFSET(%i) SET TO %f     ",
+//												calMode+1, flOffset);
+//				}
+//				else if (calMode == 1){
+//					frOffset = posEncFR.GetVoltage();
+//					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "OFFSET(%i) SET TO %f     ",
+//												calMode+1, frOffset);
+//				}
+//				else if (calMode == 3){
+//					blOffset = posEncBL.GetVoltage();
+//					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "OFFSET(%i) SET TO %f     ",
+//												calMode+1, blOffset);
+//				}
+//				else if (calMode == 4){
+//					brOffset = posEncBR.GetVoltage();
+//					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "OFFSET(%i) SET TO %f     ",
+//												calMode+1, brOffset);
+//				}
+//				
+//				calMode++;
+//				isButtonPressed = true;
+//				
+//				
+//				if (calMode >= 4) { calibrating = false; }
+//				
+//				
+//			}
+//			
+//			else if (isButtonPressed){ 
+//				isButtonPressed = false; 
+//			}
+//			
+//			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i",
+//							calMode+1);
+//			if (stick.GetRawButton(2) == true && calMode == 0) {
+//			 turnWheelFL.Set(.15);
+//			 } else if (stick.GetRawButton(3) == true) {
+//			 turnWheelFL.Set(-.15);
+//			 } else {
+//			 turnWheelFL.Set(0);
+//			 }
+//			
+//			if (stick.GetRawButton(2) == true && calMode == 1) {
+//						 turnWheelFR.Set(.15);
+//						 } else if (stick.GetRawButton(3) == true && calMode == 1) {
+//						 turnWheelFR.Set(-.15);
+//						 } else {
+//						 turnWheelFR.Set(0);
+//						 }
+//			
+//			if (stick.GetRawButton(2) == true && calMode == 2) {
+//						 turnWheelBL.Set(.15);
+//						 } else if (stick.GetRawButton(3) == true && calMode == 2) {
+//						 turnWheelBL.Set(-.15);
+//						 } else {
+//						 turnWheelBL.Set(0);
+//						 }
+//			
+//			if (stick.GetRawButton(2) == true && calMode == 3) {
+//						 turnWheelBR.Set(.15);
+//						 } else if (stick.GetRawButton(3) == true && calMode == 3) {
+//						 turnWheelBR.Set(-.15);
+//						 } else {
+//						 turnWheelBR.Set(0);
+//						 }
+//			
+//
+//		}
 		
 		
 		
@@ -421,7 +421,7 @@ public:
 			//				turnWheelBL.Set(0);
 		}
 		if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
-			turnWheelBL.Set(-wheel[BL].turnVel);
+			turnWheelBL.Set(wheel[BL].turnVel);
 //				turnWheelBL.Set(wheel[BL].turnVel);
 //				 turnWheelBR.Set(wheel[BR].turnVel);
 //				 turnWheelBL.Set(wheel[BL].turnVel);
@@ -439,7 +439,7 @@ public:
 //				turnWheelBL.Set(0);
 		}
 		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
-			turnWheelBR.Set(-wheel[BR].turnVel);
+			turnWheelBR.Set(wheel[BR].turnVel);
 		//				turnWheelBL.Set(wheel[BL].turnVel);
 		//				 turnWheelBR.Set(wheel[BR].turnVel);
 		//				 turnWheelBL.Set(wheel[BL].turnVel);
