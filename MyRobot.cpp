@@ -154,10 +154,10 @@ public:
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
 //		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);	
 		
-		wheel[FL].offset = 1.6;
-		wheel[FR].offset = 1.31;
-		wheel[BL].offset = 1;
-		wheel[BR].offset = 0.59;
+		wheel[FL].offset = 1.16;
+		wheel[FR].offset = 3.07;
+		wheel[BL].offset = 2.91;
+		wheel[BR].offset = 4.45;
 		
 		if (secondStick.GetRawButton(6) && !secondStick.GetRawButton(3)){
 			wheel[FL].disable = true;
@@ -198,7 +198,7 @@ public:
 		turnWheelBR.SetVoltageRampRate(voltageRate);
 		turnWheelBL.SetVoltageRampRate(voltageRate);*/
 		
-		
+		/*
 		calFileIn.open("2517_swerve_calibration.txt");
 		if (calFileIn.is_open()){
 			while (!calFileIn.eof())
@@ -207,7 +207,7 @@ public:
 				cout<<calReadOutput;
 			}
 		}
-		
+		*/
 
 		while (IsOperatorControl()) 
 		{
@@ -476,7 +476,7 @@ public:
 						}
 					}
 				}
-				
+				/*
 				for (i = 0; i <= 3; i++)
 				{
 					if (wheel[i].curTheta - wheel[i].prevTheta 
@@ -487,7 +487,7 @@ public:
 						wheel[i].disable = true;
 					}
 				}
-				
+				*/
 				for(i=0;i<4;i++)
 				{
 					if (!(wheel[i].x == 0 && wheel[i].y == 0 && wheel[i].disable != true))
