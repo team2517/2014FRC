@@ -58,7 +58,7 @@ public:
 		stick(1), turnWheelFL(45), turnWheelFR(30), turnWheelBR(9),
 			turnWheelBL(11), moveWheelFL(2), moveWheelFR(12),
 			moveWheelBR(27), moveWheelBL(4), posEncFL(4), posEncFR(1),
-			posEncBR(2), posEncBL(3) {
+			posEncBR(3), posEncBL(2) {
 		Watchdog().SetExpiration(1);
 	}
 
@@ -421,7 +421,7 @@ public:
 			//				turnWheelBL.Set(0);
 		}
 		if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
-			turnWheelBL.Set(wheel[BL].turnVel);
+			turnWheelBL.Set(-wheel[BL].turnVel);
 //				turnWheelBL.Set(wheel[BL].turnVel);
 //				 turnWheelBR.Set(wheel[BR].turnVel);
 //				 turnWheelBL.Set(wheel[BL].turnVel);
@@ -439,7 +439,7 @@ public:
 //				turnWheelBL.Set(0);
 		}
 		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
-			turnWheelBR.Set(wheel[BR].turnVel);
+			turnWheelBR.Set(-wheel[BR].turnVel);
 		//				turnWheelBL.Set(wheel[BL].turnVel);
 		//				 turnWheelBR.Set(wheel[BR].turnVel);
 		//				 turnWheelBL.Set(wheel[BL].turnVel);
