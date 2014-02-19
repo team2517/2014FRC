@@ -3,7 +3,7 @@
 #include "Vision/BinaryImage.h"
 #include "Math.h"
 
-#define OFFSETMOVE					.2
+#define OFFSETMOVE					.25
 #define TESTENCODERNUM				7
 #define FL                        0
 #define FR                        1
@@ -39,9 +39,9 @@ class RobotDemo : public SimpleRobot
 
 public:
 	RobotDemo() :
-		posEncFL(5), posEncFR(1), posEncBR(7), posEncBL(3), 
-		turnWheelFL(4), turnWheelFR(11), turnWheelBR(27),
-		turnWheelBL(9), stick(1) 
+		posEncFL(4), posEncFR(1), posEncBR(2), posEncBL(3), 
+		turnWheelFL(45), turnWheelFR(30), turnWheelBR(9),
+		turnWheelBL(11), stick(1) 
 	{
 		Watchdog().SetExpiration(1);
 	}
@@ -73,32 +73,46 @@ public:
 		while (IsOperatorControl()) 
 		{
 			Watchdog().Feed();
+			
+			flOffset = posEncFL.GetVoltage();
+			frOffset = posEncFR.GetVoltage();
+			brOffset = posEncBR.GetVoltage();
+			blOffset = posEncBL.GetVoltage();
+			
+			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
+				"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
+				"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
+				"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
+				"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
 
 			if (stick.GetRawButton(8) && !isButtonPressed) 
 			{
 				if (calMode == 0) 
 				{
 					flOffset = posEncFL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-						"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+//					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
+//						"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
 				} 
 				else if (calMode == 1) 
 				{
 					frOffset = posEncFR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-						"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+//					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
+//						"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
 				} 
 				else if (calMode == 2) 
 				{
 					blOffset = posEncBL.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-						"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
+//					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
+//						"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
 				} 
 				else if (calMode == 3) 
 				{
 					brOffset = posEncBR.GetVoltage();
-					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-						"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+//					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
+//						"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
 				}
 
 				calMode++;
