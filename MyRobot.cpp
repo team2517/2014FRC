@@ -57,7 +57,8 @@ struct wheelVector
  */
 class RobotDemo : public SimpleRobot {
 	wheelVector wheel[4];
-	Joystick driveStick; // only joystick
+	Joystick driveStick;
+	Joystick secondStick;
 	CANJaguar pickUpArm1;
 	CANJaguar pickUpArm2;
 	Talon shooterMotor1;
@@ -67,7 +68,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		driveStick(1), pickUpArm1(12), pickUpArm2(46), shooterMotor1(1), shooterMotor2(10)
+		driveStick(1), secondStick(2), pickUpArm1(12), pickUpArm2(46), shooterMotor1(1), shooterMotor2(10)
 	{
 		Watchdog().SetExpiration(1);
 		wheel[FL].turnWheel = new CANJaguar(4);
@@ -158,6 +159,20 @@ public:
 		wheel[FR].offset = 1.31;
 		wheel[BL].offset = 1;
 		wheel[BR].offset = 0.59;
+		
+		if (secondStick.GetRawButton(1)){
+			wheel[FL].disable = true;
+		}
+		else if (secondStick.GetRawButton(2)){
+			wheel[FR].disable = true;
+		}
+		else if (secondStick.GetRawButton(3)){
+			wheel[BL].disable = true;
+		}
+		else if (secondStick.GetRawButton(4)){
+			wheel[BR].disable = true;
+		}
+		
 		
 		
 		for (i = 0; i < 4; i++) 
