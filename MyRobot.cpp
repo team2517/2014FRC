@@ -287,21 +287,21 @@ public:
 			
 			
 
-			for (i = 0; i <= 3; i++) {
+			for (i = 0; i < 4; i++) {
 				wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
 			}
 
-			for (i = 0; i <= 3; i++) {
+			for (i = 0; i < 4; i++) {
 				if (wheel[i].mag > 1 * MAXPOWER) {
 					largestMag = wheel[i].mag;
-					for (j = 0; j <= 3; j++) {
+					for (j = 0; j < 4; j++) {
 						wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
 					}
 				}
 
 			}
 
-			for (i = 0; i <= 3; i++) {
+			for (i = 0; i < 4; i++) {
 				wheel[i].tarTheta = atan(wheel[i].y / wheel[i].x);
 
 				if (wheel[i].x < 0) {
@@ -327,7 +327,7 @@ public:
 //						 turnWheelFL.Set(0);
 //						 }
 
-			for (i=0; i <= 3; i++) {
+			for (i=0; i < 4; i++) {
 				wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
 
 				if (wheel[i].diffTheta > PI) {
