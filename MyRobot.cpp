@@ -478,6 +478,11 @@ public:
 			pickUpArm1.Set(-1);
 			pickUpArm2.Set(1);
 		}
+		else
+		{
+			pickUpArm1.Set(0);
+						pickUpArm2.Set(0);
+		}
 		if (stick.GetRawButton(6))
 		{
 			shooterMotor1.Set(1);
@@ -487,6 +492,11 @@ public:
 		{
 			shooterMotor1.Set(-1);
 			shooterMotor2.Set(1);
+		}
+		else
+		{
+			shooterMotor1.Set(0);
+						shooterMotor2.Set(0);
 		}
 
 	}
