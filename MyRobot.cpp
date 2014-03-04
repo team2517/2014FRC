@@ -27,6 +27,7 @@ struct wheelVector {
 
 	float prevTurnVel;
 	bool changeSign;
+	bool disable;
 	float moveTime;
 };
 
