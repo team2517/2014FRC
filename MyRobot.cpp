@@ -94,8 +94,6 @@ public:
 		wheelVector wheel[4];
 		int i;
 		int j;
-		bool calibrating = false;
-		int calMode;
 		bool isButtonPressed;
 		isButtonPressed = false;
 		
@@ -471,13 +469,13 @@ public:
 		
 		if (stick.GetRawButton(7))
 		{
-			pickUpArm1.Set(1);
-			pickUpArm2.Set(-1);
+			pickUpArm1.Set(.8);
+			pickUpArm2.Set(-.8);
 		}
 		else if (stick.GetRawButton(5))
 		{
-			pickUpArm1.Set(-1);
-			pickUpArm2.Set(1);
+			pickUpArm1.Set(-.8);
+			pickUpArm2.Set(.8);
 		}
 		else
 		{
@@ -486,13 +484,13 @@ public:
 		}
 		if (stick.GetRawButton(6))
 		{
-			shooterMotor1.Set(1);
-			shooterMotor2.Set(-1);
+			shooterMotor1.Set(.3);
+			shooterMotor2.Set(-.3);
 		}
 		else if (stick.GetRawButton(8))
 		{
-			shooterMotor1.Set(-1);
-			shooterMotor2.Set(1);
+			shooterMotor1.Set(-.3);
+			shooterMotor2.Set(.3);
 		}
 		else
 		{
