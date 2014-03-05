@@ -173,6 +173,10 @@ public:
 			{
 				turnWheelBR.Set(-OFFSETMOVE);
 			} 
+			else if (calMode >= 4)
+			{
+				calMode = 0;
+			}
 			else 
 			{
 				turnWheelBR.Set(0);
