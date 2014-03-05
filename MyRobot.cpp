@@ -39,6 +39,7 @@ struct wheelVector {
  */
 class RobotDemo : public SimpleRobot {
 	Joystick stick; // only joystick
+	Joystick secondStick;
 	CANJaguar turnWheelFL;
 	CANJaguar turnWheelFR;
 	CANJaguar turnWheelBR;
@@ -60,7 +61,8 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), turnWheelFL(45), turnWheelFR(30), turnWheelBR(9),
+		stick(1), secondStick(2), turnWheelFL(45), turnWheelFR(30), 
+		turnWheelBR(9),
 			turnWheelBL(11), moveWheelFL(2), moveWheelFR(12),
 			moveWheelBR(27), moveWheelBL(4), shooterMotor1(13), shooterMotor2(46),
 			pickUpArm1(1), pickUpArm2(10),
@@ -236,6 +238,31 @@ public:
 
 			
 //#define TESTER			1
+			
+			if (secondStick.GetRawButton(6) && !secondStick.GetRawButton(3)){
+				wheel[FL].disable = true;
+			}
+			else if (secondStick.GetRawButton(11) && !secondStick.GetRawButton(3)){
+				wheel[FR].disable = true;
+			}
+			else if (secondStick.GetRawButton(7) && !secondStick.GetRawButton(3)){
+				wheel[BL].disable = true;
+			}
+			else if (secondStick.GetRawButton(10) && !secondStick.GetRawButton(3)){
+				wheel[BR].disable = true;
+			}
+			else if (secondStick.GetRawButton(6) && secondStick.GetRawButton(3)){
+				wheel[FL].disable = false;
+			}
+			else if (secondStick.GetRawButton(11) && secondStick.GetRawButton(3)){
+				wheel[FR].disable = false;
+			}
+			else if (secondStick.GetRawButton(7) && secondStick.GetRawButton(3)){
+				wheel[BL].disable = false;
+			}
+			else if (secondStick.GetRawButton(10) && secondStick.GetRawButton(3)){
+				wheel[BR].disable = false;
+			}
 
 			leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
 			leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
@@ -387,7 +414,7 @@ public:
 			}
 		
 
-		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
+		if (!(wheel[FL].x == 0 && wheel[FL].y == 0 && !wheel[FL].disable)) {
 			turnWheelFL.Set(-wheel[FL].turnVel);
 			//				turnWheelFR.Set(wheel[FR].turnVel);
 			//				 turnWheelBR.Set(wheel[BR].turnVel);
@@ -406,7 +433,7 @@ public:
 			//				turnWheelBR.Set(0);
 			//				turnWheelBL.Set(0);
 		}
-		if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
+		if (!(wheel[FR].x == 0 && wheel[FR].y == 0 && !wheel[FR].disable)) {
 			turnWheelFR.Set(-wheel[FR].turnVel);
 			//				turnWheelFR.Set(wheel[FR].turnVel);
 			//				 turnWheelBR.Set(wheel[BR].turnVel);
@@ -425,7 +452,7 @@ public:
 			//				turnWheelBR.Set(0);
 			//				turnWheelBL.Set(0);
 		}
-		if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
+		if (!(wheel[BL].x == 0 && wheel[BL].y == 0 && !wheel[BL].disable)) {
 			turnWheelBL.Set(-wheel[BL].turnVel);
 //				turnWheelBL.Set(wheel[BL].turnVel);
 //				 turnWheelBR.Set(wheel[BR].turnVel);
@@ -443,7 +470,7 @@ public:
 //				turnWheelBR.Set(0);
 //				turnWheelBL.Set(0);
 		}
-		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
+		if (!(wheel[BR].x == 0 && wheel[BR].y == 0 && !wheel[BR].disable)) {
 			turnWheelBR.Set(-wheel[BR].turnVel);
 		//				turnWheelBL.Set(wheel[BL].turnVel);
 		//				 turnWheelBR.Set(wheel[BR].turnVel);
