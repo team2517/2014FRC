@@ -39,9 +39,9 @@ class RobotDemo : public SimpleRobot
 
 public:
 	RobotDemo() :
-		posEncFL(4), posEncFR(1), posEncBR(3), posEncBL(2), 
-		turnWheelFL(45), turnWheelFR(30), turnWheelBR(9),
-		turnWheelBL(11), stick(1) 
+		posEncFL(3), posEncFR(2), posEncBR(4), posEncBL(1), 
+		turnWheelFL(9), turnWheelFR(11), turnWheelBR(45),
+		turnWheelBL(30), stick(1) 
 	{
 		Watchdog().SetExpiration(1);
 	}
@@ -80,13 +80,13 @@ public:
 			blOffset = posEncBL.GetVoltage();
 			
 			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-				"OFFSET(%i) SET TO %f     ", calMode+1, flOffset);
+				"flOffset SET TO %f     ", flOffset);
 			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-				"OFFSET(%i) SET TO %f     ", calMode+1, frOffset);
+				"frOffset SET TO %f     ", frOffset);
 			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-				"OFFSET(%i) SET TO %f     ", calMode+1, brOffset);
+				"brOffset SET TO %f     ", brOffset);
 			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-				"OFFSET(%i) SET TO %f     ", calMode+1, blOffset);
+				"blOffset SET TO %f     ", blOffset);
 
 			if (stick.GetRawButton(8) && !isButtonPressed) 
 			{
