@@ -39,7 +39,8 @@ struct wheelVector {
  */
 class RobotDemo : public SimpleRobot {
 	Joystick stick; // only joystick
-	Joystick secondStick;
+	Joystick manipStick;
+	Joystick disableStick;
 	CANJaguar turnWheelFL;
 	CANJaguar turnWheelFR;
 	CANJaguar turnWheelBR;
@@ -61,7 +62,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), secondStick(2), turnWheelFL(9), turnWheelFR(1), 
+		stick(1), manipStick(2),disableStick(3), turnWheelFL(9), turnWheelFR(11), 
 		turnWheelBR(45),
 			turnWheelBL(30), moveWheelFL(27), moveWheelFR(4),
 			moveWheelBR(2), moveWheelBL(12), shooterMotor1(13), shooterMotor2(46),
@@ -225,6 +226,7 @@ public:
 		for (i = 0; i < 4; i++) {
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
+			wheel[i].disable = true;
 		}
 		
 		/*turnWheelFL.SetVoltageRampRate(voltageRate);
@@ -239,28 +241,28 @@ public:
 			
 //#define TESTER			1
 			
-			if (secondStick.GetRawButton(6) && !secondStick.GetRawButton(3)){
+			if (disableStick.GetRawButton(6) && !disableStick.GetRawButton(3)){
 				wheel[FL].disable = true;
 			}
-			else if (secondStick.GetRawButton(11) && !secondStick.GetRawButton(3)){
+			else if (disableStick.GetRawButton(11) && !disableStick.GetRawButton(3)){
 				wheel[FR].disable = true;
 			}
-			else if (secondStick.GetRawButton(7) && !secondStick.GetRawButton(3)){
+			else if (disableStick.GetRawButton(7) && !disableStick.GetRawButton(3)){
 				wheel[BL].disable = true;
 			}
-			else if (secondStick.GetRawButton(10) && !secondStick.GetRawButton(3)){
+			else if (disableStick.GetRawButton(10) && !disableStick.GetRawButton(3)){
 				wheel[BR].disable = true;
 			}
-			else if (secondStick.GetRawButton(6) && secondStick.GetRawButton(3)){
+			else if (disableStick.GetRawButton(6) && disableStick.GetRawButton(3)){
 				wheel[FL].disable = false;
 			}
-			else if (secondStick.GetRawButton(11) && secondStick.GetRawButton(3)){
+			else if (disableStick.GetRawButton(11) && disableStick.GetRawButton(3)){
 				wheel[FR].disable = false;
 			}
-			else if (secondStick.GetRawButton(7) && secondStick.GetRawButton(3)){
+			else if (disableStick.GetRawButton(7) && disableStick.GetRawButton(3)){
 				wheel[BL].disable = false;
 			}
-			else if (secondStick.GetRawButton(10) && secondStick.GetRawButton(3)){
+			else if (disableStick.GetRawButton(10) && disableStick.GetRawButton(3)){
 				wheel[BR].disable = false;
 			}
 
@@ -439,7 +441,7 @@ public:
 			//				 turnWheelBR.Set(wheel[BR].turnVel);
 			//				 turnWheelBL.Set(wheel[BL].turnVel);
 			//				 
-			moveWheelFR.Set(wheel[FR].mag);
+			moveWheelFR.Set(-wheel[FR].mag);
 			//				 moveWheelFR.Set(wheel[FR].mag);
 			//				 moveWheelBR.Set(wheel[BR].mag);
 			//				 moveWheelBL.Set(wheel[BL].mag);
@@ -458,7 +460,7 @@ public:
 //				 turnWheelBR.Set(wheel[BR].turnVel);
 //				 turnWheelBL.Set(wheel[BL].turnVel);
 //				 
-			moveWheelBL.Set(-wheel[BL].mag);
+			moveWheelBL.Set(wheel[BL].mag);
 //				 moveWheelBL.Set(wheel[BL].mag);
 //				 moveWheelBR.Set(wheel[BR].mag);
 //				 moveWheelBL.Set(wheel[BL].mag);
@@ -494,12 +496,12 @@ public:
 			wheel[i].prevTurnVel = wheel[i].turnVel;
 		}
 		
-		if (stick.GetRawButton(7))
+		if (stick.GetRawButton(8))
 		{
 			pickUpArm1.Set(-.8);
 			pickUpArm2.Set(-.8);
 		}
-		else if (stick.GetRawButton(5))
+		else if (stick.GetRawButton(6))
 		{
 			pickUpArm1.Set(.8);
 			pickUpArm2.Set(.8);
@@ -509,15 +511,15 @@ public:
 			pickUpArm1.Set(0);
 						pickUpArm2.Set(0);
 		}
-		if (stick.GetRawButton(6))
+		if (manipStick.GetRawButton(3))
 		{
 			shooterMotor1.Set(.3);
 			shooterMotor2.Set(.3);
 		}
-		else if (stick.GetRawButton(8))
+		else if (manipStick.GetRawButton(1))
 		{
-			shooterMotor1.Set(-.3);
-			shooterMotor2.Set(-.3);
+			shooterMotor1.Set(-1.0);
+			shooterMotor2.Set(-1.0);
 		}
 		else
 		{
