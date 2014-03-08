@@ -78,7 +78,7 @@ public:
 	 * Drive left & right motors for 2 seconds then stop
 	 */
 	void Autonomous() {
-		
+		/*
 		float leftStickVec[4];
 		float phi;
 		float largestMag;
@@ -89,9 +89,9 @@ public:
 		autoTimer.Start();
 		baneTimer.Start();
 		Watchdog().SetEnabled(false);
-
+		*/
 		while (IsAutonomous() && IsEnabled()) {
-			
+			/*
 			if(autoTimer.Get() < 3)
 			{
 				leftStickVec[Y] = TESTVAL;
@@ -303,7 +303,7 @@ public:
 		for(i=0; i<4; i++)
 		{
 			wheel[i].prevTurnVel = wheel[i].turnVel;
-		}
+		}*/
 		}
 	}
 
