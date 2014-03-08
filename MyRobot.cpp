@@ -49,8 +49,8 @@ class RobotDemo : public SimpleRobot {
 	CANJaguar moveWheelFR;
 	CANJaguar moveWheelBR;
 	CANJaguar moveWheelBL;
-	CANJaguar shooterMotor1;
-	CANJaguar shooterMotor2;
+//	CANJaguar shooterMotor1;
+//	CANJaguar shooterMotor2;
 	Talon pickUpArm1;
 	Talon pickUpArm2;
 	AnalogChannel posEncFL;
@@ -66,7 +66,8 @@ public:
 		stick(1), manipStick(2),disableStick(3), turnWheelFL(9), turnWheelFR(11), 
 		turnWheelBR(45),
 			turnWheelBL(30), moveWheelFL(27), moveWheelFR(4),
-			moveWheelBR(2), moveWheelBL(12), shooterMotor1(13), shooterMotor2(46),
+			moveWheelBR(2), moveWheelBL(12), 
+			//shooterMotor1(13), shooterMotor2(46),
 			pickUpArm1(1), pickUpArm2(10),
 			posEncFL(3), posEncFR(2),
 			posEncBR(4), posEncBL(1) {
@@ -735,6 +736,8 @@ public:
 			pickUpArm1.Set(0);
 						pickUpArm2.Set(0);
 		}
+		
+		/*         Shooter
 		if (manipStick.GetRawButton(3))
 		{
 			shooterMotor1.Set(.3);
@@ -748,8 +751,8 @@ public:
 		else
 		{
 			shooterMotor1.Set(0);
-						shooterMotor2.Set(0);
-		}
+			shooterMotor2.Set(0);
+		}*/
 
 	}
 }
