@@ -152,6 +152,8 @@ public:
 				turnWheelFR.Set(0);
 			}
 
+			//Back Left
+			
 			if (stick.GetRawButton(2) == true && calMode == 2) 
 			{
 				turnWheelBL.Set(OFFSETMOVE);
@@ -160,6 +162,15 @@ public:
 			{
 				turnWheelBL.Set(-OFFSETMOVE);
 			} 
+			else if (stick.GetRawButton(1) == true && calMode == 2) 
+			{
+				turnWheelBL.Set(OFFSETMOVE/2);
+			} 
+			else if (stick.GetRawButton(4) == true && calMode == 2) 
+			{
+				turnWheelBL.Set(-OFFSETMOVE/2);
+			} 
+			
 			else 
 			{
 				turnWheelBL.Set(0);
