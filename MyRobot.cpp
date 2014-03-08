@@ -134,6 +134,15 @@ public:
 			{
 				turnWheelFL.Set(-OFFSETMOVE);
 			} 
+			
+			else if (stick.GetRawButton(1) == true && calMode == 0) 
+			{
+				turnWheelFL.Set(OFFSETMOVE/2);
+			} 
+			else if (stick.GetRawButton(4) == true && calMode == 0) 
+			{
+				turnWheelFL.Set(-OFFSETMOVE/2);
+			} 
 			else 
 			{
 				turnWheelFL.Set(0);
@@ -147,13 +156,19 @@ public:
 			{
 				turnWheelFR.Set(-OFFSETMOVE);
 			} 
+			else if (stick.GetRawButton(1) == true && calMode == 1) 
+			{
+				turnWheelFR.Set(OFFSETMOVE/2);
+			} 
+			else if (stick.GetRawButton(4) == true && calMode == 1) 
+			{
+				turnWheelFR.Set(-OFFSETMOVE/2);
+			} 
 			else 
 			{
 				turnWheelFR.Set(0);
 			}
 
-			//Back Left
-			
 			if (stick.GetRawButton(2) == true && calMode == 2) 
 			{
 				turnWheelBL.Set(OFFSETMOVE);
@@ -170,7 +185,6 @@ public:
 			{
 				turnWheelBL.Set(-OFFSETMOVE/2);
 			} 
-			
 			else 
 			{
 				turnWheelBL.Set(0);
@@ -183,6 +197,14 @@ public:
 			else if (stick.GetRawButton(3) == true && calMode == 3) 
 			{
 				turnWheelBR.Set(-OFFSETMOVE);
+			} 
+			else if (stick.GetRawButton(1) == true && calMode == 3) 
+			{
+				turnWheelBR.Set(OFFSETMOVE/2);
+			} 
+			else if (stick.GetRawButton(4) == true && calMode == 3) 
+			{
+				turnWheelBR.Set(-OFFSETMOVE/2);
 			} 
 			else if (calMode >= 4)
 			{
