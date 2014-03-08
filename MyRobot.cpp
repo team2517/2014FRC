@@ -3,7 +3,7 @@
 #include "controls.h"
 #include "offsets.h"
 //#include "util.h"
-#define TESTVAL                 .4
+#define TESTVAL                 .5
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -87,6 +87,7 @@ public:
 		
 		autoTimer.Start();
 		baneTimer.Start();
+		Watchdog().SetEnabled(false);
 
 		while (IsAutonomous() && IsEnabled()) {
 			
