@@ -322,140 +322,13 @@ public:
 		int i;
 		int j;
 		bool isButtonPressed;
-		isButtonPressed = false;
-		
-//		moveWheelFL.ChangeControlMode(CANJaguar::kSpeed);
-//		moveWheelFL.ConfigEncoderCodesPerRev(1000);
-//		moveWheelFL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
-//		moveWheelFL.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-//		moveWheelFL.SetPID(PVALUE,IVALUE,DVALUE);
-//		moveWheelFL.EnableControl();
-//		Watchdog().Feed();
-//		moveWheelFR.ChangeControlMode(CANJaguar::kSpeed);
-//		moveWheelFR.ConfigEncoderCodesPerRev(1000);
-//		moveWheelFR.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
-//		moveWheelFR.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-//		moveWheelFR.SetPID(PVALUE,IVALUE,DVALUE);
-//		moveWheelFR.EnableControl();
-//		Watchdog().Feed();
-//		moveWheelBL.ChangeControlMode(CANJaguar::kSpeed);
-//		moveWheelBL.ConfigEncoderCodesPerRev(1000);
-//		moveWheelBL.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
-//		moveWheelBL.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder);
-//		moveWheelBL.SetPID(PVALUE,IVALUE,DVALUE);
-//		moveWheelBL.EnableControl();
-//		Watchdog().Feed();
-//		moveWheelBR.ChangeControlMode(CANJaguar::kSpeed);
-//		moveWheelBR.ConfigEncoderCodesPerRev(1000);
-//		moveWheelBR.SetPositionReference(CANJaguar::kPosRef_QuadEncoder);
-//		moveWheelBR.SetSpeedReference(CANJaguar::kSpeedRef_QuadEncoder	);
-//		moveWheelBR.SetPID(PVALUE,IVALUE,DVALUE);
-//		moveWheelBR.EnableControl();
-//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
-//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
-//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
-//		turnWheelBR.ChangeControlMode(CANJaguar::kPercentVbus);
-		
-		
-		
-//		
-//		if (stick.GetRawButton(5) && stick.GetRawButton(6)) {
-//			calibrating = true;
-//			calMode = 0;
-//			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING**             ");
-//			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "1 NOT SET                   ");
-//			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "2 NOT SET                   ");
-//			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "3 NOT SET                   ");
-//			dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "4 NOT SET                   ");
-//			dsLCD->Printf(DriverStationLCD::kUser_Line6, 1, "                            ");
-//		}
-//		
-//		while (calibrating == true) {
-//			
-//			if (stick.GetRawButton(8) && !isButtonPressed){
-//				if (calMode == 0){
-//					flOffset = posEncFL.GetVoltage();
-//					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "OFFSET(%i) SET TO %f     ",
-//												calMode+1, flOffset);
-//				}
-//				else if (calMode == 1){
-//					frOffset = posEncFR.GetVoltage();
-//					dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "OFFSET(%i) SET TO %f     ",
-//												calMode+1, frOffset);
-//				}
-//				else if (calMode == 3){
-//					blOffset = posEncBL.GetVoltage();
-//					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "OFFSET(%i) SET TO %f     ",
-//												calMode+1, blOffset);
-//				}
-//				else if (calMode == 4){
-//					brOffset = posEncBR.GetVoltage();
-//					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "OFFSET(%i) SET TO %f     ",
-//												calMode+1, brOffset);
-//				}
-//				
-//				calMode++;
-//				isButtonPressed = true;
-//				
-//				
-//				if (calMode >= 4) { calibrating = false; }
-//				
-//				
-//			}
-//			
-//			else if (isButtonPressed){ 
-//				isButtonPressed = false; 
-//			}
-//			
-//			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i",
-//							calMode+1);
-//			if (stick.GetRawButton(2) == true && calMode == 0) {
-//			 turnWheelFL.Set(.15);
-//			 } else if (stick.GetRawButton(3) == true) {
-//			 turnWheelFL.Set(-.15);
-//			 } else {
-//			 turnWheelFL.Set(0);
-//			 }
-//			
-//			if (stick.GetRawButton(2) == true && calMode == 1) {
-//						 turnWheelFR.Set(.15);
-//						 } else if (stick.GetRawButton(3) == true && calMode == 1) {
-//						 turnWheelFR.Set(-.15);
-//						 } else {
-//						 turnWheelFR.Set(0);
-//						 }
-//			
-//			if (stick.GetRawButton(2) == true && calMode == 2) {
-//						 turnWheelBL.Set(.15);
-//						 } else if (stick.GetRawButton(3) == true && calMode == 2) {
-//						 turnWheelBL.Set(-.15);
-//						 } else {
-//						 turnWheelBL.Set(0);
-//						 }
-//			
-//			if (stick.GetRawButton(2) == true && calMode == 3) {
-//						 turnWheelBR.Set(.15);
-//						 } else if (stick.GetRawButton(3) == true && calMode == 3) {
-//						 turnWheelBR.Set(-.15);
-//						 } else {
-//						 turnWheelBR.Set(0);
-//						 }
-//			
-//
-//		}
-		
-		
-		
+		isButtonPressed = false;		
 		
 		for (i = 0; i < 4; i++) {
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
 		}
 		
-		/*turnWheelFL.SetVoltageRampRate(voltageRate);
-		turnWheelFR.SetVoltageRampRate(voltageRate);
-		turnWheelBR.SetVoltageRampRate(voltageRate);
-		turnWheelBL.SetVoltageRampRate(voltageRate);*/
 
 		while (IsOperatorControl()) {
 			Watchdog().Feed();
@@ -616,77 +489,38 @@ public:
 
 		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
 			turnWheelFL.Set(-wheel[FL].turnVel);
-			//				turnWheelFR.Set(wheel[FR].turnVel);
-			//				 turnWheelBR.Set(wheel[BR].turnVel);
-			//				 turnWheelBL.Set(wheel[BL].turnVel);
-			//				 
 			moveWheelFL.Set(wheel[FL].mag);
-			//				 moveWheelFR.Set(wheel[FR].mag);
-			//				 moveWheelBR.Set(wheel[BR].mag);
-			//				 moveWheelBL.Set(wheel[BL].mag);
 
 		} else {
 			turnWheelFL.Set(0);
 			moveWheelFL.Set(0);
-
-			//				turnWheelFR.Set(0);
-			//				turnWheelBR.Set(0);
-			//				turnWheelBL.Set(0);
 		}
 		if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
 			turnWheelFR.Set(-wheel[FR].turnVel);
-			//				turnWheelFR.Set(wheel[FR].turnVel);
-			//				 turnWheelBR.Set(wheel[BR].turnVel);
-			//				 turnWheelBL.Set(wheel[BL].turnVel);
-			//				 
 			moveWheelFR.Set(-wheel[FR].mag);
-			//				 moveWheelFR.Set(wheel[FR].mag);
-			//				 moveWheelBR.Set(wheel[BR].mag);
-			//				 moveWheelBL.Set(wheel[BL].mag);
 
 		} else {
 			turnWheelFR.Set(0);
 			moveWheelFR.Set(0);
-
-			//				turnWheelFR.Set(0);
-			//				turnWheelBR.Set(0);
-			//				turnWheelBL.Set(0);
+			
 		}
 		if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
 			turnWheelBL.Set(-wheel[BL].turnVel);
-//				turnWheelBL.Set(wheel[BL].turnVel);
-//				 turnWheelBR.Set(wheel[BR].turnVel);
-//				 turnWheelBL.Set(wheel[BL].turnVel);
 //				 
 			moveWheelBL.Set(wheel[BL].mag);
-//				 moveWheelBL.Set(wheel[BL].mag);
-//				 moveWheelBR.Set(wheel[BR].mag);
-//				 moveWheelBL.Set(wheel[BL].mag);
 
 		} else {
 			turnWheelBL.Set(0);
 			moveWheelBL.Set(0);
-//				turnWheelBL.Set(0);
-//				turnWheelBR.Set(0);
-//				turnWheelBL.Set(0);
 		}
 		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
 			turnWheelBR.Set(-wheel[BR].turnVel);
-		//				turnWheelBL.Set(wheel[BL].turnVel);
-		//				 turnWheelBR.Set(wheel[BR].turnVel);
-		//				 turnWheelBL.Set(wheel[BL].turnVel);
 		//				 
 			moveWheelBR.Set(wheel[BR].mag);
-		//				 moveWheelBL.Set(wheel[BL].mag);
-		//				 moveWheelBR.Set(wheel[BR].mag);
-		//				 moveWheelBL.Set(wheel[BL].mag);
 
 		} else {
 			turnWheelBR.Set(0);
 			moveWheelBR.Set(0);
-		//				turnWheelBL.Set(0);
-		//				turnWheelBR.Set(0);
-		//				turnWheelBL.Set(0);
 		}
 
 		for(i=0; i<4; i++)
