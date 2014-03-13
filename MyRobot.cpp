@@ -27,7 +27,6 @@ struct wheelVector {
 
 	float prevTurnVel;
 	bool changeSign;
-	bool disable;
 	float moveTime;
 };
 
@@ -40,7 +39,7 @@ struct wheelVector {
 class RobotDemo : public SimpleRobot {
 	Joystick stick; // only joystick
 	Joystick manipStick;
-	Joystick disableStick;
+	Joystick controlStick;
 	CANJaguar turnWheelFL;
 	CANJaguar turnWheelFR;
 	CANJaguar turnWheelBR;
@@ -63,7 +62,7 @@ class RobotDemo : public SimpleRobot {
 
 public:
 	RobotDemo() :
-		stick(1), manipStick(2),disableStick(3), turnWheelFL(9), turnWheelFR(11), 
+		stick(1), manipStick(2),controlStick(3), turnWheelFL(9), turnWheelFR(11), 
 		turnWheelBR(45),
 			turnWheelBL(30), moveWheelFL(27), moveWheelFR(4),
 			moveWheelBR(2), moveWheelBL(12), 
@@ -225,7 +224,7 @@ public:
 			}
 		
 
-		if (!(wheel[FL].x == 0 && wheel[FL].y == 0 && !wheel[FL].disable)) {
+		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
 			turnWheelFL.Set(-wheel[FL].turnVel);
 			//				turnWheelFR.Set(wheel[FR].turnVel);
 			//				 turnWheelBR.Set(wheel[BR].turnVel);
@@ -244,7 +243,7 @@ public:
 			//				turnWheelBR.Set(0);
 			//				turnWheelBL.Set(0);
 		}
-		if (!(wheel[FR].x == 0 && wheel[FR].y == 0 && !wheel[FR].disable)) {
+		if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
 			turnWheelFR.Set(-wheel[FR].turnVel);
 			//				turnWheelFR.Set(wheel[FR].turnVel);
 			//				 turnWheelBR.Set(wheel[BR].turnVel);
@@ -263,7 +262,7 @@ public:
 			//				turnWheelBR.Set(0);
 			//				turnWheelBL.Set(0);
 		}
-		if (!(wheel[BL].x == 0 && wheel[BL].y == 0 && !wheel[BL].disable)) {
+		if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
 			turnWheelBL.Set(-wheel[BL].turnVel);
 //				turnWheelBL.Set(wheel[BL].turnVel);
 //				 turnWheelBR.Set(wheel[BR].turnVel);
@@ -281,7 +280,7 @@ public:
 //				turnWheelBR.Set(0);
 //				turnWheelBL.Set(0);
 		}
-		if (!(wheel[BR].x == 0 && wheel[BR].y == 0 && !wheel[BR].disable)) {
+		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
 			turnWheelBR.Set(-wheel[BR].turnVel);
 		//				turnWheelBL.Set(wheel[BL].turnVel);
 		//				 turnWheelBR.Set(wheel[BR].turnVel);
@@ -451,7 +450,6 @@ public:
 		for (i = 0; i < 4; i++) {
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
-			wheel[i].disable = true;
 		}
 		
 		/*turnWheelFL.SetVoltageRampRate(voltageRate);
@@ -465,31 +463,6 @@ public:
 
 			
 //#define TESTER			1
-			
-			if (disableStick.GetRawButton(6) && !disableStick.GetRawButton(3)){
-				wheel[FL].disable = true;
-			}
-			else if (disableStick.GetRawButton(11) && !disableStick.GetRawButton(3)){
-				wheel[FR].disable = true;
-			}
-			else if (disableStick.GetRawButton(7) && !disableStick.GetRawButton(3)){
-				wheel[BL].disable = true;
-			}
-			else if (disableStick.GetRawButton(10) && !disableStick.GetRawButton(3)){
-				wheel[BR].disable = true;
-			}
-			else if (disableStick.GetRawButton(6) && disableStick.GetRawButton(3)){
-				wheel[FL].disable = false;
-			}
-			else if (disableStick.GetRawButton(11) && disableStick.GetRawButton(3)){
-				wheel[FR].disable = false;
-			}
-			else if (disableStick.GetRawButton(7) && disableStick.GetRawButton(3)){
-				wheel[BL].disable = false;
-			}
-			else if (disableStick.GetRawButton(10) && disableStick.GetRawButton(3)){
-				wheel[BR].disable = false;
-			}
 
 			leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
 			leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
