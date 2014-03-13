@@ -18,6 +18,7 @@
 #define DVALUE					0
 #define MAXPOWER				1
 #define TESTER                  1
+#define STAGGERDELAY			0.005 //In seconds
 //#define VOLTAGERATE				10000
 
 float deadBand(float);
@@ -56,6 +57,7 @@ class RobotDemo : public SimpleRobot {
 	AnalogChannel posEncFR;
 	AnalogChannel posEncBR;
 	AnalogChannel posEncBL;
+	Timer staggerTimer;
 	Timer baneTimer;
 	Timer autoTimer;
 	//float magmodifier;
@@ -314,6 +316,7 @@ public:
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
 		baneTimer.Start();
+		staggerTimer.Start();
 
 		float leftStickVec[4];
 		float phi;
@@ -486,8 +489,8 @@ public:
 
 			}
 		
-
-		if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
+        
+		if (!(wheel[FL].x == 0 && wheel[FL].y == 0 && staggerTimer.Get() > STAGGERDELAY*1 && staggerTimer.Get() < STAGGERDELAY*2)) {
 			turnWheelFL.Set(-wheel[FL].turnVel);
 			moveWheelFL.Set(wheel[FL].mag);
 
@@ -495,7 +498,7 @@ public:
 			turnWheelFL.Set(0);
 			moveWheelFL.Set(0);
 		}
-		if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
+		if (!(wheel[FR].x == 0 && wheel[FR].y == 0 && staggerTimer.Get() > STAGGERDELAY*2 && staggerTimer.Get() < STAGGERDELAY*3)) {
 			turnWheelFR.Set(-wheel[FR].turnVel);
 			moveWheelFR.Set(-wheel[FR].mag);
 
@@ -504,7 +507,7 @@ public:
 			moveWheelFR.Set(0);
 			
 		}
-		if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
+		if (!(wheel[BL].x == 0 && wheel[BL].y == 0 && staggerTimer.Get() > STAGGERDELAY*3 && staggerTimer.Get() < STAGGERDELAY*4)) {
 			turnWheelBL.Set(-wheel[BL].turnVel);
 //				 
 			moveWheelBL.Set(wheel[BL].mag);
@@ -513,7 +516,7 @@ public:
 			turnWheelBL.Set(0);
 			moveWheelBL.Set(0);
 		}
-		if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
+		if (!(wheel[BR].x == 0 && wheel[BR].y == 0 && staggerTimer.Get() > STAGGERDELAY*4 && staggerTimer.Get() < STAGGERDELAY*5)) {
 			turnWheelBR.Set(-wheel[BR].turnVel);
 		//				 
 			moveWheelBR.Set(wheel[BR].mag);
@@ -522,7 +525,11 @@ public:
 			turnWheelBR.Set(0);
 			moveWheelBR.Set(0);
 		}
-
+		
+		if (staggerTimer.Get() > STAGGERDELAY*5){
+			staggerTimer.Reset();
+		}
+		
 		for(i=0; i<4; i++)
 		{
 			wheel[i].prevTurnVel = wheel[i].turnVel;
