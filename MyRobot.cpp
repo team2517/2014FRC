@@ -105,6 +105,7 @@ public:
 		int i;
 		int j;
 		int moduleCounter = 0;
+		bool moduleFlag = true;
 		bool isButtonPressed;
 		isButtonPressed = false;	
 		
@@ -125,171 +126,179 @@ public:
 
 			
 //#define TESTER			1
-
-			leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
-			leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
-			leftStickVec[X] = leftStickVec[RAWX]*sqrt(1-.5*pow(
-					leftStickVec[RAWY], 2));
-			leftStickVec[Y] = -leftStickVec[RAWY]*sqrt(1-.5*pow(
-					leftStickVec[RAWX], 2));
-			phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
-			
-			#ifdef TESTER
-				if (stick.GetRawButton(4)){
-					leftStickVec[X] = 0;
-					leftStickVec[Y] = TESTVAL;
-				} 
-				else if (stick.GetRawButton(3)){
-					leftStickVec[X] = TESTVAL;
-					leftStickVec[Y] = 0;
-				}
-				else if (stick.GetRawButton(2)){
-					leftStickVec[X] = 0;
-					leftStickVec[Y] = -TESTVAL;
-				}
-				else if (stick.GetRawButton(1)){
-					leftStickVec[X] = -TESTVAL;
-					leftStickVec[Y] = 0;
-				}				
-			#endif
-			
-			//Need to change these values based on center/wheel placement.
-			wheel[FL].x = .707 * phi;
-			wheel[FL].y = .707 * phi;
-			wheel[FR].x = .707 * phi;
-			wheel[FR].y = -.707 * phi;
-			wheel[BR].x = -.707 * phi;
-			wheel[BR].y = -.707 * phi;
-			wheel[BL].x = -.707 * phi;
-			wheel[BL].y = .707 * phi;
-
-			wheel[FL].x += leftStickVec[X];
-			wheel[FL].y += leftStickVec[Y];
-			wheel[FR].x += leftStickVec[X];
-			wheel[FR].y += leftStickVec[Y];
-			wheel[BR].x += leftStickVec[X];
-			wheel[BR].y += leftStickVec[Y];
-			wheel[BL].x += leftStickVec[X];
-			wheel[BL].y += leftStickVec[Y];
-			
-			
-			
-
-			for (i = 0; i < 4; i++) {
-				wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
-			}
-
-			for (i = 0; i < 4; i++) {
-				if (wheel[i].mag > 1 * MAXPOWER) {
-					largestMag = wheel[i].mag;
-					for (j = 0; j < 4; j++) {
-						wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
-					}
-				}
-
-			}
-
-			for (i = 0; i < 4; i++) {
-				wheel[i].tarTheta = atan(wheel[i].y / wheel[i].x);
-
-				if (wheel[i].x < 0) {
-					wheel[i].tarTheta += PI;
-				}
-
-			}
-
-			wheel[FL].curTheta = -(wheel[FL].posEncoder->GetVoltage() - wheel[FL].offset) / 5 * 2
-					* PI;
-			wheel[FR].curTheta = -(wheel[FR].posEncoder->GetVoltage() - wheel[FR].offset) / 5 * 2
-					* PI;
-			wheel[BR].curTheta = -(wheel[BR].posEncoder->GetVoltage() - wheel[BR].offset)/ 5 * 2
-					* PI;
-			wheel[BL].curTheta = -(wheel[BL].posEncoder->GetVoltage() - wheel[BL].offset) / 5 * 2
-					* PI;
-
-//						if (stick.GetRawButton(2) == true) {
-//						 turnWheelFL.Set(.15);
-//						 } else if (stick.GetRawButton(3) == true) {
-//						 turnWheelFL.Set(-.15);
-//						 } else {
-//						 turnWheelFL.Set(0);
-//						 }
-
-			for (i=0; i < 4; i++) {
-				wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
-
-				if (wheel[i].diffTheta > PI) {
-					wheel[i].diffTheta -= 2*PI;
-				} else if (wheel[i].diffTheta < -PI) {
-					wheel[i].diffTheta += 2*PI;
-				}
-
-				if (wheel[i].diffTheta > PI/2) {
-					wheel[i].diffTheta -= PI;
-					wheel[i].mag = wheel[i].mag * -1;
-				} else if (wheel[i].diffTheta < -PI/2) {
-					wheel[i].diffTheta += PI;
-					wheel[i].mag = wheel[i].mag * -1;
-				}
-
-				wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
-				
-				if (0 < wheel[i].turnVel && wheel[i].turnVel < .25){
-					wheel[i].turnVel = .25;
-				} 
-				if (0 > wheel[i].turnVel && wheel[i].turnVel > -.25){
-					wheel[i].turnVel = -.25;
-				}
-				if (fabs(wheel[i].diffTheta) < PI/45 ){
-					wheel[i].turnVel = 0;
-				}
-			}
-			
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
-				wheel[FL].mag);
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
-				wheel[FL].diffTheta);
-			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
-				wheel[FL].x, wheel[FL].y);
-			dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
-			dsLCD->UpdateLCD();
-			
-			for (i = 0; i < 4; i++) 
+			if(moduleFlag)
 			{
-				if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
-						|| (wheel[i].turnVel < 0&& wheel[i].prevTurnVel> 0)) 
-						&& !wheel[i].changeSign)
-				{
-					wheel[i].changeSign = true;
-					wheel[i].moveTime = baneTimer.Get() + .1;
+				leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
+				leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
+				leftStickVec[X] = leftStickVec[RAWX]*sqrt(1-.5*pow(
+						leftStickVec[RAWY], 2));
+				leftStickVec[Y] = -leftStickVec[RAWY]*sqrt(1-.5*pow(
+						leftStickVec[RAWX], 2));
+				phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
+				
+				#ifdef TESTER
+					if (stick.GetRawButton(4)){
+						leftStickVec[X] = 0;
+						leftStickVec[Y] = TESTVAL;
+					} 
+					else if (stick.GetRawButton(3)){
+						leftStickVec[X] = TESTVAL;
+						leftStickVec[Y] = 0;
+					}
+					else if (stick.GetRawButton(2)){
+						leftStickVec[X] = 0;
+						leftStickVec[Y] = -TESTVAL;
+					}
+					else if (stick.GetRawButton(1)){
+						leftStickVec[X] = -TESTVAL;
+						leftStickVec[Y] = 0;
+					}				
+				#endif
+				
+				//Need to change these values based on center/wheel placement.
+				wheel[FL].x = .707 * phi;
+				wheel[FL].y = .707 * phi;
+				wheel[FR].x = .707 * phi;
+				wheel[FR].y = -.707 * phi;
+				wheel[BR].x = -.707 * phi;
+				wheel[BR].y = -.707 * phi;
+				wheel[BL].x = -.707 * phi;
+				wheel[BL].y = .707 * phi;
+	
+				wheel[FL].x += leftStickVec[X];
+				wheel[FL].y += leftStickVec[Y];
+				wheel[FR].x += leftStickVec[X];
+				wheel[FR].y += leftStickVec[Y];
+				wheel[BR].x += leftStickVec[X];
+				wheel[BR].y += leftStickVec[Y];
+				wheel[BL].x += leftStickVec[X];
+				wheel[BL].y += leftStickVec[Y];
+				
+				
+				
+	
+				for (i = 0; i < 4; i++) {
+					wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
 				}
-				if (wheel[i].changeSign) {
-					wheel[i].turnVel = 0;
-					if (wheel[i].moveTime < baneTimer.Get()) {
-						wheel[i].changeSign = false;
+	
+				for (i = 0; i < 4; i++) {
+					if (wheel[i].mag > 1 * MAXPOWER) {
+						largestMag = wheel[i].mag;
+						for (j = 0; j < 4; j++) {
+							wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
+						}
+					}
+	
+				}
+	
+				for (i = 0; i < 4; i++) {
+					wheel[i].tarTheta = atan(wheel[i].y / wheel[i].x);
+	
+					if (wheel[i].x < 0) {
+						wheel[i].tarTheta += PI;
+					}
+	
+				}
+	
+				wheel[FL].curTheta = -(wheel[FL].posEncoder->GetVoltage() - wheel[FL].offset) / 5 * 2
+						* PI;
+				wheel[FR].curTheta = -(wheel[FR].posEncoder->GetVoltage() - wheel[FR].offset) / 5 * 2
+						* PI;
+				wheel[BR].curTheta = -(wheel[BR].posEncoder->GetVoltage() - wheel[BR].offset)/ 5 * 2
+						* PI;
+				wheel[BL].curTheta = -(wheel[BL].posEncoder->GetVoltage() - wheel[BL].offset) / 5 * 2
+						* PI;
+	
+	//						if (stick.GetRawButton(2) == true) {
+	//						 turnWheelFL.Set(.15);
+	//						 } else if (stick.GetRawButton(3) == true) {
+	//						 turnWheelFL.Set(-.15);
+	//						 } else {
+	//						 turnWheelFL.Set(0);
+	//						 }
+	
+				for (i=0; i < 4; i++) {
+					wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
+	
+					if (wheel[i].diffTheta > PI) {
+						wheel[i].diffTheta -= 2*PI;
+					} else if (wheel[i].diffTheta < -PI) {
+						wheel[i].diffTheta += 2*PI;
+					}
+	
+					if (wheel[i].diffTheta > PI/2) {
+						wheel[i].diffTheta -= PI;
+						wheel[i].mag = wheel[i].mag * -1;
+					} else if (wheel[i].diffTheta < -PI/2) {
+						wheel[i].diffTheta += PI;
+						wheel[i].mag = wheel[i].mag * -1;
+					}
+	
+					wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
+					
+					if (0 < wheel[i].turnVel && wheel[i].turnVel < .25){
+						wheel[i].turnVel = .25;
+					} 
+					if (0 > wheel[i].turnVel && wheel[i].turnVel > -.25){
+						wheel[i].turnVel = -.25;
+					}
+					if (fabs(wheel[i].diffTheta) < PI/45 ){
+						wheel[i].turnVel = 0;
 					}
 				}
 				
-
-			}
-		
-			if (!(wheel[moduleCounter].x == 0 && wheel[moduleCounter].y == 0)) {
-				wheel[moduleCounter].turnWheel->Set(-wheel[moduleCounter].turnVel);
-				wheel[moduleCounter].moveWheel->Set(wheel[moduleCounter].mag);
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
+					wheel[FL].mag);
+				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
+					wheel[FL].diffTheta);
+				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
+					wheel[FL].x, wheel[FL].y);
+				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
+				dsLCD->UpdateLCD();
+				
+				for (i = 0; i < 4; i++) 
+				{
+					if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
+							|| (wheel[i].turnVel < 0&& wheel[i].prevTurnVel> 0)) 
+							&& !wheel[i].changeSign)
+					{
+						wheel[i].changeSign = true;
+						wheel[i].moveTime = baneTimer.Get() + .1;
+					}
+					if (wheel[i].changeSign) {
+						wheel[i].turnVel = 0;
+						if (wheel[i].moveTime < baneTimer.Get()) {
+							wheel[i].changeSign = false;
+						}
+					}
+					
 	
-			} else {
-				wheel[moduleCounter].moveWheel->Set(0);
-				wheel[moduleCounter].turnWheel->Set(0);
+				}
+			
+				
+				if (!(wheel[moduleCounter].x == 0 && wheel[moduleCounter].y == 0)) {
+					wheel[moduleCounter].turnWheel->Set(-wheel[moduleCounter].turnVel);
+					wheel[moduleCounter].moveWheel->Set(wheel[moduleCounter].mag);
+		
+				} else {
+					wheel[moduleCounter].moveWheel->Set(0);
+					wheel[moduleCounter].turnWheel->Set(0);
+				}
+				
+				moduleFlag = false;
+				
 			}
         
         
 		if (staggerTimer.Get() > STAGGERDELAY){
 			moduleCounter++;
 			staggerTimer.Reset();
-		}
-		if(moduleCounter > 3)
-		{
-			moduleCounter = 0;
+			moduleFlag = true;
+			
+			if(moduleCounter > 3)
+			{
+				moduleCounter = 0;
+			}
 		}
 		
 		for(i=0; i<4; i++)
