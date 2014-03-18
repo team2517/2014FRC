@@ -303,7 +303,6 @@ public:
 				}
 				
 			}
-        
 		
 		if (stick.GetRawButton(8))
 		{
