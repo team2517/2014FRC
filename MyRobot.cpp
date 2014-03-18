@@ -125,9 +125,21 @@ public:
 
 
 			
-//#define TESTER			1
+			if (staggerTimer.Get() > STAGGERDELAY){
+				moduleCounter++;
+				staggerTimer.Reset();
+				moduleFlag = true;
+				
+				if(moduleCounter > 3)
+				{
+					moduleCounter = 0;
+				}
+			}
+			
 			if(moduleFlag)
 			{
+				moduleFlag = false;
+				
 				leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
 				leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
 				leftStickVec[X] = leftStickVec[RAWX]*sqrt(1-.5*pow(
@@ -285,26 +297,13 @@ public:
 					wheel[moduleCounter].turnWheel->Set(0);
 				}
 				
-				moduleFlag = false;
+				for(i=0; i<4; i++)
+				{
+					wheel[i].prevTurnVel = wheel[i].turnVel;
+				}
 				
 			}
         
-        
-		if (staggerTimer.Get() > STAGGERDELAY){
-			moduleCounter++;
-			staggerTimer.Reset();
-			moduleFlag = true;
-			
-			if(moduleCounter > 3)
-			{
-				moduleCounter = 0;
-			}
-		}
-		
-		for(i=0; i<4; i++)
-		{
-			wheel[i].prevTurnVel = wheel[i].turnVel;
-		}
 		
 		if (stick.GetRawButton(8))
 		{
