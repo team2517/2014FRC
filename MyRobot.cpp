@@ -104,7 +104,7 @@ public:
 		wheelVector wheel[4];
 		int i;
 		int j;
-		int moduleCounter = 1;
+		int moduleCounter = 0;
 		bool isButtonPressed;
 		isButtonPressed = false;	
 		
@@ -287,9 +287,9 @@ public:
 			moduleCounter++;
 			staggerTimer.Reset();
 		}
-		if(moduleCounter > 4)
+		if(moduleCounter > 3)
 		{
-			moduleCounter = 1;
+			moduleCounter = 0;
 		}
 		
 		for(i=0; i<4; i++)
