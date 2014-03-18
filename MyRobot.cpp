@@ -324,6 +324,7 @@ public:
 		wheelVector wheel[4];
 		int i;
 		int j;
+		int moduleCounter = 1;
 		bool isButtonPressed;
 		isButtonPressed = false;		
 		
@@ -489,45 +490,60 @@ public:
 
 			}
 		
-        
-		if (!(wheel[FL].x == 0 && wheel[FL].y == 0 && staggerTimer.Get() > STAGGERDELAY*1 && staggerTimer.Get() < STAGGERDELAY*2)) {
-			turnWheelFL.Set(-wheel[FL].turnVel);
-			moveWheelFL.Set(wheel[FL].mag);
-
-		} else {
-			turnWheelFL.Set(0);
-			moveWheelFL.Set(0);
-		}
-		if (!(wheel[FR].x == 0 && wheel[FR].y == 0 && staggerTimer.Get() > STAGGERDELAY*2 && staggerTimer.Get() < STAGGERDELAY*3)) {
-			turnWheelFR.Set(-wheel[FR].turnVel);
-			moveWheelFR.Set(-wheel[FR].mag);
-
-		} else {
-			turnWheelFR.Set(0);
-			moveWheelFR.Set(0);
-			
-		}
-		if (!(wheel[BL].x == 0 && wheel[BL].y == 0 && staggerTimer.Get() > STAGGERDELAY*3 && staggerTimer.Get() < STAGGERDELAY*4)) {
-			turnWheelBL.Set(-wheel[BL].turnVel);
-//				 
-			moveWheelBL.Set(wheel[BL].mag);
-
-		} else {
-			turnWheelBL.Set(0);
-			moveWheelBL.Set(0);
-		}
-		if (!(wheel[BR].x == 0 && wheel[BR].y == 0 && staggerTimer.Get() > STAGGERDELAY*4 && staggerTimer.Get() < STAGGERDELAY*5)) {
-			turnWheelBR.Set(-wheel[BR].turnVel);
-		//				 
-			moveWheelBR.Set(wheel[BR].mag);
-
-		} else {
-			turnWheelBR.Set(0);
-			moveWheelBR.Set(0);
-		}
-		
-		if (staggerTimer.Get() > STAGGERDELAY*5){
+        if(moduleCounter == 1)
+        {
+			if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
+				turnWheelFL.Set(-wheel[FL].turnVel);
+				moveWheelFL.Set(wheel[FL].mag);
+	
+			} else {
+				turnWheelFL.Set(0);
+				moveWheelFL.Set(0);
+			}
+        }
+        if(moduleCounter == 2)
+        {
+			if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
+				turnWheelFR.Set(-wheel[FR].turnVel);
+				moveWheelFR.Set(-wheel[FR].mag);
+	
+			} else {
+				turnWheelFR.Set(0);
+				moveWheelFR.Set(0);
+				
+			}
+        }
+        if(moduleCounter == 3)
+        {
+			if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
+				turnWheelBL.Set(-wheel[BL].turnVel);
+	//				 
+				moveWheelBL.Set(wheel[BL].mag);
+	
+			} else {
+				turnWheelBL.Set(0);
+				moveWheelBL.Set(0);
+			}
+        }
+        if(moduleCounter == 4)
+        {
+			if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
+				turnWheelBR.Set(-wheel[BR].turnVel);
+			//				 
+				moveWheelBR.Set(wheel[BR].mag);
+	
+			} else {
+				turnWheelBR.Set(0);
+				moveWheelBR.Set(0);
+			}
+        }
+		if (staggerTimer.Get() > STAGGERDELAY){
+			moduleCounter++;
 			staggerTimer.Reset();
+		}
+		if(moduleCounter > 4)
+		{
+			moduleCounter = 1;
 		}
 		
 		for(i=0; i<4; i++)
@@ -548,7 +564,7 @@ public:
 		else
 		{
 			pickUpArm1.Set(0);
-						pickUpArm2.Set(0);
+			pickUpArm2.Set(0);
 		}
 		
 		/*         Shooter
