@@ -245,21 +245,6 @@ public:
 					{
 						wheel[i].turnVel = 0;
 					}
-				}
-				
-				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
-					wheel[FL].mag);
-				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
-					wheel[FL].diffTheta);
-				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
-					wheel[FL].x, wheel[FL].y);
-				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
-				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
-								moveWheelFL.GetPosition());
-				dsLCD->UpdateLCD();
-				
-				for (i = 0; i < 4; i++) 
-				{
 					if (((wheel[i].turnVel > 0 && wheel[i].prevTurnVel < 0)
 							|| (wheel[i].turnVel < 0&& wheel[i].prevTurnVel> 0)) 
 							&& !wheel[i].changeSign)
@@ -276,6 +261,17 @@ public:
 						}
 					}
 				}
+				
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
+					wheel[FL].mag);
+				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
+					wheel[FL].diffTheta);
+				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
+					wheel[FL].x, wheel[FL].y);
+				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
+				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
+								moveWheelFL.GetPosition());
+				dsLCD->UpdateLCD();
 			
 		        if(moduleCounter == 1)
 		        {
