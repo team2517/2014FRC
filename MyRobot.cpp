@@ -106,6 +106,11 @@ public:
 		bool moduleFlag = true;
 		bool isButtonPressed;
 		bool calibrating = false;
+		int calMode = 0;
+		float flOffset;
+		float frOffset;
+		float brOffset;
+		float blOffset;
 		isButtonPressed = false;		
 		
 		for (i = 0; i < 4; i++) 
