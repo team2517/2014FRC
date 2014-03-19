@@ -105,6 +105,7 @@ public:
 		int moduleCounter = 1;
 		bool moduleFlag = true;
 		bool isButtonPressed;
+		bool calibrating = false;
 		isButtonPressed = false;		
 		
 		for (i = 0; i < 4; i++) 
@@ -129,6 +130,7 @@ public:
 				leftStickVec[Y] = -leftStickVec[RAWY]*sqrt(1-.5*pow(
 						leftStickVec[RAWX], 2));
 				phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
+				
 				
 				#ifdef TESTER
 					if (stick.GetRawButton(4)){
@@ -376,6 +378,12 @@ public:
 			{
 				shooterMotor1.Set(0);
 				shooterMotor2.Set(0);
+			}
+			
+			//Calibration Code
+			if (manipStick.GetRawButton(8))
+			{
+				calibrating = true;
 			}
 	
 		}
