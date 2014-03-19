@@ -522,6 +522,7 @@ public:
 				else if (calMode >= 4)
 				{
 					calMode = 0;
+					calibrating = false;
 				}
 				else 
 				{
