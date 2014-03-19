@@ -283,7 +283,7 @@ public:
 				dsLCD->UpdateLCD();
 				}
 				
-		        if(moduleCounter == 1 && calibration != true )
+		        if(moduleCounter == 1 && calibrating != true )
 		        {
 					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
 					{
@@ -296,7 +296,7 @@ public:
 						moveWheelFL.Set(0);
 					}
 		        }
-		        if(moduleCounter == 2 && calibration != true)
+		        if(moduleCounter == 2 && calibrating != true)
 		        {
 					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
 					{
@@ -310,7 +310,7 @@ public:
 						moveWheelFR.Set(0);
 					}
 		        }
-		        if(moduleCounter == 3 && calibration != true)
+		        if(moduleCounter == 3 && calibrating != true)
 		        {
 					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
 					{
@@ -324,7 +324,7 @@ public:
 						moveWheelBL.Set(0);
 					}
 		        }
-		        if(moduleCounter == 4 && calibration != true)
+		        if(moduleCounter == 4 && calibrating != true)
 		        {
 					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
 					{
@@ -398,11 +398,45 @@ public:
 				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
 					"FLOFFSET: %f     ", flOffset);
 				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-					"FROFFSET SET TO %f     ", frOffset);
+					"FROFFSET: %f     ", frOffset);
 				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-					"BLOFFSET SET TO %f     ", blOffset);
+					"BLOFFSET: %f     ", blOffset);
 				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-					"BROFFSET SET TO %f     ", brOffset);
+					"BROFFSET: %f     ", brOffset);
+				if (stick.GetRawButton(8) && !isButtonPressed) 
+				{
+					if (calMode == 0) 
+					{
+						flOffset = posEncFL.GetVoltage();
+					} 
+					else if (calMode == 1) 
+					{
+						frOffset = posEncFR.GetVoltage();
+					} 
+					else if (calMode == 2) 
+					{
+						blOffset = posEncBL.GetVoltage();
+					} 
+					else if (calMode == 3) 
+					{
+						brOffset = posEncBR.GetVoltage();
+					}
+
+					calMode++;
+					isButtonPressed = true;
+				}
+
+				else if (!stick.GetRawButton(8)) 
+				{
+					isButtonPressed = false;
+				}
+				
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
+					"**CALIBRATING WHEEL %i", calMode+1);
+				
+				
+							
+
 			}
 			
 			//Calibration Code
