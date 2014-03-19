@@ -125,7 +125,7 @@ public:
 		{
 			Watchdog().Feed();
 
-			if(moduleFlag)
+			if(moduleFlag && !calibrating)
 			{
 				moduleFlag = false;
 				
@@ -284,7 +284,7 @@ public:
 				dsLCD->UpdateLCD();
 				}
 				
-		        if(moduleCounter == 1 && calibrating != true )
+		        if(moduleCounter == 1)
 		        {
 					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
 					{
@@ -297,7 +297,7 @@ public:
 						moveWheelFL.Set(0);
 					}
 		        }
-		        if(moduleCounter == 2 && calibrating != true)
+		        if(moduleCounter == 2)
 		        {
 					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
 					{
@@ -311,7 +311,7 @@ public:
 						moveWheelFR.Set(0);
 					}
 		        }
-		        if(moduleCounter == 3 && calibrating != true)
+		        if(moduleCounter == 3)
 		        {
 					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
 					{
@@ -325,7 +325,7 @@ public:
 						moveWheelBL.Set(0);
 					}
 		        }
-		        if(moduleCounter == 4 && calibrating != true)
+		        if(moduleCounter == 4)
 		        {
 					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
 					{
