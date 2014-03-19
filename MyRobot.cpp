@@ -383,6 +383,23 @@ public:
 				shooterMotor2.Set(0);
 			}
 			
+			if (calibrating == true)
+			{
+				flOffset = posEncFL.GetVoltage();
+				frOffset = posEncFR.GetVoltage();
+				brOffset = posEncBR.GetVoltage();
+				blOffset = posEncBL.GetVoltage();
+				
+				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
+					"FLOFFSET: %f     ", flOffset);
+				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
+					"FROFFSET SET TO %f     ", frOffset);
+				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
+					"BLOFFSET SET TO %f     ", blOffset);
+				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
+					"BROFFSET SET TO %f     ", brOffset);
+			}
+			
 			//Calibration Code
 			if (manipStick.GetRawButton(8))
 			{
