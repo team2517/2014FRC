@@ -272,8 +272,8 @@ public:
 				
 				if (calibrating != true)
 				{
-				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
-					wheel[FL].mag);
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %.2f, %.2f, %.2f, %.2f        ",
+					wheel[FL].mag, wheel[FR].mag, wheel[BL].mag, wheel[BR].mag);
 				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
 					wheel[FL].diffTheta);
 				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Coords: (%3.2f,%3.2f)        ",
