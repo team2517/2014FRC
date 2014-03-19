@@ -264,6 +264,8 @@ public:
 					}
 				}
 				
+				if (calibrating != true)
+				{
 				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %f        ",
 					wheel[FL].mag);
 				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
@@ -274,7 +276,8 @@ public:
 				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
 								moveWheelFL.GetPosition());
 				dsLCD->UpdateLCD();
-			
+				}
+				
 		        if(moduleCounter == 1)
 		        {
 					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
@@ -381,10 +384,10 @@ public:
 			}
 			
 			//Calibration Code
-			if (manipStick.GetRawButton(8))
-			{
-				calibrating = true;
-			}
+//			if (manipStick.GetRawButton(8))
+//			{
+//				calibrating = true;
+//			}
 	
 		}
 	}
