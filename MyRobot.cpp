@@ -49,8 +49,8 @@ class RobotDemo : public SimpleRobot {
 	CANJaguar moveWheelFR;
 	CANJaguar moveWheelBR;
 	CANJaguar moveWheelBL;
-//	CANJaguar shooterMotor1;
-//	CANJaguar shooterMotor2;
+	CANJaguar shooterMotor1;
+	CANJaguar shooterMotor2;
 	Talon pickUpArm1;
 	Talon pickUpArm2;
 	AnalogChannel posEncFL;
@@ -68,7 +68,7 @@ public:
 		turnWheelBR(45),
 			turnWheelBL(30), moveWheelFL(27), moveWheelFR(4),
 			moveWheelBR(2), moveWheelBL(12), 
-			//shooterMotor1(13), shooterMotor2(46),
+			shooterMotor1(13), shooterMotor2(46),
 			pickUpArm1(1), pickUpArm2(10),
 			posEncFL(3), posEncFR(2),
 			posEncBR(4), posEncBL(1) {
@@ -88,7 +88,8 @@ public:
 	/**
 	 * Runs the motors with arcade steering. 
 	 */
-	void OperatorControl() {
+	void OperatorControl() 
+	{
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
@@ -106,18 +107,16 @@ public:
 		bool isButtonPressed;
 		isButtonPressed = false;		
 		
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) 
+		{
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
 		}
 		
 
-		while (IsOperatorControl()) {
+		while (IsOperatorControl()) 
+		{
 			Watchdog().Feed();
-
-
-			
-//#define TESTER			1
 
 			if(moduleFlag)
 			{
@@ -172,27 +171,31 @@ public:
 				
 				
 	
-				for (i = 0; i < 4; i++) {
+				for (i = 0; i < 4; i++) 
+				{
 					wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
 				}
 	
-				for (i = 0; i < 4; i++) {
-					if (wheel[i].mag > 1 * MAXPOWER) {
+				for (i = 0; i < 4; i++) 
+				{
+					if (wheel[i].mag > 1 * MAXPOWER) 
+					{
 						largestMag = wheel[i].mag;
-						for (j = 0; j < 4; j++) {
+						for (j = 0; j < 4; j++) 
+						{
 							wheel[j].mag = MAXPOWER * wheel[j].mag / largestMag;
 						}
 					}
-	
 				}
 	
-				for (i = 0; i < 4; i++) {
+				for (i = 0; i < 4; i++) 
+				{
 					wheel[i].tarTheta = atan(wheel[i].y / wheel[i].x);
 	
-					if (wheel[i].x < 0) {
+					if (wheel[i].x < 0) 
+					{
 						wheel[i].tarTheta += PI;
 					}
-	
 				}
 	
 				wheel[FL].curTheta = -(posEncFL.GetVoltage() - flOffset ) / 5 * 2
@@ -204,40 +207,42 @@ public:
 				wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
 						* PI;
 	
-	//						if (stick.GetRawButton(2) == true) {
-	//						 turnWheelFL.Set(.15);
-	//						 } else if (stick.GetRawButton(3) == true) {
-	//						 turnWheelFL.Set(-.15);
-	//						 } else {
-	//						 turnWheelFL.Set(0);
-	//						 }
-	
-				for (i=0; i < 4; i++) {
+				for (i=0; i < 4; i++) 
+				{
 					wheel[i].diffTheta = wheel[i].tarTheta - wheel[i].curTheta;
 	
-					if (wheel[i].diffTheta > PI) {
+					if (wheel[i].diffTheta > PI) 
+					{
 						wheel[i].diffTheta -= 2*PI;
-					} else if (wheel[i].diffTheta < -PI) {
+					} 
+					else if (wheel[i].diffTheta < -PI) 
+					{
 						wheel[i].diffTheta += 2*PI;
 					}
 	
-					if (wheel[i].diffTheta > PI/2) {
+					if (wheel[i].diffTheta > PI/2) 
+					{
 						wheel[i].diffTheta -= PI;
 						wheel[i].mag = wheel[i].mag * -1;
-					} else if (wheel[i].diffTheta < -PI/2) {
+					} 
+					else if (wheel[i].diffTheta < -PI/2) 
+					{
 						wheel[i].diffTheta += PI;
 						wheel[i].mag = wheel[i].mag * -1;
 					}
 	
 					wheel[i].turnVel = wheel[i].diffTheta / (PI/2);
 					
-					if (0 < wheel[i].turnVel && wheel[i].turnVel < .25){
+					if (0 < wheel[i].turnVel && wheel[i].turnVel < .25)
+					{
 						wheel[i].turnVel = .25;
 					} 
-					if (0 > wheel[i].turnVel && wheel[i].turnVel > -.25){
+					if (0 > wheel[i].turnVel && wheel[i].turnVel > -.25)
+					{
 						wheel[i].turnVel = -.25;
 					}
-					if (fabs(wheel[i].diffTheta) < PI/45 ){
+					if (fabs(wheel[i].diffTheta) < PI/45 )
+					{
 						wheel[i].turnVel = 0;
 					}
 				}
@@ -262,122 +267,130 @@ public:
 						wheel[i].changeSign = true;
 						wheel[i].moveTime = baneTimer.Get() + .1;
 					}
-					if (wheel[i].changeSign) {
+					if (wheel[i].changeSign) 
+					{
 						wheel[i].turnVel = 0;
-						if (wheel[i].moveTime < baneTimer.Get()) {
+						if (wheel[i].moveTime < baneTimer.Get()) 
+						{
 							wheel[i].changeSign = false;
 						}
 					}
-					
-	
 				}
 			
-	        if(moduleCounter == 1)
-	        {
-				if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) {
-					turnWheelFL.Set(-wheel[FL].turnVel);
-					moveWheelFL.Set(wheel[FL].mag);
-		
-				} else {
-					turnWheelFL.Set(0);
-					moveWheelFL.Set(0);
-				}
-	        }
-	        if(moduleCounter == 2)
-	        {
-				if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) {
-					turnWheelFR.Set(-wheel[FR].turnVel);
-					moveWheelFR.Set(-wheel[FR].mag);
-		
-				} else {
-					turnWheelFR.Set(0);
-					moveWheelFR.Set(0);
-					
-				}
-	        }
-	        if(moduleCounter == 3)
-	        {
-				if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) {
-					turnWheelBL.Set(-wheel[BL].turnVel);
-		//				 
-					moveWheelBL.Set(wheel[BL].mag);
-		
-				} else {
-					turnWheelBL.Set(0);
-					moveWheelBL.Set(0);
-				}
-	        }
-	        if(moduleCounter == 4)
-	        {
-				if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) {
-					turnWheelBR.Set(-wheel[BR].turnVel);
-				//				 
-					moveWheelBR.Set(wheel[BR].mag);
-		
-				} else {
-					turnWheelBR.Set(0);
-					moveWheelBR.Set(0);
-				}
-	        }
-	        
-	        for(i=0; i<4; i++)
-    		{
-    			wheel[i].prevTurnVel = wheel[i].turnVel;
-    		}
+		        if(moduleCounter == 1)
+		        {
+					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
+					{
+						turnWheelFL.Set(-wheel[FL].turnVel);
+						moveWheelFL.Set(wheel[FL].mag);
+					} 
+					else 
+					{
+						turnWheelFL.Set(0);
+						moveWheelFL.Set(0);
+					}
+		        }
+		        if(moduleCounter == 2)
+		        {
+					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
+					{
+						turnWheelFR.Set(-wheel[FR].turnVel);
+						moveWheelFR.Set(-wheel[FR].mag);
+			
+					} 
+					else 
+					{
+						turnWheelFR.Set(0);
+						moveWheelFR.Set(0);
+					}
+		        }
+		        if(moduleCounter == 3)
+		        {
+					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
+					{
+						turnWheelBL.Set(-wheel[BL].turnVel);		 
+						moveWheelBL.Set(wheel[BL].mag);
+			
+					} 
+					else 
+					{
+						turnWheelBL.Set(0);
+						moveWheelBL.Set(0);
+					}
+		        }
+		        if(moduleCounter == 4)
+		        {
+					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
+					{
+						turnWheelBR.Set(-wheel[BR].turnVel);			 
+						moveWheelBR.Set(wheel[BR].mag);
+			
+					} 
+					else 
+					{
+						turnWheelBR.Set(0);
+						moveWheelBR.Set(0);
+					}
+		        }
+		        
+		        for(i=0; i<4; i++)
+	    		{
+	    			wheel[i].prevTurnVel = wheel[i].turnVel;
+	    		}
 			}
-		if (staggerTimer.Get() > STAGGERDELAY){
-			moduleCounter++;
-			moduleFlag = true;
-			staggerTimer.Reset();
-			
-			if(moduleCounter > 4)
+			if (staggerTimer.Get() > STAGGERDELAY)
 			{
-				moduleCounter = 1;
+				moduleCounter++;
+				moduleFlag = true;
+				staggerTimer.Reset();
+				
+				if(moduleCounter > 4)
+				{
+					moduleCounter = 1;
+				}
 			}
-		}
 		
-		if (stick.GetRawButton(8))
-		{
-			pickUpArm1.Set(-.8);
-			pickUpArm2.Set(-.8);
+			if (stick.GetRawButton(8))
+			{
+				pickUpArm1.Set(-.8);
+				pickUpArm2.Set(-.8);
+			}
+			else if (stick.GetRawButton(6))
+			{
+				pickUpArm1.Set(.8);
+				pickUpArm2.Set(.8);
+			}
+			else
+			{
+				pickUpArm1.Set(0);
+				pickUpArm2.Set(0);
+			}
+	
+			if (manipStick.GetRawButton(3))
+			{
+				shooterMotor1.Set(.3);
+				shooterMotor2.Set(.3);
+			}
+			else if (manipStick.GetRawButton(1))
+			{
+				shooterMotor1.Set(-1.0);
+				shooterMotor2.Set(-1.0);
+			}
+			else
+			{
+				shooterMotor1.Set(0);
+				shooterMotor2.Set(0);
+			}
+	
 		}
-		else if (stick.GetRawButton(6))
-		{
-			pickUpArm1.Set(.8);
-			pickUpArm2.Set(.8);
-		}
-		else
-		{
-			pickUpArm1.Set(0);
-			pickUpArm2.Set(0);
-		}
-		
-		/*         Shooter
-		if (manipStick.GetRawButton(3))
-		{
-			shooterMotor1.Set(.3);
-			shooterMotor2.Set(.3);
-		}
-		else if (manipStick.GetRawButton(1))
-		{
-			shooterMotor1.Set(-1.0);
-			shooterMotor2.Set(-1.0);
-		}
-		else
-		{
-			shooterMotor1.Set(0);
-			shooterMotor2.Set(0);
-		}*/
-
 	}
-}
 
 /**
  * Runs during test mode
  */
-void Test() {
-
-}
+	void Test() {
+	
+	}
 };
 
 START_ROBOT_CLASS(RobotDemo)
