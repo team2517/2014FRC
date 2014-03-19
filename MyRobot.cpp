@@ -278,7 +278,7 @@ public:
 				dsLCD->UpdateLCD();
 				}
 				
-		        if(moduleCounter == 1)
+		        if(moduleCounter == 1 && calibration != true )
 		        {
 					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
 					{
@@ -291,7 +291,7 @@ public:
 						moveWheelFL.Set(0);
 					}
 		        }
-		        if(moduleCounter == 2)
+		        if(moduleCounter == 2 && calibration != true)
 		        {
 					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
 					{
@@ -305,7 +305,7 @@ public:
 						moveWheelFR.Set(0);
 					}
 		        }
-		        if(moduleCounter == 3)
+		        if(moduleCounter == 3 && calibration != true)
 		        {
 					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
 					{
@@ -319,7 +319,7 @@ public:
 						moveWheelBL.Set(0);
 					}
 		        }
-		        if(moduleCounter == 4)
+		        if(moduleCounter == 4 && calibration != true)
 		        {
 					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
 					{
@@ -384,10 +384,10 @@ public:
 			}
 			
 			//Calibration Code
-//			if (manipStick.GetRawButton(8))
-//			{
-//				calibrating = true;
-//			}
+			if (manipStick.GetRawButton(8))
+			{
+				calibrating = true;
+			}
 	
 		}
 	}
