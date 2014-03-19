@@ -536,7 +536,6 @@ public:
 
 			}
 			
-			//Calibration Code
 			if (manipStick.GetRawButton(8))
 			{
 				calibrating = true;
