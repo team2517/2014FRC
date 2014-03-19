@@ -19,6 +19,7 @@
 #define MAXPOWER				1
 #define TESTER                  1
 #define STAGGERDELAY			0.005 //In seconds
+#define OFFSETMOVE				.25
 //#define VOLTAGERATE				10000
 
 float deadBand(float);
@@ -388,6 +389,10 @@ public:
 				shooterMotor2.Set(0);
 			}
 			
+			// **************************************
+			// ********BEGIN CALIBRATION CODE********
+			// **************************************
+			
 			if (calibrating == true)
 			{
 				flOffset = posEncFL.GetVoltage();
@@ -433,6 +438,97 @@ public:
 				
 				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
 					"**CALIBRATING WHEEL %i", calMode+1);
+				
+				if (stick.GetRawButton(2) == true && calMode == 0) 
+				{
+					turnWheelFL.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 0) 
+				{
+					turnWheelFL.Set(-OFFSETMOVE);
+				} 
+				
+				else if (stick.GetRawButton(1) == true && calMode == 0) 
+				{
+					turnWheelFL.Set(OFFSETMOVE/2);
+				} 
+				else if (stick.GetRawButton(4) == true && calMode == 0) 
+				{
+					turnWheelFL.Set(-OFFSETMOVE/2);
+				} 
+				else 
+				{
+					turnWheelFL.Set(0);
+				}
+
+				if (stick.GetRawButton(2) == true && calMode == 1) 
+				{
+					turnWheelFR.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 1) 
+				{
+					turnWheelFR.Set(-OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(1) == true && calMode == 1) 
+				{
+					turnWheelFR.Set(OFFSETMOVE/2);
+				} 
+				else if (stick.GetRawButton(4) == true && calMode == 1) 
+				{
+					turnWheelFR.Set(-OFFSETMOVE/2);
+				} 
+				else 
+				{
+					turnWheelFR.Set(0);
+				}
+
+				if (stick.GetRawButton(2) == true && calMode == 2) 
+				{
+					turnWheelBL.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 2) 
+				{
+					turnWheelBL.Set(-OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(1) == true && calMode == 2) 
+				{
+					turnWheelBL.Set(OFFSETMOVE/2);
+				} 
+				else if (stick.GetRawButton(4) == true && calMode == 2) 
+				{
+					turnWheelBL.Set(-OFFSETMOVE/2);
+				} 
+				else 
+				{
+					turnWheelBL.Set(0);
+				}
+
+				if (stick.GetRawButton(2) == true && calMode == 3) 
+				{
+					turnWheelBR.Set(OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(3) == true && calMode == 3) 
+				{
+					turnWheelBR.Set(-OFFSETMOVE);
+				} 
+				else if (stick.GetRawButton(1) == true && calMode == 3) 
+				{
+					turnWheelBR.Set(OFFSETMOVE/2);
+				} 
+				else if (stick.GetRawButton(4) == true && calMode == 3) 
+				{
+					turnWheelBR.Set(-OFFSETMOVE/2);
+				} 
+				else if (calMode >= 4)
+				{
+					calMode = 0;
+				}
+				else 
+				{
+					turnWheelBR.Set(0);
+				}
+				
+				dsLCD->UpdateLCD();
 				
 				
 							
