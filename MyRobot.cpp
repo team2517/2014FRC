@@ -329,61 +329,20 @@ public:
 					dsLCD->UpdateLCD();
 				}
 				
-		        if(moduleCounter == 1)
-		        {
-					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
+				
+				for(i=0; i<4; i++)
+				{
+					if (!(wheel[i].x == 0 && wheel[i].y == 0))
 					{
-						turnWheel(0, -wheel[FL].turnVel);
-						moveWheel(0, wheel[FL].mag);
-					} 
-					else 
-					{
-						turnWheel(0, 0);
-						moveWheel(0, 0);
+						turnWheel(i, -wheel[i].turnVel);
+						moveWheel(i, wheel[i].mag);
 					}
-		        }
-		        if(moduleCounter == 2)
-		        {
-					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
+					else
 					{
-						turnWheel(1, -wheel[FR].turnVel);
-						moveWheel(1, -wheel[FR].mag);
-			
-					} 
-					else 
-					{
-						turnWheel(1, 0);
-						moveWheel(1, 0);
+						turnWheel(i, 0);
+						movewheel(i, 0);
 					}
-		        }
-		        if(moduleCounter == 3)
-		        {
-					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
-					{
-						turnWheel(3, -wheel[BL].turnVel);		 
-						moveWheel(3, wheel[BL].mag);
-			
-					} 
-					else 
-					{
-						turnWheel(3, 0);
-						moveWheel(3, 0);
-					}
-		        }
-		        if(moduleCounter == 4)
-		        {
-					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
-					{
-						turnWheel(2, -wheel[BR].turnVel);			 
-						moveWheel(2, wheel[BR].mag);
-			
-					} 
-					else 
-					{
-						turnWheel(2, 0);
-						moveWheel(2, 0);
-					}
-		        }
+				}
 		        
 		        for(i=0; i<4; i++)
 	    		{
