@@ -59,6 +59,47 @@ class RobotDemo : public SimpleRobot {
 	Timer baneTimer;
 	Timer autoTimer;
 	//float magmodifier;
+	
+	void turnWheel(int module, float speed)
+	{
+		if (module == 0)
+		{
+			turnWheelFL.Set(speed);
+		}
+		else if (module == 1)
+		{
+			turnWheelFR.Set(speed);
+		}
+		else if (module == 2)
+		{
+			turnWheelBR.Set(speed);
+		}
+		else if (module == 3)
+		{
+			turnWheelBL.Set(speed);
+		}
+	}
+
+	void moveWheel(int module, float speed)
+	{
+		if (module == 0)
+		{
+			moveWheelFL.Set(speed);
+		}
+		else if (module == 1)
+		{
+			moveWheelFR.Set(speed);
+		}
+		else if (module == 2)
+		{
+			moveWheelBR.Set(speed);
+		}
+		else if (module == 3)
+		{
+			moveWheelBL.Set(speed);
+		}
+	}
+	
 
 public:
 	RobotDemo() :
@@ -565,4 +606,5 @@ float deadBand(float axisValue)
 		return 0.0;
 	}
 }
+
 
