@@ -276,7 +276,7 @@ public:
 				
 				if (calibrating != true)
 				{
-					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %.2f, %.2f, %.2f, %.2f        ",
+					dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Mag: %.1f, %.1f, %.1f, %.1f        ",
 						wheel[FL].mag, wheel[FR].mag, wheel[BL].mag, wheel[BR].mag);
 					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Diff: %f        ",
 						wheel[FL].diffTheta);
@@ -361,12 +361,12 @@ public:
 				}
 			}
 		
-			if (stick.GetRawButton(8))
+			if (stick.GetRawButton(8) && !calibrating)
 			{
 				pickUpArm1.Set(-.8);
 				pickUpArm2.Set(-.8);
 			}
-			else if (stick.GetRawButton(6))
+			else if (stick.GetRawButton(6) && !calibrating)
 			{
 				pickUpArm1.Set(.8);
 				pickUpArm2.Set(.8);
@@ -377,12 +377,12 @@ public:
 				pickUpArm2.Set(0);
 			}
 	
-			if (manipStick.GetRawButton(3))
+			if (manipStick.GetRawButton(3) && !calibrating)
 			{
 				shooterMotor1.Set(.3);
 				shooterMotor2.Set(.3);
 			}
-			else if (manipStick.GetRawButton(1))
+			else if (manipStick.GetRawButton(1) && !calibrating)
 			{
 				shooterMotor1.Set(-1.0);
 				shooterMotor2.Set(-1.0);
