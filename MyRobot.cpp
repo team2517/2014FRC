@@ -3,7 +3,7 @@
 #include "controls.h"
 #include "offsets.h"
 //#include "util.h"
-#define TESTVAL                 .5
+#define MOVEVAL                 .5
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -17,7 +17,6 @@
 #define IVALUE					0.0
 #define DVALUE					0
 #define MAXPOWER				1
-#define TESTER                  1
 #define STAGGERDELAY			0.005 //In seconds
 #define OFFSETMOVE				.25
 //#define VOLTAGERATE				10000
@@ -138,24 +137,22 @@ public:
 				phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 				
 				
-				#ifdef TESTER
-					if (stick.GetRawButton(4)){
-						leftStickVec[X] = 0;
-						leftStickVec[Y] = TESTVAL;
-					} 
-					else if (stick.GetRawButton(3)){
-						leftStickVec[X] = TESTVAL;
-						leftStickVec[Y] = 0;
-					}
-					else if (stick.GetRawButton(2)){
-						leftStickVec[X] = 0;
-						leftStickVec[Y] = -TESTVAL;
-					}
-					else if (stick.GetRawButton(1)){
-						leftStickVec[X] = -TESTVAL;
-						leftStickVec[Y] = 0;
-					}				
-				#endif
+				if (stick.GetRawButton(4)){
+					leftStickVec[X] = 0;
+					leftStickVec[Y] = MOVEVAL;
+				} 
+				else if (stick.GetRawButton(3)){
+					leftStickVec[X] = MOVEVAL;
+					leftStickVec[Y] = 0;
+				}
+				else if (stick.GetRawButton(2)){
+					leftStickVec[X] = 0;
+					leftStickVec[Y] = -MOVEVAL;
+				}
+				else if (stick.GetRawButton(1)){
+					leftStickVec[X] = -MOVEVAL;
+					leftStickVec[Y] = 0;
+				}				
 				
 				//Need to change these values based on center/wheel placement.
 				wheel[FL].x = .707 * phi;
