@@ -1,7 +1,8 @@
-float flOffset = 4.200; 
-float frOffset = 1.941;
-float blOffset = 1.268; 
-float brOffset = 3.585; 
+#define FLOFFSET			4.105 
+#define FROFFSET			1.955
+#define BLOFFSET			1.305
+#define BROFFSET			3.595 
+ 
 
 //Original values
 //float flOffset = 4.68;
