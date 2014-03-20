@@ -333,55 +333,55 @@ public:
 		        {
 					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
 					{
-						turnWheelFL.Set(-wheel[FL].turnVel);
-						moveWheelFL.Set(wheel[FL].mag);
+						turnWheel(0, -wheel[FL].turnVel);
+						moveWheel(0, wheel[FL].mag);
 					} 
 					else 
 					{
-						turnWheelFL.Set(0);
-						moveWheelFL.Set(0);
+						turnWheel(0, 0);
+						moveWheel(0, 0);
 					}
 		        }
 		        if(moduleCounter == 2)
 		        {
 					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
 					{
-						turnWheelFR.Set(-wheel[FR].turnVel);
-						moveWheelFR.Set(-wheel[FR].mag);
+						turnWheel(1, -wheel[FR].turnVel);
+						moveWheel(1, -wheel[FR].mag);
 			
 					} 
 					else 
 					{
-						turnWheelFR.Set(0);
-						moveWheelFR.Set(0);
+						turnWheel(1, 0);
+						moveWheel(1, 0);
 					}
 		        }
 		        if(moduleCounter == 3)
 		        {
 					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
 					{
-						turnWheelBL.Set(-wheel[BL].turnVel);		 
-						moveWheelBL.Set(wheel[BL].mag);
+						turnWheel(3, -wheel[BL].turnVel);		 
+						moveWheel(3, wheel[BL].mag);
 			
 					} 
 					else 
 					{
-						turnWheelBL.Set(0);
-						moveWheelBL.Set(0);
+						turnWheel(3, 0);
+						moveWheel(3, 0);
 					}
 		        }
 		        if(moduleCounter == 4)
 		        {
 					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
 					{
-						turnWheelBR.Set(-wheel[BR].turnVel);			 
-						moveWheelBR.Set(wheel[BR].mag);
+						turnWheel(2, -wheel[BR].turnVel);			 
+						moveWheel(2, wheel[BR].mag);
 			
 					} 
 					else 
 					{
-						turnWheelBR.Set(0);
-						moveWheelBR.Set(0);
+						turnWheel(2, 0);
+						moveWheel(2, 0);
 					}
 		        }
 		        
@@ -486,83 +486,83 @@ public:
 				
 				if (stick.GetRawButton(2) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(OFFSETMOVE);
+					turnWheel(0, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(-OFFSETMOVE);
+					turnWheel(0, -OFFSETMOVE);
 				} 
 				
 				else if (stick.GetRawButton(1) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(OFFSETMOVE/2);
+					turnWheel(0, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(-OFFSETMOVE/2);
+					turnWheel(0, -OFFSETMOVE/2);
 				} 
 				else 
 				{
-					turnWheelFL.Set(0);
+					turnWheel(0, 0);
 				}
 
 				if (stick.GetRawButton(2) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(OFFSETMOVE);
+					turnWheel(1, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(-OFFSETMOVE);
+					turnWheel(1, -OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(1) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(OFFSETMOVE/2);
+					turnWheel(1, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(-OFFSETMOVE/2);
+					turnWheel(1, -OFFSETMOVE/2);
 				} 
 				else 
 				{
-					turnWheelFR.Set(0);
+					turnWheel(1, 0);
 				}
 
 				if (stick.GetRawButton(2) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(OFFSETMOVE);
+					turnWheel(3, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(-OFFSETMOVE);
+					turnWheel(3, -OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(1) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(OFFSETMOVE/2);
+					turnWheel(3, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(-OFFSETMOVE/2);
+					turnWheel(3, -OFFSETMOVE/2);
 				} 
 				else 
 				{
-					turnWheelBL.Set(0);
+					turnWheel(3, 0);
 				}
 
 				if (stick.GetRawButton(2) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(OFFSETMOVE);
+					turnWheel(2, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(-OFFSETMOVE);
+					turnWheel(2, -OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(1) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(OFFSETMOVE/2);
+					turnWheel(2, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(-OFFSETMOVE/2);
+					turnWheel(2, -OFFSETMOVE/2);
 				} 
 				else if (calMode >= 4)
 				{
@@ -571,7 +571,7 @@ public:
 				}
 				else 
 				{
-					turnWheelBR.Set(0);
+					turnWheel(2, 0);
 				}
 				
 				dsLCD->UpdateLCD();
