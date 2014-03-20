@@ -105,10 +105,10 @@ public:
 		bool isButtonPressed;
 		bool calibrating = false;
 		int calMode = 0;
-		float flOffset;
-		float frOffset;
-		float brOffset;
-		float blOffset;
+		float flOff;
+		float frOff;
+		float brOff;
+		float blOff;
 		float moveVal = .5;
 		isButtonPressed = false;		
 		
@@ -210,13 +210,13 @@ public:
 					}
 				}
 	
-				wheel[FL].curTheta = -(posEncFL.GetVoltage() - flOffset ) / 5 * 2
+				wheel[FL].curTheta = -(posEncFL.GetVoltage() - FLOFFSET ) / 5 * 2
 						* PI;
-				wheel[FR].curTheta = -(posEncFR.GetVoltage() - frOffset) / 5 * 2
+				wheel[FR].curTheta = -(posEncFR.GetVoltage() - FROFFSET) / 5 * 2
 						* PI;
-				wheel[BR].curTheta = -(posEncBR.GetVoltage() - brOffset)/ 5 * 2
+				wheel[BR].curTheta = -(posEncBR.GetVoltage() - BROFFSET)/ 5 * 2
 						* PI;
-				wheel[BL].curTheta = -(posEncBL.GetVoltage() - blOffset) / 5 * 2
+				wheel[BL].curTheta = -(posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
 						* PI;
 	
 				for (i=0; i < 4; i++) 
@@ -399,36 +399,36 @@ public:
 			
 			if (calibrating == true)
 			{
-				flOffset = posEncFL.GetVoltage();
-				frOffset = posEncFR.GetVoltage();
-				brOffset = posEncBR.GetVoltage();
-				blOffset = posEncBL.GetVoltage();
+				flOff = posEncFL.GetVoltage();
+				frOff = posEncFR.GetVoltage();
+				brOff = posEncBR.GetVoltage();
+				blOff = posEncBL.GetVoltage();
 				
 				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-					"FLOFFSET: %f     ", flOffset);
+					"FLOFFSET: %f     ", flOff);
 				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-					"FROFFSET: %f     ", frOffset);
+					"FROFFSET: %f     ", frOff);
 				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-					"BLOFFSET: %f     ", blOffset);
+					"BLOFFSET: %f     ", blOff);
 				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-					"BROFFSET: %f     ", brOffset);
+					"BROFFSET: %f     ", brOff);
 				if (stick.GetRawButton(8) && !isButtonPressed) 
 				{
 					if (calMode == 0) 
 					{
-						flOffset = posEncFL.GetVoltage();
+						flOff = posEncFL.GetVoltage();
 					} 
 					else if (calMode == 1) 
 					{
-						frOffset = posEncFR.GetVoltage();
+						frOff = posEncFR.GetVoltage();
 					} 
 					else if (calMode == 2) 
 					{
-						blOffset = posEncBL.GetVoltage();
+						blOff = posEncBL.GetVoltage();
 					} 
 					else if (calMode == 3) 
 					{
-						brOffset = posEncBR.GetVoltage();
+						brOff = posEncBR.GetVoltage();
 					}
 
 					calMode++;
