@@ -3,7 +3,6 @@
 #include "controls.h"
 #include "offsets.h"
 //#include "util.h"
-#define MOVEVAL                 .5
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -19,7 +18,6 @@
 #define MAXPOWER				1
 #define STAGGERDELAY			0.005 //In seconds
 #define OFFSETMOVE				.25
-//#define VOLTAGERATE				10000
 
 float deadBand(float);
 
@@ -111,6 +109,7 @@ public:
 		float frOffset;
 		float brOffset;
 		float blOffset;
+		float moveVal = .5;
 		isButtonPressed = false;		
 		
 		for (i = 0; i < 4; i++) 
@@ -136,21 +135,29 @@ public:
 						leftStickVec[RAWX], 2));
 				phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
 				
+				if (stick.GetRawButton(5))
+				{
+					moveVal = .9;
+				}
+				else
+				{
+					moveVal = .5;
+				}
 				
 				if (stick.GetRawButton(4)){
 					leftStickVec[X] = 0;
-					leftStickVec[Y] = MOVEVAL;
+					leftStickVec[Y] = moveVal;
 				} 
 				else if (stick.GetRawButton(3)){
-					leftStickVec[X] = MOVEVAL;
+					leftStickVec[X] = moveVal;
 					leftStickVec[Y] = 0;
 				}
 				else if (stick.GetRawButton(2)){
 					leftStickVec[X] = 0;
-					leftStickVec[Y] = -MOVEVAL;
+					leftStickVec[Y] = -moveVal;
 				}
 				else if (stick.GetRawButton(1)){
-					leftStickVec[X] = -MOVEVAL;
+					leftStickVec[X] = -moveVal;
 					leftStickVec[Y] = 0;
 				}				
 				
