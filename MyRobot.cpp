@@ -340,7 +340,7 @@ public:
 					else
 					{
 						turnWheel(i, 0);
-						movewheel(i, 0);
+						moveWheel(i, 0);
 					}
 				}
 		        
