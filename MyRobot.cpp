@@ -77,7 +77,7 @@ public:
 	 * Drive left & right motors for 2 seconds then stop
 	 */
 	void Autonomous() {
-		/*
+		
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
@@ -108,16 +108,18 @@ public:
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
 		}
-		*/
+		
 		while (IsAutonomous() && IsEnabled()) {
+			
+			Watchdog().Feed();
 			
 			if(moduleFlag && !calibrating)
 			{
 				moduleFlag = false;
 				
-				if(autoTimer.Get() < 3.0)
+				if(autoTimer.Get() < .8)
 				{
-					leftStickVec[Y] = .5;
+					leftStickVec[Y] = 1.0;
 				}
 				else
 				{
