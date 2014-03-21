@@ -110,12 +110,12 @@ public:
 		}
 		*/
 		while (IsAutonomous() && IsEnabled()) {
-			/*
+			
 			if(moduleFlag && !calibrating)
 			{
 				moduleFlag = false;
 				
-				if(autoTimer.Get < 3.0)
+				if(autoTimer.Get() < 3.0)
 				{
 					leftStickVec[Y] = .5;
 				}
@@ -238,7 +238,20 @@ public:
 							wheel[i].changeSign = false;
 						}
 					}
-				}*/
+				}
+			} //End of if
+			
+			if (staggerTimer.Get() > STAGGERDELAY)
+			{
+				moduleCounter++;
+				moduleFlag = true;
+				staggerTimer.Reset();
+				
+				if(moduleCounter > 4)
+				{
+					moduleCounter = 1;
+				}
+			}
 		}
 	}
 
