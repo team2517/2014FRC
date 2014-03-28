@@ -69,7 +69,7 @@ public:
 			shooterMotor1(13), shooterMotor2(46),
 			pickUpArm1(1), pickUpArm2(10),
 			posEncFL(3), posEncFR(2),
-			posEncBR(4), posEncBL(1) {
+			posEncBR(4), posEncBL(5) {
 		Watchdog().SetExpiration(1);
 	}
 
@@ -110,16 +110,24 @@ public:
 		}
 		
 		while (IsAutonomous() && IsEnabled()) {
-			
 			Watchdog().Feed();
 			
 			if(moduleFlag && !calibrating)
 			{
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Time %.2f        ",
+									autoTimer.Get());
+			
 				moduleFlag = false;
 				
-				if(autoTimer.Get() < .8)
+				if(autoTimer.Get() > 3 && autoTimer.Get() < 6)
 				{
-					leftStickVec[Y] = 1.0;
+					dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Left Stick Set");
+					
+					leftStickVec[Y] = .15;
+				}
+				else if(autoTimer.Get() >= 6 && autoTimer.Get() < 8.25)
+				{
+					leftStickVec[Y] = .50;
 				}
 				else
 				{
@@ -204,6 +212,7 @@ public:
 					{
 						wheel[i].diffTheta -= PI;
 						wheel[i].mag = wheel[i].mag * -1;
+						
 					} 
 					else if (wheel[i].diffTheta < -PI/2) 
 					{
@@ -241,6 +250,67 @@ public:
 						}
 					}
 				}
+				
+				if(moduleCounter == 1)
+		        {
+					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
+					{
+						turnWheelFL.Set(-wheel[FL].turnVel);
+						moveWheelFL.Set(wheel[FL].mag);
+					} 
+					else 
+					{
+						turnWheelFL.Set(0);
+						moveWheelFL.Set(0);
+					}
+		        }
+		        if(moduleCounter == 2)
+		        {
+					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
+					{
+						turnWheelFR.Set(-wheel[FR].turnVel);
+						moveWheelFR.Set(-wheel[FR].mag);
+			
+					} 
+					else 
+					{
+						turnWheelFR.Set(0);
+						moveWheelFR.Set(0);
+					}
+		        }
+		        if(moduleCounter == 3)
+		        {
+					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
+					{
+						turnWheelBL.Set(-wheel[BL].turnVel);		 
+						moveWheelBL.Set(wheel[BL].mag);
+			
+					} 
+					else 
+					{
+						turnWheelBL.Set(0);
+						moveWheelBL.Set(0);
+					}
+		        }
+		        if(moduleCounter == 4)
+		        {
+					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
+					{
+						turnWheelBR.Set(-wheel[BR].turnVel);			 
+						moveWheelBR.Set(wheel[BR].mag);
+			
+					} 
+					else 
+					{
+						turnWheelBR.Set(0);
+						moveWheelBR.Set(0);
+					}
+		        }
+		        
+		        for(i=0; i<4; i++)
+	    		{
+	    			wheel[i].prevTurnVel = wheel[i].turnVel;
+	    		}
 			} //End of if
 			
 			if (staggerTimer.Get() > STAGGERDELAY)
@@ -254,6 +324,8 @@ public:
 					moduleCounter = 1;
 				}
 			}
+			
+			dsLCD->UpdateLCD();
 		}
 	}
 
@@ -535,15 +607,15 @@ public:
 				}
 			}
 		
-			if (stick.GetRawButton(8) && !calibrating)
-			{
-				pickUpArm1.Set(-.8);
-				pickUpArm2.Set(-.8);
-			}
-			else if (stick.GetRawButton(6) && !calibrating)
+			if (stick.GetRawButton(6) && !calibrating)
 			{
 				pickUpArm1.Set(.8);
 				pickUpArm2.Set(.8);
+			}
+			else if (stick.GetRawButton(8) && !calibrating)
+			{
+				pickUpArm1.Set(-.8);
+				pickUpArm2.Set(-.8);
 			}
 			else
 			{
