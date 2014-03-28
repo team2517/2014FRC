@@ -580,7 +580,7 @@ public:
 				{
 					if (!(wheel[i].x == 0 && wheel[i].y == 0))
 					{
-						turnWheel(i, -wheel[i].turnVel);
+						turnWheel(i, wheel[i].turnVel);
 						moveWheel(i, wheel[i].mag);
 					}
 					else
