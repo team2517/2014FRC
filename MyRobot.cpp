@@ -449,15 +449,42 @@ public:
 				}				
 				
 				//Need to change these values based on center/wheel placement.
-				wheel[FL].x = .707 * phi;
-				wheel[FL].y = .707 * phi;
-				wheel[FR].x = .707 * phi;
-				wheel[FR].y = -.707 * phi;
-				wheel[BR].x = -.707 * phi;
-				wheel[BR].y = -.707 * phi;
-				wheel[BL].x = -.707 * phi;
-				wheel[BL].y = .707 * phi;
-	
+				if(stick.GetRawButton(7))
+				{
+					//Front left corner
+					wheel[FL].x = .707 * phi;
+					wheel[FL].y = .707 * phi;
+					wheel[FR].x = .707 * phi;
+					wheel[FR].y = -.707 * phi;
+					wheel[BR].x = -.707 * phi;
+					wheel[BR].y = -.707 * phi;
+					wheel[BL].x = -.707 * phi;
+					wheel[BL].y = .707 * phi;
+				}
+				else if(stick.GetRawButton(7))
+				{
+					//Front right corner
+					wheel[FL].x = .707 * phi;
+					wheel[FL].y = .707 * phi;
+					wheel[FR].x = .707 * phi;
+					wheel[FR].y = -.707 * phi;
+					wheel[BR].x = -.707 * phi;
+					wheel[BR].y = -.707 * phi;
+					wheel[BL].x = -.707 * phi;
+					wheel[BL].y = .707 * phi;
+				}
+				else
+				{
+					//Center of rotation
+					wheel[FL].x = .707 * phi;
+					wheel[FL].y = .707 * phi;
+					wheel[FR].x = .707 * phi;
+					wheel[FR].y = -.707 * phi;
+					wheel[BR].x = -.707 * phi;
+					wheel[BR].y = -.707 * phi;
+					wheel[BL].x = -.707 * phi;
+					wheel[BL].y = .707 * phi;
+				}
 				wheel[FL].x += leftStickVec[X];
 				wheel[FL].y += leftStickVec[Y];
 				wheel[FR].x += leftStickVec[X];
@@ -466,7 +493,6 @@ public:
 				wheel[BR].y += leftStickVec[Y];
 				wheel[BL].x += leftStickVec[X];
 				wheel[BL].y += leftStickVec[Y];
-				
 				
 				
 	
@@ -612,7 +638,7 @@ public:
 				pickUpArm1.Set(.8);
 				pickUpArm2.Set(.8);
 			}
-			else if (stick.GetRawButton(8) && !calibrating)
+			else if (stick.GetRawButton(5) && !calibrating)
 			{
 				pickUpArm1.Set(-.8);
 				pickUpArm2.Set(-.8);
