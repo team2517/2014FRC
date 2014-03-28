@@ -59,6 +59,47 @@ class RobotDemo : public SimpleRobot {
 	Timer baneTimer;
 	Timer autoTimer;
 	//float magmodifier;
+	
+	void turnWheel(int module, float speed)
+	{
+		if (module == 0)
+		{
+			turnWheelFL.Set(speed);
+		}
+		else if (module == 1)
+		{
+			turnWheelFR.Set(speed);
+		}
+		else if (module == 2)
+		{
+			turnWheelBR.Set(speed);
+		}
+		else if (module == 3)
+		{
+			turnWheelBL.Set(speed);
+		}
+	}
+
+	void moveWheel(int module, float speed)
+	{
+		if (module == 0)
+		{
+			moveWheelFL.Set(speed);
+		}
+		else if (module == 1)
+		{
+			moveWheelFR.Set(speed);
+		}
+		else if (module == 2)
+		{
+			moveWheelBR.Set(speed);
+		}
+		else if (module == 3)
+		{
+			moveWheelBL.Set(speed);
+		}
+	}
+	
 
 public:
 	RobotDemo() :
@@ -534,61 +575,20 @@ public:
 					dsLCD->UpdateLCD();
 				}
 				
-		        if(moduleCounter == 1)
-		        {
-					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
+				
+				for(i=0; i<4; i++)
+				{
+					if (!(wheel[i].x == 0 && wheel[i].y == 0))
 					{
-						turnWheelFL.Set(-wheel[FL].turnVel);
-						moveWheelFL.Set(wheel[FL].mag);
-					} 
-					else 
-					{
-						turnWheelFL.Set(0);
-						moveWheelFL.Set(0);
+						turnWheel(i, -wheel[i].turnVel);
+						moveWheel(i, wheel[i].mag);
 					}
-		        }
-		        if(moduleCounter == 2)
-		        {
-					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
+					else
 					{
-						turnWheelFR.Set(-wheel[FR].turnVel);
-						moveWheelFR.Set(-wheel[FR].mag);
-			
-					} 
-					else 
-					{
-						turnWheelFR.Set(0);
-						moveWheelFR.Set(0);
+						turnWheel(i, 0);
+						moveWheel(i, 0);
 					}
-		        }
-		        if(moduleCounter == 3)
-		        {
-					if (!(wheel[BL].x == 0 && wheel[BL].y == 0)) 
-					{
-						turnWheelBL.Set(-wheel[BL].turnVel);		 
-						moveWheelBL.Set(wheel[BL].mag);
-			
-					} 
-					else 
-					{
-						turnWheelBL.Set(0);
-						moveWheelBL.Set(0);
-					}
-		        }
-		        if(moduleCounter == 4)
-		        {
-					if (!(wheel[BR].x == 0 && wheel[BR].y == 0)) 
-					{
-						turnWheelBR.Set(-wheel[BR].turnVel);			 
-						moveWheelBR.Set(wheel[BR].mag);
-			
-					} 
-					else 
-					{
-						turnWheelBR.Set(0);
-						moveWheelBR.Set(0);
-					}
-		        }
+				}
 		        
 		        for(i=0; i<4; i++)
 	    		{
@@ -691,83 +691,83 @@ public:
 				
 				if (stick.GetRawButton(2) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(OFFSETMOVE);
+					turnWheel(0, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(-OFFSETMOVE);
+					turnWheel(0, -OFFSETMOVE);
 				} 
 				
 				else if (stick.GetRawButton(1) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(OFFSETMOVE/2);
+					turnWheel(0, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 0) 
 				{
-					turnWheelFL.Set(-OFFSETMOVE/2);
+					turnWheel(0, -OFFSETMOVE/2);
 				} 
 				else 
 				{
-					turnWheelFL.Set(0);
+					turnWheel(0, 0);
 				}
 
 				if (stick.GetRawButton(2) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(OFFSETMOVE);
+					turnWheel(1, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(-OFFSETMOVE);
+					turnWheel(1, -OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(1) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(OFFSETMOVE/2);
+					turnWheel(1, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 1) 
 				{
-					turnWheelFR.Set(-OFFSETMOVE/2);
+					turnWheel(1, -OFFSETMOVE/2);
 				} 
 				else 
 				{
-					turnWheelFR.Set(0);
+					turnWheel(1, 0);
 				}
 
 				if (stick.GetRawButton(2) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(OFFSETMOVE);
+					turnWheel(3, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(-OFFSETMOVE);
+					turnWheel(3, -OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(1) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(OFFSETMOVE/2);
+					turnWheel(3, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 2) 
 				{
-					turnWheelBL.Set(-OFFSETMOVE/2);
+					turnWheel(3, -OFFSETMOVE/2);
 				} 
 				else 
 				{
-					turnWheelBL.Set(0);
+					turnWheel(3, 0);
 				}
 
 				if (stick.GetRawButton(2) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(OFFSETMOVE);
+					turnWheel(2, OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(3) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(-OFFSETMOVE);
+					turnWheel(2, -OFFSETMOVE);
 				} 
 				else if (stick.GetRawButton(1) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(OFFSETMOVE/2);
+					turnWheel(2, OFFSETMOVE/2);
 				} 
 				else if (stick.GetRawButton(4) == true && calMode == 3) 
 				{
-					turnWheelBR.Set(-OFFSETMOVE/2);
+					turnWheel(2, -OFFSETMOVE/2);
 				} 
 				else if (calMode >= 4)
 				{
@@ -776,7 +776,7 @@ public:
 				}
 				else 
 				{
-					turnWheelBR.Set(0);
+					turnWheel(2, 0);
 				}
 				
 				dsLCD->UpdateLCD();
@@ -811,4 +811,5 @@ float deadBand(float axisValue)
 		return 0.0;
 	}
 }
+
 
