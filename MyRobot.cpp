@@ -64,19 +64,19 @@ class RobotDemo : public SimpleRobot {
 	{
 		if (module == 0)
 		{
-			turnWheelFL.Set(speed);
+			turnWheelFL.Set(-speed);
 		}
 		else if (module == 1)
 		{
-			turnWheelFR.Set(speed);
+			turnWheelFR.Set(-speed);
 		}
 		else if (module == 2)
 		{
-			turnWheelBR.Set(speed);
+			turnWheelBR.Set(-speed);
 		}
 		else if (module == 3)
 		{
-			turnWheelBL.Set(speed);
+			turnWheelBL.Set(-speed);
 		}
 	}
 
@@ -88,7 +88,7 @@ class RobotDemo : public SimpleRobot {
 		}
 		else if (module == 1)
 		{
-			moveWheelFR.Set(speed);
+			moveWheelFR.Set(-speed);
 		}
 		else if (module == 2)
 		{
