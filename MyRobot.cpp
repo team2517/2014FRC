@@ -2,7 +2,6 @@
 #include "math.h"
 #include "controls.h"
 #include "offsets.h"
-//#include "util.h"
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -29,22 +28,16 @@ struct wheelVector {
 	float moveTime;
 };
 
-/**
- * This is a demo program showing the use of the RobotBase class.
- * The SimpleRobot class is the base of a robot application that will automatically call your
- * Autonomous and OperatorControl methods at the right time as controlled by the switches on
- * the driver station or the field controls.
- */
 class RobotDemo : public SimpleRobot 
 {
 	Joystick stick; // only joystick
 	Joystick manipStick;
 	Joystick controlStick;
-	CANJaguar turnWheelFL;
+	CANJaguar turnWheelFL; //Banebots that control the direction of the wheels.
 	CANJaguar turnWheelFR;
 	CANJaguar turnWheelBR;
 	CANJaguar turnWheelBL;
-	CANJaguar moveWheelFL;
+	CANJaguar moveWheelFL; //Cims that control the speed of the wheel.
 	CANJaguar moveWheelFR;
 	CANJaguar moveWheelBR;
 	CANJaguar moveWheelBL;
@@ -52,15 +45,15 @@ class RobotDemo : public SimpleRobot
 	CANJaguar shooterMotor2;
 	Talon pickUpArm1;
 	Talon pickUpArm2;
-	AnalogChannel posEncFL;
+	AnalogChannel posEncFL; //Absolute encoders.  Return angle on scale from 0 to 5 volts.
 	AnalogChannel posEncFR;
 	AnalogChannel posEncBR;
 	AnalogChannel posEncBL;
-	Timer staggerTimer;
-	Timer baneTimer;
-	Timer autoTimer;
-	//float magmodifier;
+	Timer staggerTimer; //Measures the time the code takes to jump from motor to motor.
+	Timer baneTimer; //Measures the time the motor has spent at neutral to discharge.
+	Timer autoTimer; //Measures the current game time.
 	
+	//Sets the speed of the respective banebot.
 	void turnWheel(int module, float speed)
 	{
 		if (module == 0)
@@ -81,6 +74,7 @@ class RobotDemo : public SimpleRobot
 		}
 	}
 
+	//Sets the speed of the respective cim.
 	void moveWheel(int module, float speed)
 	{
 		if (module == 0)
@@ -129,8 +123,8 @@ public:
 		staggerTimer.Start();
 		autoTimer.Start();
 
-		float leftStickVec[4];
-		float phi;
+		float leftStickVec[4]; //Stores both raw and processed 2 dimensional vectors from left stick.
+		float phi; //Stores the x value of the right stick.
 		float largestMag;
 		wheelVector wheel[4];
 		int i;
@@ -409,13 +403,14 @@ public:
 			{
 				moduleFlag = false;
 				
+				//Makes all the left stick vectors have a magnitude of 1, rather than 1.4 in the corners.
 				leftStickVec[RAWX] = deadBand(stick.GetRawAxis(1));
 				leftStickVec[RAWY] = deadBand(stick.GetRawAxis(2));
 				leftStickVec[X] = leftStickVec[RAWX]*sqrt(1-.5*pow(
 						leftStickVec[RAWY], 2));
 				leftStickVec[Y] = -leftStickVec[RAWY]*sqrt(1-.5*pow(
 						leftStickVec[RAWX], 2));
-				phi = deadBand(stick.GetRawAxis(3)); //Should be right stick x.
+				phi = deadBand(stick.GetRawAxis(3));
 				
 				if (stick.GetRawButton(5))
 				{
