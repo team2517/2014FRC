@@ -35,7 +35,8 @@ struct wheelVector {
  * Autonomous and OperatorControl methods at the right time as controlled by the switches on
  * the driver station or the field controls.
  */
-class RobotDemo : public SimpleRobot {
+class RobotDemo : public SimpleRobot 
+{
 	Joystick stick; // only joystick
 	Joystick manipStick;
 	Joystick controlStick;
@@ -105,20 +106,22 @@ public:
 	RobotDemo() :
 		stick(1), manipStick(2),controlStick(3), turnWheelFL(9), turnWheelFR(11), 
 		turnWheelBR(45),
-			turnWheelBL(30), moveWheelFL(27), moveWheelFR(4),
-			moveWheelBR(2), moveWheelBL(12), 
-			shooterMotor1(13), shooterMotor2(46),
-			pickUpArm1(1), pickUpArm2(10),
-			posEncFL(3), posEncFR(2),
-			posEncBR(4), posEncBL(5) {
+		turnWheelBL(30), moveWheelFL(27), moveWheelFR(4),
+		moveWheelBR(2), moveWheelBL(12),
+		shooterMotor1(13), shooterMotor2(46),
+		pickUpArm1(1), pickUpArm2(10),
+		posEncFL(3), posEncFR(2),
+		posEncBR(4), posEncBL(5) 
+	{
 		Watchdog().SetExpiration(1);
 	}
 
-	/**
-	 * Drive left & right motors for 2 seconds then stop
-	 */
-	void Autonomous() {
-		
+/**
+ * Drive left & right motors for 2 seconds then stop
+ */
+	void Autonomous() 
+	{
+	
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
@@ -136,12 +139,6 @@ public:
 		bool moduleFlag = true;
 		bool isButtonPressed;
 		bool calibrating = false;
-		int calMode = 0;
-		float flOff;
-		float frOff;
-		float brOff;
-		float blOff;
-		float moveVal = .5;
 		isButtonPressed = false;		
 		
 		for (i = 0; i < 4; i++) 
@@ -150,13 +147,14 @@ public:
 			wheel[i].prevTurnVel = 0;
 		}
 		
-		while (IsAutonomous() && IsEnabled()) {
+		while (IsAutonomous() && IsEnabled()) 
+		{
 			Watchdog().Feed();
 			
 			if(moduleFlag && !calibrating)
 			{
 				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Time %.2f        ",
-									autoTimer.Get());
+						autoTimer.Get());
 			
 				moduleFlag = false;
 				
@@ -253,7 +251,6 @@ public:
 					{
 						wheel[i].diffTheta -= PI;
 						wheel[i].mag = wheel[i].mag * -1;
-						
 					} 
 					else if (wheel[i].diffTheta < -PI/2) 
 					{
@@ -325,7 +322,6 @@ public:
 					{
 						turnWheelBL.Set(-wheel[BL].turnVel);		 
 						moveWheelBL.Set(wheel[BL].mag);
-			
 					} 
 					else 
 					{
@@ -339,7 +335,6 @@ public:
 					{
 						turnWheelBR.Set(-wheel[BR].turnVel);			 
 						moveWheelBR.Set(wheel[BR].mag);
-			
 					} 
 					else 
 					{
@@ -370,9 +365,9 @@ public:
 		}
 	}
 
-	/**
-	 * Runs the motors with arcade steering. 
-	 */
+/**
+ * Runs the motors with arcade steering. 
+ */
 	void OperatorControl() 
 	{
 		Watchdog().SetEnabled(true);
@@ -431,19 +426,23 @@ public:
 					moveVal = .5;
 				}
 				
-				if (stick.GetRawButton(4)){
+				if (stick.GetRawButton(4))
+				{
 					leftStickVec[X] = 0;
 					leftStickVec[Y] = moveVal;
 				} 
-				else if (stick.GetRawButton(3)){
+				else if (stick.GetRawButton(3))
+				{
 					leftStickVec[X] = moveVal;
 					leftStickVec[Y] = 0;
 				}
-				else if (stick.GetRawButton(2)){
+				else if (stick.GetRawButton(2))
+				{
 					leftStickVec[X] = 0;
 					leftStickVec[Y] = -moveVal;
 				}
-				else if (stick.GetRawButton(1)){
+				else if (stick.GetRawButton(1))
+				{
 					leftStickVec[X] = -moveVal;
 					leftStickVec[Y] = 0;
 				}				
@@ -485,6 +484,7 @@ public:
 					wheel[BL].x = -.707 * phi;
 					wheel[BL].y = .707 * phi;
 				}
+				
 				wheel[FL].x += leftStickVec[X];
 				wheel[FL].y += leftStickVec[Y];
 				wheel[FR].x += leftStickVec[X];
@@ -494,8 +494,6 @@ public:
 				wheel[BL].x += leftStickVec[X];
 				wheel[BL].y += leftStickVec[Y];
 				
-				
-	
 				for (i = 0; i < 4; i++) 
 				{
 					wheel[i].mag = MAXPOWER * sqrt(pow(wheel[i].x, 2) + pow(wheel[i].y, 2));
@@ -523,14 +521,10 @@ public:
 					}
 				}
 	
-				wheel[FL].curTheta = -(posEncFL.GetVoltage() - FLOFFSET ) / 5 * 2
-						* PI;
-				wheel[FR].curTheta = -(posEncFR.GetVoltage() - FROFFSET) / 5 * 2
-						* PI;
-				wheel[BR].curTheta = -(posEncBR.GetVoltage() - BROFFSET)/ 5 * 2
-						* PI;
-				wheel[BL].curTheta = -(posEncBL.GetVoltage() - BLOFFSET) / 5 * 2
-						* PI;
+				wheel[FL].curTheta = -(posEncFL.GetVoltage() - FLOFFSET ) / 5 * 2 * PI;
+				wheel[FR].curTheta = -(posEncFR.GetVoltage() - FROFFSET) / 5 * 2 * PI;
+				wheel[BR].curTheta = -(posEncBR.GetVoltage() - BROFFSET)/ 5 * 2 * PI;
+				wheel[BL].curTheta = -(posEncBL.GetVoltage() - BLOFFSET) / 5 * 2 * PI;
 	
 				for (i=0; i < 4; i++) 
 				{
@@ -597,7 +591,7 @@ public:
 						wheel[FL].x, wheel[FL].y);
 					dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Turn Val: %f         ", wheel[FL].turnVel);
 					dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "EncoderPos: %f        ",
-									moveWheelFL.GetPosition());
+						moveWheelFL.GetPosition());
 					dsLCD->UpdateLCD();
 				}
 				
@@ -676,14 +670,10 @@ public:
 				brOff = posEncBR.GetVoltage();
 				blOff = posEncBL.GetVoltage();
 				
-				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1,
-					"FLOFFSET: %f     ", flOff);
-				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1,
-					"FROFFSET: %f     ", frOff);
-				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1,
-					"BLOFFSET: %f     ", blOff);
-				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1,
-					"BROFFSET: %f     ", brOff);
+				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "FLOFFSET: %f     ", flOff);
+				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "FROFFSET: %f     ", frOff);
+				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "BLOFFSET: %f     ", blOff);
+				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "BROFFSET: %f     ", brOff);
 				if (stick.GetRawButton(8) && !isButtonPressed) 
 				{
 					if (calMode == 0) 
@@ -712,8 +702,7 @@ public:
 					isButtonPressed = false;
 				}
 				
-				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1,
-					"**CALIBRATING WHEEL %i", calMode+1);
+				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i", calMode+1);
 				
 				if (stick.GetRawButton(2) == true && calMode == 0) 
 				{
@@ -723,7 +712,6 @@ public:
 				{
 					turnWheel(0, -OFFSETMOVE);
 				} 
-				
 				else if (stick.GetRawButton(1) == true && calMode == 0) 
 				{
 					turnWheel(0, OFFSETMOVE/2);
@@ -819,18 +807,20 @@ public:
 /**
  * Runs during test mode
  */
-	void Test() {
+	void Test() 
+	{
 	
 	}
 };
 
-START_ROBOT_CLASS(RobotDemo)
-;
+	START_ROBOT_CLASS(RobotDemo)
+	;
 
 float deadBand(float axisValue) 
 {
-	if (axisValue < -.05 || axisValue> .05){
-	return axisValue;
+	if (axisValue < -.05 || axisValue> .05)
+	{
+		return axisValue;
 	}
 	else
 	{
