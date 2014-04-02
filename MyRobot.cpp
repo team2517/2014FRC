@@ -17,6 +17,7 @@
 #define MAXPOWER				1
 #define STAGGERDELAY			0.005 //In seconds
 #define OFFSETMOVE				.25
+#define IDLESPEED				.2
 
 float deadBand(float);
 
@@ -41,8 +42,7 @@ class RobotDemo : public SimpleRobot
 	CANJaguar moveWheelFR;
 	CANJaguar moveWheelBR;
 	CANJaguar moveWheelBL;
-	CANJaguar shooterMotor1;
-	CANJaguar shooterMotor2;
+	CANJaguar shooterMotor;
 	Talon pickUpArm1;
 	Talon pickUpArm2;
 	AnalogChannel posEncFL; //Absolute encoders.  Return angle on scale from 0 to 5 volts.
@@ -102,10 +102,10 @@ public:
 		turnWheelBR(45),
 		turnWheelBL(30), moveWheelFL(27), moveWheelFR(4),
 		moveWheelBR(2), moveWheelBL(12),
-		shooterMotor1(13), shooterMotor2(46),
-		pickUpArm1(1), pickUpArm2(10),
-		posEncFL(3), posEncFR(2),
-		posEncBR(4), posEncBL(5) 
+		shooterMotor(13), pickUpArm1(1), 
+		pickUpArm2(10), posEncFL(3),
+		posEncFR(2), posEncBR(4), 
+		posEncBL(5) 
 	{
 		Watchdog().SetExpiration(1);
 	}
@@ -640,20 +640,14 @@ public:
 				pickUpArm2.Set(0);
 			}
 	
-			if (manipStick.GetRawButton(3) && !calibrating)
+			if (manipStick.GetRawButton(3) && !calibrating) 
 			{
-				shooterMotor1.Set(.3);
-				shooterMotor2.Set(.3);
-			}
-			else if (manipStick.GetRawButton(1) && !calibrating)
-			{
-				shooterMotor1.Set(-1.0);
-				shooterMotor2.Set(-1.0);
+				shooterMotor.Set(1);
+				//Ryan put pneumatics stuff here
 			}
 			else
 			{
-				shooterMotor1.Set(0);
-				shooterMotor2.Set(0);
+				shooterMotor.Set(IDLESPEED);
 			}
 			
 			// **************************************
