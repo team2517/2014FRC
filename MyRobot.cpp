@@ -445,27 +445,29 @@ public:
 				//Need to change these values based on center/wheel placement.
 				if(stick.GetRawButton(7))
 				{
+					//Rearranged from front right corner.
 					//Front left corner
-					wheel[FL].x = .707 * phi;
-					wheel[FL].y = .707 * phi;
-					wheel[FR].x = .707 * phi;
-					wheel[FR].y = -.707 * phi;
-					wheel[BR].x = -.707 * phi;
-					wheel[BR].y = -.707 * phi;
-					wheel[BL].x = -.707 * phi;
-					wheel[BL].y = .707 * phi;
+					wheel[FL].x = .146 * phi;
+					wheel[FL].y = .150 * phi;
+					wheel[FR].x = .146 * phi;
+					wheel[FR].y = .710 * phi;
+					wheel[BR].x = .704 * phi;
+					wheel[BR].y = .710 * phi;
+					wheel[BL].x = .704 * phi;
+					wheel[BL].y = .143 * phi;
 				}
 				else if(stick.GetRawButton(7))
 				{
 					//Front right corner
-					wheel[FL].x = .707 * phi;
-					wheel[FL].y = .707 * phi;
-					wheel[FR].x = .707 * phi;
-					wheel[FR].y = -.707 * phi;
-					wheel[BR].x = -.707 * phi;
-					wheel[BR].y = -.707 * phi;
-					wheel[BL].x = -.707 * phi;
-					wheel[BL].y = .707 * phi;
+					//Actually from measurements.
+					wheel[FL].x = -.146 * phi;
+					wheel[FL].y = .710 * phi;
+					wheel[FR].x = -.146 * phi;
+					wheel[FR].y = .150 * phi;
+					wheel[BR].x = -.704 * phi;
+					wheel[BR].y = .143 * phi;
+					wheel[BL].x = -.704 * phi;
+					wheel[BL].y = .710 * phi;
 				}
 				else
 				{
