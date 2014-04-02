@@ -49,9 +49,12 @@ class RobotDemo : public SimpleRobot
 	AnalogChannel posEncFR;
 	AnalogChannel posEncBR;
 	AnalogChannel posEncBL;
+	Compressor compressor;
 	Timer staggerTimer; //Measures the time the code takes to jump from motor to motor.
 	Timer baneTimer; //Measures the time the motor has spent at neutral to discharge.
 	Timer autoTimer; //Measures the current game time.
+	Solenoid shooterPistonA;
+	Solenoid shooterPistonB;
 	
 	//Sets the speed of the respective banebot.
 	void turnWheel(int module, float speed)
@@ -105,9 +108,10 @@ public:
 		shooterMotor(13), pickUpArm1(1), 
 		pickUpArm2(10), posEncFL(3),
 		posEncFR(2), posEncBR(4), 
-		posEncBL(5) 
+		posEncBL(5), compressor(1, 3), shooterA(1), shooterB(2)
 	{
 		Watchdog().SetExpiration(1);
+		compressor.Start();
 	}
 
 /**
@@ -643,11 +647,14 @@ public:
 			if (manipStick.GetRawButton(3) && !calibrating) 
 			{
 				shooterMotor.Set(1);
-				//Ryan put pneumatics stuff here
+				shooterPistonA.Set(true);
+				shooterPistonB.Set(false);
 			}
 			else
 			{
 				shooterMotor.Set(IDLESPEED);
+				shooterPistonA.Set(false);
+				shooterPistonB.Set(true);
 			}
 			
 			// **************************************
