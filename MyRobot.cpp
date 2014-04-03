@@ -108,7 +108,7 @@ public:
 		shooterMotor(13), pickUpArm1(1), 
 		pickUpArm2(10), posEncFL(3),
 		posEncFR(2), posEncBR(4), 
-		posEncBL(5), compressor(1, 3), shooterA(1), shooterB(2)
+		posEncBL(5), compressor(3, 1), shooterPistonA(1), shooterPistonB(2)
 	{
 		Watchdog().SetExpiration(1);
 		compressor.Start();
