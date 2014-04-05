@@ -108,7 +108,7 @@ public:
 		shooterMotor(13), pickUpArm1(1), 
 		pickUpArm2(10), posEncFL(3),
 		posEncFR(2), posEncBR(4), 
-		posEncBL(5), compressor(3, 1), shooterPistonA(1), shooterPistonB(2)
+		posEncBL(5), compressor(14, 1), shooterPistonA(1), shooterPistonB(2)
 	{
 		Watchdog().SetExpiration(1);
 		compressor.Start();
@@ -137,7 +137,9 @@ public:
 		bool moduleFlag = true;
 		bool isButtonPressed;
 		bool calibrating = false;
-		isButtonPressed = false;		
+		isButtonPressed = false;	
+		
+		
 		
 		for (i = 0; i < 4; i++) 
 		{
@@ -148,6 +150,9 @@ public:
 		while (IsAutonomous() && IsEnabled()) 
 		{
 			Watchdog().Feed();
+			
+			shooterPistonA.Set(false);
+			shooterPistonB.Set(true);
 			
 			if(moduleFlag && !calibrating)
 			{
@@ -460,18 +465,18 @@ public:
 					wheel[BL].x = .704 * phi;
 					wheel[BL].y = .143 * phi;
 				}
-				else if(stick.GetRawButton(7))
+				else if(stick.GetRawButton(8))
 				{
 					//Front right corner
 					//Actually from measurements.
-					wheel[FL].x = -.146 * phi;
-					wheel[FL].y = .710 * phi;
-					wheel[FR].x = -.146 * phi;
-					wheel[FR].y = .150 * phi;
-					wheel[BR].x = -.704 * phi;
-					wheel[BR].y = .143 * phi;
-					wheel[BL].x = -.704 * phi;
-					wheel[BL].y = .710 * phi;
+					wheel[FL].x = .146 * phi;
+					wheel[FL].y = -.710 * phi;
+					wheel[FR].x = .146 * phi;
+					wheel[FR].y = -.150 * phi;
+					wheel[BR].x = .704 * phi;
+					wheel[BR].y = -.143 * phi;
+					wheel[BL].x = .704 * phi;
+					wheel[BL].y = -.710 * phi;
 				}
 				else
 				{
@@ -647,12 +652,18 @@ public:
 			if (manipStick.GetRawButton(3) && !calibrating) 
 			{
 				shooterMotor.Set(1);
+			}
+			else
+			{
+				shooterMotor.Set(IDLESPEED);
+			}
+			if (manipStick.GetRawButton(1) && !calibrating) 
+			{
 				shooterPistonA.Set(true);
 				shooterPistonB.Set(false);
 			}
 			else
 			{
-				shooterMotor.Set(IDLESPEED);
 				shooterPistonA.Set(false);
 				shooterPistonB.Set(true);
 			}
