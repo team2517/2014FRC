@@ -17,7 +17,7 @@
 #define MAXPOWER				1
 #define STAGGERDELAY			0.005 //In seconds
 #define OFFSETMOVE				.25
-#define IDLESPEED				.2
+#define IDLESPEED				0.0
 
 float deadBand(float);
 
@@ -59,11 +59,11 @@ class RobotDemo : public SimpleRobot
 	//Sets the speed of the respective banebot.
 	void turnWheel(int module, float speed)
 	{
-		if (module == 0)
-		{
-			turnWheelFL.Set(-speed);
-		}
-		else if (module == 1)
+//		if (module == 0)
+//		{
+//			turnWheelFL.Set(-speed);
+//		}
+		if (module == 1)
 		{
 			turnWheelFR.Set(-speed);
 		}
@@ -80,11 +80,11 @@ class RobotDemo : public SimpleRobot
 	//Sets the speed of the respective cim.
 	void moveWheel(int module, float speed)
 	{
-		if (module == 0)
-		{
-			moveWheelFL.Set(speed);
-		}
-		else if (module == 1)
+//		if (module == 0)
+//		{
+//			moveWheelFL.Set(speed);
+//		}
+		if (module == 1)
 		{
 			moveWheelFR.Set(-speed);
 		}
@@ -119,7 +119,7 @@ public:
  */
 	void Autonomous() 
 	{
-	
+	/*
 		Watchdog().SetEnabled(true);
 		DriverStationLCD *dsLCD = DriverStationLCD::GetInstance();
 
@@ -146,9 +146,9 @@ public:
 			wheel[i].changeSign = false;
 			wheel[i].prevTurnVel = 0;
 		}
-		
+		*/
 		while (IsAutonomous() && IsEnabled()) 
-		{
+		{/*
 			Watchdog().Feed();
 			
 			shooterPistonA.Set(false);
@@ -292,19 +292,6 @@ public:
 					}
 				}
 				
-				if(moduleCounter == 1)
-		        {
-					if (!(wheel[FL].x == 0 && wheel[FL].y == 0)) 
-					{
-						turnWheelFL.Set(-wheel[FL].turnVel);
-						moveWheelFL.Set(wheel[FL].mag);
-					} 
-					else 
-					{
-						turnWheelFL.Set(0);
-						moveWheelFL.Set(0);
-					}
-		        }
 		        if(moduleCounter == 2)
 		        {
 					if (!(wheel[FR].x == 0 && wheel[FR].y == 0)) 
@@ -364,7 +351,7 @@ public:
 				}
 			}
 			
-			dsLCD->UpdateLCD();
+			dsLCD->UpdateLCD();*/
 		}
 	}
 
@@ -651,12 +638,18 @@ public:
 	
 			if (manipStick.GetRawButton(3) && !calibrating) 
 			{
-				shooterMotor.Set(1);
+				shooterMotor.Set(-.25);
+			}
+			else if(manipStick.GetRawButton(2) && !calibrating)
+			{
+				shooterMotor.Set(.25);
 			}
 			else
 			{
-				shooterMotor.Set(IDLESPEED);
+				shooterMotor.Set(manipStick.GetRawAxis(2));
 			}
+			
+			
 			if (manipStick.GetRawButton(1) && !calibrating) 
 			{
 				shooterPistonA.Set(true);
