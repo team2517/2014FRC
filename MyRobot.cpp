@@ -59,10 +59,10 @@ class RobotDemo : public SimpleRobot
 	//Sets the speed of the respective banebot.
 	void turnWheel(int module, float speed)
 	{
-//		if (module == 0)
-//		{
-//			turnWheelFL.Set(-speed);
-//		}
+		if (module == 0)
+		{
+			turnWheelFL.Set(-speed);
+		}
 		if (module == 1)
 		{
 			turnWheelFR.Set(-speed);
@@ -80,10 +80,10 @@ class RobotDemo : public SimpleRobot
 	//Sets the speed of the respective cim.
 	void moveWheel(int module, float speed)
 	{
-//		if (module == 0)
-//		{
-//			moveWheelFL.Set(speed);
-//		}
+		if (module == 0)
+		{
+			moveWheelFL.Set(speed);
+		}
 		if (module == 1)
 		{
 			moveWheelFR.Set(-speed);
