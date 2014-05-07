@@ -2,6 +2,7 @@
 #include "math.h"
 #include "controls.h"
 #include "offsets.h"
+#include "SwerveModule.cpp"
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -431,151 +432,8 @@ public:
 				shooterPistonB.Set(true);
 			}
 			
-			// **************************************
-			// ********BEGIN CALIBRATION CODE********
-			// **************************************
-			
-			if (calibrating == true)
-			{
-				flOff = posEncFL.GetVoltage();
-				frOff = posEncFR.GetVoltage();
-				brOff = posEncBR.GetVoltage();
-				blOff = posEncBL.GetVoltage();
-				
-				dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "FLOFFSET: %f     ", flOff);
-				dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "FROFFSET: %f     ", frOff);
-				dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "BLOFFSET: %f     ", blOff);
-				dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "BROFFSET: %f     ", brOff);
-				if (stick.GetRawButton(8) && !isButtonPressed) 
-				{
-					if (calMode == 0) 
-					{
-						flOff = posEncFL.GetVoltage();
-					} 
-					else if (calMode == 1) 
-					{
-						frOff = posEncFR.GetVoltage();
-					} 
-					else if (calMode == 2) 
-					{
-						blOff = posEncBL.GetVoltage();
-					} 
-					else if (calMode == 3) 
-					{
-						brOff = posEncBR.GetVoltage();
-					}
-
-					calMode++;
-					isButtonPressed = true;
-				}
-
-				else if (!stick.GetRawButton(8)) 
-				{
-					isButtonPressed = false;
-				}
-				
-				dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "**CALIBRATING WHEEL %i", calMode+1);
-				
-				if (stick.GetRawButton(2) == true && calMode == 0) 
-				{
-					turnWheel(0, OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 0) 
-				{
-					turnWheel(0, -OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(1) == true && calMode == 0) 
-				{
-					turnWheel(0, OFFSETMOVE/2);
-				} 
-				else if (stick.GetRawButton(4) == true && calMode == 0) 
-				{
-					turnWheel(0, -OFFSETMOVE/2);
-				} 
-				else 
-				{
-					turnWheel(0, 0);
-				}
-
-				if (stick.GetRawButton(2) == true && calMode == 1) 
-				{
-					turnWheel(1, OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 1) 
-				{
-					turnWheel(1, -OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(1) == true && calMode == 1) 
-				{
-					turnWheel(1, OFFSETMOVE/2);
-				} 
-				else if (stick.GetRawButton(4) == true && calMode == 1) 
-				{
-					turnWheel(1, -OFFSETMOVE/2);
-				} 
-				else 
-				{
-					turnWheel(1, 0);
-				}
-
-				if (stick.GetRawButton(2) == true && calMode == 2) 
-				{
-					turnWheel(3, OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 2) 
-				{
-					turnWheel(3, -OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(1) == true && calMode == 2) 
-				{
-					turnWheel(3, OFFSETMOVE/2);
-				} 
-				else if (stick.GetRawButton(4) == true && calMode == 2) 
-				{
-					turnWheel(3, -OFFSETMOVE/2);
-				} 
-				else 
-				{
-					turnWheel(3, 0);
-				}
-
-				if (stick.GetRawButton(2) == true && calMode == 3) 
-				{
-					turnWheel(2, OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(3) == true && calMode == 3) 
-				{
-					turnWheel(2, -OFFSETMOVE);
-				} 
-				else if (stick.GetRawButton(1) == true && calMode == 3) 
-				{
-					turnWheel(2, OFFSETMOVE/2);
-				} 
-				else if (stick.GetRawButton(4) == true && calMode == 3) 
-				{
-					turnWheel(2, -OFFSETMOVE/2);
-				} 
-				else if (calMode >= 4)
-				{
-					calMode = 0;
-					calibrating = false;
-				}
-				else 
-				{
-					turnWheel(2, 0);
-				}
-				
-				dsLCD->UpdateLCD();
-			}
-			
-			if (manipStick.GetRawButton(8))
-			{
-				calibrating = true;
-			}
-	
 		}
 	}
-
 /**
  * Runs during test mode
  */
