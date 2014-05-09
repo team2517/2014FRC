@@ -25,6 +25,7 @@ class SwerveModule
 	AnalogChannel *posEncoder; 
 	CANJaguar *turnWheel;
 	CANJaguar *moveWheel;
+	Timer *baneTimer;
 	
 	
 public:
@@ -34,7 +35,7 @@ public:
 	 *   2:  
 	 * 
 	 * */
-	SwerveModule(int);
+	SwerveModule(int, int, int);
 	
 	void setRotation(float x, float y)
 	{
@@ -100,7 +101,7 @@ public:
 				&& !changeSign)
 		{
 			changeSign = true;
-			//moveTime = baneTimer.Get() + .1; 				**FIX BANETIMER
+//			moveTime = baneTimer.Get() + .1; 				**FIX BANETIMER
 		}
 		if (changeSign) 
 		{
@@ -114,22 +115,26 @@ public:
 		//	/Code Snippet
 		
 		
-		if (!(xVector == 0 && y == 0))
+		if (!(xVector == 0 && yVector == 0))
 		{
-//			turnWheel(i, turnVel);							REPLACE FUNCTIONS
-//			moveWheel(i, mag);
+			turnWheel->Set(turnVel);							
+			moveWheel->Set(mag);
 		}
 		else
 		{
-//			turnWheel(i, 0);
-//			moveWheel(i, 0);
+			turnWheel->Set(0);
+			moveWheel->Set(0);
 		}
 		
 		
 	}
 };
 
-SwerveModule::SwerveModule(int anaChan)
+SwerveModule::SwerveModule(int anaChan, int turnJagID, int moveJagID)
 {
 	posEncoder = new AnalogChannel(anaChan);
+	turnWheel = new CANJaguar(turnJagID);
+	moveWheel = new CANJaguar(moveJagID);
+//	baneTimer = new Timer();					FIRST PRIORITY FIX
+//	baneTimer->Start();
 }
