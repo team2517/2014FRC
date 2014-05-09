@@ -31,7 +31,7 @@ class SwerveModule
 public:
 	/*
 	 *Arguments: 
-	 *   1: positon encoder analog
+	 *   1: Positon encoder analog
 	 *   2:  
 	 * 
 	 * */
