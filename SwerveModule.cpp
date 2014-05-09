@@ -1,7 +1,18 @@
+#include "WPILib.h"
+#include "math.h"
+#include "controls.h"
+#include "offsets.h"
+#define MAXPOWER 					1
+#define PI							3.14159
+#define FLOFFSET					2.73
+#define FROFFSET					3.595
+#define BLOFFSET					1.295
+#define BROFFSET					3.595
+
 class SwerveModule
 {
 	float offset;
-	float x, y, mag, tarTheta, curTheta, diffTheta, turnVel;
+	float mag, tarTheta, curTheta, diffTheta, turnVel;
 	float phi;
 	float prevTurnVel;
 	bool changeSign;
@@ -10,6 +21,20 @@ class SwerveModule
 	float yVector;
 	float xBaseVector;
 	float yBaseVector;
+	float largestMag;
+	AnalogChannel *posEncoder; 
+	CANJaguar *turnWheel;
+	CANJaguar *moveWheel;
+	
+	
+public:
+	/*
+	 *Arguments: 
+	 *   1: positon encoder analog
+	 *   2:  
+	 * 
+	 * */
+	SwerveModule(int);
 	
 	void setRotation(float x, float y)
 	{
@@ -18,16 +43,93 @@ class SwerveModule
 	}
 	float getMagnitude(float leftX, float leftY, float rightX)
 	{
+		
 		phi = rightX;
 		xVector = xBaseVector * phi;
 		yVector = yBaseVector * phi;
-		x += leftX;
-		y += leftY;
-		mag = MAXPOWER * sqrt(pow(x, 2) + pow(y, 2));
+		xVector += leftX;
+		yVector += leftY;
+		mag = MAXPOWER * sqrt(pow(xVector, 2) + pow(yVector, 2));
 		return mag;		
 	}
 	float setSpeed(float newMagnitude)
 	{
-		x = 
+		tarTheta = atan2(yVector, xVector);
+		curTheta = -(posEncoder->GetVoltage() - FLOFFSET ) / 5 * 2 * PI;
+		
+		
+		//	Code Snippet
+		diffTheta = tarTheta - curTheta;
+			
+		if (diffTheta > PI) 
+		{
+			diffTheta -= 2*PI;
+		} 
+		else if (diffTheta < -PI) 
+		{
+			diffTheta += 2*PI;
+		}
+
+		if (diffTheta > PI/2) 
+		{
+			diffTheta -= PI;
+			mag = mag * -1;
+		} 
+		else if (diffTheta < -PI/2) 
+		{
+			diffTheta += PI;
+			mag = mag * -1;
+		}
+
+		turnVel = diffTheta / (PI/2);
+		
+		if (0 < turnVel && turnVel < .25)
+		{
+			turnVel = .25;
+		} 
+		if (0 > turnVel && turnVel > -.25)
+		{
+			turnVel = -.25;
+		}
+		if (fabs(diffTheta) < PI/45 )
+		{
+			turnVel = 0;
+		}
+		if (((turnVel > 0 && prevTurnVel < 0)
+				|| (turnVel < 0&& prevTurnVel> 0)) 
+				&& !changeSign)
+		{
+			changeSign = true;
+			//moveTime = baneTimer.Get() + .1; 				**FIX BANETIMER
+		}
+		if (changeSign) 
+		{
+			turnVel = 0;
+//			if (moveTime < baneTimer.Get()) 
+			{
+				changeSign = false;
+			}
+		}
+		
+		//	/Code Snippet
+		
+		
+		if (!(xVector == 0 && y == 0))
+		{
+//			turnWheel(i, turnVel);							REPLACE FUNCTIONS
+//			moveWheel(i, mag);
+		}
+		else
+		{
+//			turnWheel(i, 0);
+//			moveWheel(i, 0);
+		}
+		
+		
 	}
 };
+
+SwerveModule::SwerveModule(int anaChan)
+{
+	posEncoder = new AnalogChannel(anaChan);
+}
