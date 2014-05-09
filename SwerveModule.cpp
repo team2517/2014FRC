@@ -135,6 +135,6 @@ SwerveModule::SwerveModule(int anaChan, int turnJagID, int moveJagID)
 	posEncoder = new AnalogChannel(anaChan);
 	turnWheel = new CANJaguar(turnJagID);
 	moveWheel = new CANJaguar(moveJagID);
-//	baneTimer = new Timer();					FIRST PRIORITY FIX
+//	baneTimer = new Timer();					FIRST PROP
 //	baneTimer->Start();
 }
