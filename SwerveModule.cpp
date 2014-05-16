@@ -32,6 +32,16 @@ float SwerveModule::setSpeed(float newMagnitude)
 	tarTheta = atan2(yVector, xVector);
 	curTheta = -(posEncoder->GetVoltage() - FLOFFSET ) / 5 * 2 * PI;
 	
+<<<<<<< HEAD
+=======
+public:
+	/*
+	 *Arguments: 
+	 *   1: Positon encoder analog
+	 *   2:  
+	 * 
+	 * */
+	SwerveModule(int, int, int);
 	
 	//	Code Snippet
 	diffTheta = tarTheta - curTheta;
