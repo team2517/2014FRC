@@ -34,8 +34,9 @@ float SwerveModule::getMagnitude(float leftX, float leftY, float rightX)
  *   1: Positon encoder analog
  *   2:  
  * 
- * */	
-float SwerveModule::setSpeed(float newMagnitude)
+ * */
+
+void SwerveModule::setSpeed(float newMagnitude)
 {
 	tarTheta = atan2(yVector, xVector);
 	curTheta = -(posEncoder->GetVoltage() - FLOFFSET ) / 5 * 2 * PI;
@@ -106,6 +107,10 @@ float SwerveModule::setSpeed(float newMagnitude)
 		turnWheel->Set(0);
 		moveWheel->Set(0);
 	}
+	
+	prevTurnVel = turnVel;
+	
+	
 		
 		
 }
