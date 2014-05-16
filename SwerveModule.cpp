@@ -27,22 +27,19 @@ float SwerveModule::getMagnitude(float leftX, float leftY, float rightX)
 	mag = MAXPOWER * sqrt(pow(xVector, 2) + pow(yVector, 2));
 	return mag;		
 }
+
+
+/*
+ *Arguments: 
+ *   1: Positon encoder analog
+ *   2:  
+ * 
+ * */	
 float SwerveModule::setSpeed(float newMagnitude)
 {
 	tarTheta = atan2(yVector, xVector);
 	curTheta = -(posEncoder->GetVoltage() - FLOFFSET ) / 5 * 2 * PI;
-	
-<<<<<<< HEAD
-=======
-public:
-	/*
-	 *Arguments: 
-	 *   1: Positon encoder analog
-	 *   2:  
-	 * 
-	 * */
-	SwerveModule(int, int, int);
-	
+
 	//	Code Snippet
 	diffTheta = tarTheta - curTheta;
 		
