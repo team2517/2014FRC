@@ -2,7 +2,7 @@
 #include "math.h"
 #include "controls.h"
 #include "offsets.h"
-#include "SwerveModule.cpp"
+#include "SwerveModule.hpp"
 #define FL                      0
 #define FR                      1
 #define BR                      2
