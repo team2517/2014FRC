@@ -39,7 +39,7 @@ float SwerveModule::getMagnitude(float leftX, float leftY, float rightX)
 void SwerveModule::setSpeed(float newMagnitude)
 {
 	tarTheta = atan2(yVector, xVector);
-	curTheta = -(posEncoder->GetVoltage() - FLOFFSET ) / 5 * 2 * PI;
+	curTheta = -(posEncoder->GetVoltage() - offset ) / 5 * 2 * PI;
 
 	//	Code Snippet
 	diffTheta = tarTheta - curTheta;
@@ -83,12 +83,12 @@ void SwerveModule::setSpeed(float newMagnitude)
 			&& !changeSign)
 	{
 		changeSign = true;
-//			moveTime = baneTimer.Get() + .1; 				**FIX BANETIMER
+		moveTime = baneTimer->Get() + .1; 				
 	}
 	if (changeSign) 
 	{
 		turnVel = 0;
-//			if (moveTime < baneTimer.Get()) 
+			if (moveTime < baneTimer->Get()) 
 		{
 			changeSign = false;
 		}
@@ -115,11 +115,12 @@ void SwerveModule::setSpeed(float newMagnitude)
 		
 }
 
-SwerveModule::SwerveModule(int anaChan, int turnJagID, int moveJagID)
+SwerveModule::SwerveModule(int anaChan, int turnJagID, int moveJagID, float passOffset)
 {
 	posEncoder = new AnalogChannel(anaChan);
+	offset = passOffset;
 	turnWheel = new CANJaguar(turnJagID);
 	moveWheel = new CANJaguar(moveJagID);
-//	baneTimer = new Timer();					FIRST PROP
-//	baneTimer->Start();
+	baneTimer = new Timer();				
+	baneTimer->Start();
 }

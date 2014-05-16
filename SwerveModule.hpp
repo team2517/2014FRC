@@ -18,13 +18,13 @@ class SwerveModule
 
 public:
 
-	SwerveModule(int, int, int);
+	SwerveModule(int, int, int, float);
 	
 	void setRotation(float x, float y);
 	
 	float getMagnitude(float leftX, float leftY, float rightX);
 	
-	float setSpeed(float newMagnitude);
+	void setSpeed(float newMagnitude);
 	
 	
 
