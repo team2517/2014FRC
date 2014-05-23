@@ -1,3 +1,5 @@
+#define OFFSETFILE				"offsets.dat"
+
 float deadBand(float axisValue)
 {
 	if(axisValue < -.05 || axisValue > .05)
