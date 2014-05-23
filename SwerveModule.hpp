@@ -1,3 +1,14 @@
+#ifndef SWERVEMODULE_HPP
+#define SWERVEMODULE_HPP
+
+
+struct modulePlug {
+	int analogChannel, turnID, moveID;
+	
+	float offset, xRotation, yRotation;
+};
+
+
 class SwerveModule
 {
 	float offset;
@@ -18,7 +29,7 @@ class SwerveModule
 
 public:
 
-	SwerveModule(int, int, int, float);
+	SwerveModule(modulePlug);
 	
 	void setRotation(float x, float y);
 	
@@ -29,3 +40,4 @@ public:
 	
 
 };
+#endif

@@ -16,6 +16,7 @@ void SwerveModule::setRotation(float x, float y)
 	xBaseVector = x;
     yBaseVector = y;
 }
+
 float SwerveModule::getMagnitude(float leftX, float leftY, float rightX)
 {
 	
@@ -115,12 +116,14 @@ void SwerveModule::setSpeed(float newMagnitude)
 		
 }
 
-SwerveModule::SwerveModule(int anaChan, int turnJagID, int moveJagID, float passOffset)
+SwerveModule::SwerveModule(modulePlug connections)
 {
-	posEncoder = new AnalogChannel(anaChan);
-	offset = passOffset;
-	turnWheel = new CANJaguar(turnJagID);
-	moveWheel = new CANJaguar(moveJagID);
+	posEncoder = new AnalogChannel(connections.analogChannel);
+	offset = connections.offset;
+	turnWheel = new CANJaguar(connections.turnID);
+	moveWheel = new CANJaguar(connections.moveID);
 	baneTimer = new Timer();				
 	baneTimer->Start();
+	xBaseVector = connections.xRotation;
+	yBaseVector = connections.yRotation;
 }

@@ -1,6 +1,18 @@
+#ifndef SWERVEDRIVE_HPP
+#define SWERVEDRIVE_HPP
+
+#include "SwerveModule.hpp"
 class SwerveDrive 
 {
+	SwerveModule *ModuleFL;
+	SwerveModule *ModuleFR;
+	SwerveModule *ModuleBR;
+	SwerveModule *ModuleBL;
+	
 public:
 	
-	SwerveDrive(int, int, int, int, int, int, int, int, float, float, float, float, int, int, int, int);
+	SwerveDrive(modulePlug, modulePlug, modulePlug, modulePlug);
+	void moveDrive(float, float, float);
 };
+
+#endif
