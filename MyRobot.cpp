@@ -3,6 +3,8 @@
 #include "controls.h"
 #include "offsets.h"
 #include "SwerveModule.cpp"
+#include "util.cpp"
+#include "util.hpp"
 #define FL                      0
 #define FR                      1
 #define BR                      2
@@ -20,7 +22,7 @@
 #define OFFSETMOVE				.25
 #define IDLESPEED				0.0
 
-float deadBand(float);
+/* float deadBand(float);		Deadband already defined in util.cpp
 
 struct wheelVector {
 	float rawx, x, rawy, y, mag, tarTheta, curTheta, diffTheta, turnVel;
@@ -28,7 +30,7 @@ struct wheelVector {
 	float prevTurnVel;
 	bool changeSign;
 	float moveTime;
-};
+}; */
 
 class RobotDemo : public SimpleRobot 
 {
