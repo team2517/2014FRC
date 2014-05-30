@@ -25,6 +25,7 @@ class SwerveModule
 	AnalogChannel *posEncoder; 
 	CANJaguar *turnWheel;
 	CANJaguar *moveWheel;
+	DriverStationLCD *dsLCD;
 	Timer *baneTimer;
 
 public:

@@ -39,7 +39,9 @@ float SwerveModule::getMagnitude(float leftX, float leftY, float rightX)
 
 void SwerveModule::setSpeed(float newMagnitude)
 {
-	tarTheta = atan2(yVector, xVector);
+	mag = newMagnitude; //Comes after the speeds are scaled back.
+	
+	tarTheta = (float)atan2(yVector, xVector);
 	curTheta = -(posEncoder->GetVoltage() - offset ) / 5 * 2 * PI;
 
 	//	Code Snippet
@@ -54,16 +56,16 @@ void SwerveModule::setSpeed(float newMagnitude)
 		diffTheta += 2*PI;
 	}
 
-	if (diffTheta > PI/2) 
-	{
-		diffTheta -= PI;
-		mag = mag * -1;
-	} 
-	else if (diffTheta < -PI/2) 
-	{
-		diffTheta += PI;
-		mag = mag * -1;
-	}
+//	if (diffTheta > PI/2) 
+//	{
+//		diffTheta -= PI;
+//		mag = mag * -1;
+//	} 
+//	else if (diffTheta < -PI/2) 
+//	{
+//		diffTheta += PI;
+//		mag = mag * -1;
+//	}
 
 	turnVel = diffTheta / (PI/2);
 	
@@ -100,7 +102,7 @@ void SwerveModule::setSpeed(float newMagnitude)
 	
 	if (!(xVector == 0 && yVector == 0))
 	{
-		turnWheel->Set(turnVel);							
+		turnWheel->Set(-turnVel);							
 		moveWheel->Set(mag);
 	}
 	else
@@ -112,16 +114,24 @@ void SwerveModule::setSpeed(float newMagnitude)
 	prevTurnVel = turnVel;
 	
 	
-		
+	dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "CurTheta: %f", curTheta);
+	dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "yVector: %f", xVector);
+	dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "xVector: %f", yVector);
+	dsLCD->Printf(DriverStationLCD::kUser_Line4, 1, "Atan: %f", tarTheta);
+	dsLCD->Printf(DriverStationLCD::kUser_Line5, 1, "Diff: %f", diffTheta);
+	dsLCD->UpdateLCD();
 		
 }
 
 SwerveModule::SwerveModule(modulePlug connections)
 {
+	printf("AnalogChannel = %i, turnID = %i, moveID = %i\n", connections.analogChannel, 
+			connections.turnID, connections.moveID);
 	posEncoder = new AnalogChannel(connections.analogChannel);
 	offset = connections.offset;
 	turnWheel = new CANJaguar(connections.turnID);
 	moveWheel = new CANJaguar(connections.moveID);
+	dsLCD = DriverStationLCD::GetInstance();
 	baneTimer = new Timer();				
 	baneTimer->Start();
 	xBaseVector = connections.xRotation;

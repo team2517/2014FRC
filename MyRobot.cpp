@@ -15,6 +15,8 @@ class RobotDemo : public SimpleRobot {
 	Talon pickUpArm1;
 	Talon pickUpArm2;
 	SwerveDrive *drive;
+//	SwerveModule *moduleFL;
+	
 	
 public:
 	RobotDemo() :
@@ -22,32 +24,52 @@ public:
 	{
 		Watchdog().SetExpiration(1);
 		
+		
+		
+		/* * *
+		 * 	Jag Ids
+		 * 27 = moveFL
+		 * 9  = turnFL
+		 * 4  = moveFR
+		 * 11 = turnFR
+		 * 2  = moveBR
+		 * 45 = turnBR
+		 * 30 = turnBL
+		 * 13 = moveBL
+		 * 12 = null
+		 * * */
+		
 		modulePlug plugsFL;
 		plugsFL.analogChannel = 3;
 		plugsFL.turnID = 9;
 		plugsFL.moveID = 27;
 		plugsFL.xRotation = .707;
 		plugsFL.yRotation = .707;
+		plugsFL.offset = FLOFFSET;
 		modulePlug plugsFR;
-		plugsFR.analogChannel = 4;
-		plugsFR.turnID = 11;
+		plugsFR.analogChannel = 2;
+		plugsFR.turnID = 11; 
 		plugsFR.moveID = 4;
 		plugsFR.xRotation = .707;
 		plugsFR.yRotation = -.707;
+		plugsFR.offset = FROFFSET;
 		modulePlug plugsBR;
-		plugsBR.analogChannel = 2;
+		plugsBR.analogChannel = 4;
 		plugsBR.turnID = 45;
 		plugsBR.moveID = 2;
 		plugsBR.xRotation = -.707;
 		plugsBR.yRotation = -.707;
+		plugsBR.offset = BROFFSET;
 		modulePlug plugsBL;
 		plugsBL.analogChannel = 5;
 		plugsBL.turnID = 30;
-		plugsBL.moveID = 12;
+		plugsBL.moveID = 13;
 		plugsBL.xRotation = -.707;
 		plugsBL.yRotation = .707;
+		plugsBL.offset = BLOFFSET;
 		
 		drive = new SwerveDrive(plugsFL, plugsFR, plugsBR, plugsBL);
+//		moduleFL = new SwerveModule(plugsFL);
 	}
 
 	/**
@@ -66,6 +88,7 @@ public:
 	 */
 	void OperatorControl() {
 		Watchdog().SetEnabled(true);
+		float lastMag;
 		
 		while (IsOperatorControl()) 
 		{
@@ -74,7 +97,18 @@ public:
 			drive->moveDrive(deadBand(driveStick.GetRawAxis(1)), 
 				 deadBand(driveStick.GetRawAxis(2)), 
 				 deadBand(driveStick.GetRawAxis(3)));
-
+			
+//			lastMag = moduleFL->getMagnitude(deadBand(-driveStick.GetRawAxis(1)), 
+//								   deadBand(driveStick.GetRawAxis(2)), 
+//								   deadBand(driveStick.GetRawAxis(3)));
+//
+//			if (lastMag > 1) //Make sure lastMag isn't greater than 1
+//			{
+//				lastMag = lastMag/lastMag;
+//			}
+//			
+//			moduleFL->setSpeed(lastMag);
+//			
 			if (driveStick.GetRawButton(6))
 			{
 				pickUpArm1.Set(.8);
@@ -106,8 +140,9 @@ public:
 START_ROBOT_CLASS(RobotDemo)
 ;
 
-float deadBand(float axisValue) {
-	if (axisValue < -.05 || axisValue> .05){ 
+float deadBand(float axisValue) 
+{
+	if (axisValue < -.1 || axisValue> .1){ 
 	return axisValue;
 }
 else
